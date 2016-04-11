@@ -3,15 +3,20 @@
   (:import [UnityEngine Debug]))
 
 (defn get-components
-  ([^UnityEngine.GameObject go]
+  ([go]
    (.GetComponents go UnityEngine.Component))
-
-  ([^UnityEngine.GameObject go ^System.Type t]
+  ([go t]
    (.GetComponents go t)))
 
 (defn get-components-in-children
-  ([^UnityEngine.GameObject go]
+  ([go]
    (.GetComponentsInChildren go UnityEngine.Component))
-
-  ([^UnityEngine.GameObject go ^System.Type t]
+  ([go t]
    (.GetComponentsInChildren go t)))
+
+(defn get-children
+  [go]
+  (let [transform (get-component go UnityEngine.Transform)]
+    ; Transform acts as a collection of its children, so we
+    ; can easily pull them out with identity
+    (map identity transform)))
