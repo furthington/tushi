@@ -3,9 +3,17 @@
         tushi.interop)
   (:import [UnityEngine Debug]))
 
+(def long-width 10)
+(def short-width 9)
+(def height 10)
+
+; TODO: Load/save state
+; TODO: Find neighbors
+
 (defn start-hook
   [this]
   (let [board (object-named "board")
+        ; TODO: Add a component to each hex and just use this fn?
         groups (get-components-in-children
                  board
                  UnityEngine.UI.HorizontalLayoutGroup)
