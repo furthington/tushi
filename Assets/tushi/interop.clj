@@ -1,6 +1,7 @@
 (ns tushi.interop
   (:use arcadia.core)
-  (:import [UnityEngine Debug]))
+  (:import [UnityEngine Debug]
+           ArcadiaState))
 
 (defn get-components
   ([go]
