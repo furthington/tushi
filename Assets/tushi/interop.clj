@@ -18,5 +18,24 @@
   [go]
   (let [transform (get-component go UnityEngine.Transform)]
     ; Transform acts as a collection of its children, so we
-    ; can easily pull them out with identity
-    (map identity transform)))
+    ; can easily pull them out
+    (seq transform)))
+
+(defn ensure-component
+  [go c]
+  (or (.GetComponent go c)
+      (.AddComponent go c)))
+
+(defn state!
+  [go s]
+  (let [c (ensure-component go ArcadiaState)]
+    (set! (.state c) s)))
+
+(defn state
+  [go]
+  (let [c (ensure-component go ArcadiaState)]
+    (.state c)))
+
+(defn swap-state!
+  [go f & args]
+  (state! go (apply f (state go) args)))
