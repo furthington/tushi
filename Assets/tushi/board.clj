@@ -26,6 +26,4 @@
   (let [board (object-named "board")
         children (get-components-in-children board Board.Tile)]
     (Debug/Log (count children))
-    (swap-state! this #(assoc % :children children))
-    (save! this)
-    (load! this)))
+    (swap-state! this #(assoc % :children children))))
