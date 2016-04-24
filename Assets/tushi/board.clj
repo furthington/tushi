@@ -85,13 +85,20 @@
   (if (< x (- (row-width face-length y) 1))
     (at-position rows (+ 1 x) y)))
 
+(defn left
+  [rows face-length x y]
+  (if (> x 0)
+    (at-position rows (- x 1) y)))
+
 (defn bind-neighbor
   [rows face-length elem]
   (let [pos (:position elem)
+        l (left rows face-length (:x pos) (:y pos))
         tl (top-left rows face-length (:x pos) (:y pos))
         tr (top-right rows face-length (:x pos) (:y pos))
         r (right rows face-length (:x pos) (:y pos))]
     (assoc elem
+           :left l
            :top-left tl
            :top-right tr
            :right r)))
