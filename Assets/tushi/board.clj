@@ -71,8 +71,10 @@
 
 (defn bind-neighbors
   [rows face-length]
-  (map #(map (partial bind-neighbor rows face-length) %)
-       rows))
+  (into []
+        (map #(into []
+                    (map (partial bind-neighbor rows face-length) %))
+             rows)))
 
 (defn start-hook
   [this]
