@@ -46,9 +46,8 @@
                  (not top-half?)
                  top-half?))))))
 
-(defn start-hook
+(defn start
   [this]
   (let [board (object-named "board")
-        children (get-components-in-children board Board.Tile)
-        rows (hex-rows children face-length)]
-    (Debug/Log (str rows))))
+        children (get-components-in-children board Board.Tile)]
+    (swap-state! this #(assoc % :children children))))
