@@ -30,10 +30,17 @@
          remaining-children children
          row-width face-length
          top-half? true]
-    (if (and (not top-half?) (= row-width face-length))
-      (conj rows (take row-width remaining-children))
-      (let [half-way? (= row-width (- (* 2 face-length) 1))]
-        (recur (conj rows (take row-width remaining-children))
+    (let [half-way? (= row-width (- (* 2 face-length) 1))
+          y (count rows)
+          new-rows (conj rows
+                         (keep-indexed
+                           (fn [index elem]
+                             {:element elem
+                              :position [index y]})
+                           (take row-width remaining-children)))]
+      (if (and (not top-half?) (= row-width face-length))
+        new-rows
+        (recur new-rows
                (drop row-width remaining-children)
                (if (and top-half? (not half-way?))
                  (+ 1 row-width)
