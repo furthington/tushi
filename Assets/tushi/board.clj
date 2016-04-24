@@ -105,11 +105,13 @@
 (defn bind-neighbor
   [rows face-length elem]
   (let [pos (:position elem)
-        l (left rows face-length (:x pos) (:y pos))
-        tl (top-left rows face-length (:x pos) (:y pos))
-        tr (top-right rows face-length (:x pos) (:y pos))
-        r (right rows face-length (:x pos) (:y pos))
-        br (bottom-right rows face-length (:x pos) (:y pos))]
+        x (:x pos)
+        y (:y pos)
+        l (left rows face-length x y)
+        tl (top-left rows face-length x y)
+        tr (top-right rows face-length x y)
+        r (right rows face-length x y)
+        br (bottom-right rows face-length x y)]
     (assoc elem
            ;:left l
            ;:top-left tl
