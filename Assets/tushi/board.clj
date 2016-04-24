@@ -55,19 +55,39 @@
   [rows x y]
   (nth (nth rows y) x))
 
+(defn bottom-half?
+  [face-length y]
+  (>= y face-length))
+
+(defn row-width
+  [face-length y]
+  (if (bottom-half? face-length y)
+    (+ face-length (- (- (* 2 face-length) 2) y)) ; Mirrored
+    (+ face-length y)))
+
 (defn top-left
   [rows face-length x y]
-  (if (>= y face-length) ; Bottom half
+  (if (bottom-half? face-length y)
     (at-position rows x (- y 1))
     (when (and (> y 0) (> x 0)) ; Inside top left edge
       (at-position rows (- x 1) (- y 1)))))
 
+(defn top-right
+  [rows face-length x y]
+  (if (bottom-half? face-length y)
+    (at-position rows (+ 1 x) (- y 1))
+    (when (and (> y 0)
+               (< x (- (row-width face-length y) 1))) ; Inside top right edge
+      (at-position rows (- y 1) x))))
+
 (defn bind-neighbor
   [rows face-length elem]
   (let [pos (:position elem)
-        tl (top-left rows face-length (:x pos) (:y pos))]
+        tl (top-left rows face-length (:x pos) (:y pos))
+        tr (top-right rows face-length (:x pos) (:y pos))]
     (assoc elem
-           :top-left tl)))
+           :top-left tl
+           :top-right tr)))
 
 (defn bind-neighbors
   [rows face-length]
