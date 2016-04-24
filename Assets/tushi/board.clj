@@ -52,24 +52,20 @@
                  top-half?))))))
 
 (defn at-position
-  [rows pos]
-  (nth (nth rows (:y pos))
-       (:x pos)))
+  [rows x y]
+  (nth (nth rows y) x))
 
 (defn top-left
-  [rows face-length pos] ; TODO: x and y
-  (if (>= (:y pos) face-length) ; Bottom half
-    (at-position rows {:x (:x pos)
-                       :y (- (:y pos) 1)})
-    (when (and (> (:y pos) 0)
-               (> (:x pos) 0))
-      (at-position rows {:x (- (:x pos) 1)
-                         :y (- (:y pos) 1)}))))
+  [rows face-length x y]
+  (if (>= y face-length) ; Bottom half
+    (at-position rows x (- y 1))
+    (when (and (> y 0) (> x 0)) ; Inside top left edge
+      (at-position rows (- x 1) (- y 1)))))
 
 (defn bind-neighbor
   [rows face-length elem]
   (let [pos (:position elem)
-        tl (top-left rows face-length pos)]
+        tl (top-left rows face-length (:x pos) (:y pos))]
     (assoc elem
            :top-left tl)))
 
