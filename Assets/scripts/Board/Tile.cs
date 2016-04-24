@@ -7,13 +7,6 @@ namespace Board
 {
   public class Tile : MonoBehaviour, IPointerClickHandler
   {
-    public Tile top_right;
-    public Tile right;
-    public Tile bottom_right;
-    public Tile bottom_left;
-    public Tile left;
-    public Tile top_left;
-
     private Image img;
 
     public void Start()
