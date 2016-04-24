@@ -33,11 +33,13 @@
     (let [half-way? (= row-width (- (* 2 face-length) 1))
           y (count rows)
           new-rows (conj rows
-                         (keep-indexed
-                           (fn [index elem]
-                             {:element elem
-                              :position [index y]})
-                           (take row-width remaining-children)))]
+                         (into []
+                               (keep-indexed
+                                 (fn [index elem]
+                                   {:element elem
+                                    :position {:x index
+                                               :y y}})
+                                 (take row-width remaining-children))))]
       (if (and (not top-half?) (= row-width face-length))
         new-rows
         (recur new-rows
@@ -48,6 +50,33 @@
                (if half-way?
                  (not top-half?)
                  top-half?))))))
+
+(defn at-position
+  [rows pos]
+  (nth (nth rows (:y pos))
+       (:x pos)))
+
+(defn top-left
+  [rows face-length pos] ; TODO: x and y
+  (if (>= (:y pos) face-length) ; Bottom half
+    (at-position rows {:x (:x pos)
+                       :y (- (:y pos) 1)})
+    (when (and (> (:y pos) 0)
+               (> (:x pos) 0))
+      (at-position rows {:x (- (:x pos) 1)
+                         :y (- (:y pos) 1)}))))
+
+(defn bind-neighbor
+  [rows face-length elem]
+  (let [pos (:position elem)
+        tl (top-left rows face-length pos)]
+    (assoc elem
+           :top-left tl)))
+
+(defn bind-neighbors
+  [rows face-length]
+  (map #(map (partial bind-neighbor rows face-length) %)
+       rows))
 
 (defn start-hook
   [this]
