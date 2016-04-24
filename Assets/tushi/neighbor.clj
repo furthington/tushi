@@ -1,4 +1,5 @@
 (ns tushi.neighbor
+  (:require [arcadia.core :as arcadia])
   (:use tushi.interop)
   (:import [UnityEngine Application Debug]))
 
