@@ -2,6 +2,8 @@
   (:use tushi.interop)
   (:import [UnityEngine Application Debug]))
 
+(def face-length 5)
+
 (defn at-position
   [rows x y]
   (nth (nth rows y) x))
@@ -86,3 +88,30 @@
         (map #(into []
                     (map (partial meet rows face-length) %))
              rows)))
+
+(defn hex-rows
+  [children face-length]
+  (loop [rows []
+         remaining-children children
+         row-width face-length
+         top-half? true]
+    (let [half-way? (= row-width (- (* 2 face-length) 1))
+          y (count rows)
+          new-rows (conj rows
+                         (into []
+                               (keep-indexed
+                                 (fn [index elem]
+                                   {:element elem
+                                    :position {:x index
+                                               :y y}})
+                                 (take row-width remaining-children))))]
+      (if (and (not top-half?) (= row-width face-length))
+        new-rows
+        (recur new-rows
+               (drop row-width remaining-children)
+               (if (and top-half? (not half-way?))
+                 (+ 1 row-width)
+                 (- row-width 1))
+               (if half-way?
+                 (not top-half?)
+                 top-half?))))))
