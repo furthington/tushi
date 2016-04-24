@@ -115,3 +115,21 @@
                (if half-way?
                  (not top-half?)
                  top-half?))))))
+
+(defn apply-to-editor!
+  []
+  (assert (arcadia/editor?) "must be in editor")
+  (let [board (object-named "board")
+        children (get-components-in-children board Board.Tile)
+        rows (hex-rows children face-length)
+        neighbored (introduce rows face-length)]
+    (doseq [row neighbored
+            item row]
+      (swap-state! (:element item)
+                   #(assoc %
+                           :left (:left item)
+                           :top-left (:top-left item)
+                           :top-right (:top-right item)
+                           :right (:right item)
+                           :bottom-right (:bottom-right item)
+                           :bottom-left (:bottom-left item))))))
