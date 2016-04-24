@@ -1,5 +1,5 @@
 (ns tushi.interop
-  (:use arcadia.core)
+  (:require [arcadia.core :as arcadia])
   (:import [UnityEngine Debug]
            ArcadiaState))
 
@@ -15,17 +15,22 @@
   ([go t]
    (.GetComponentsInChildren go t)))
 
-(defn get-children
-  [go]
-  (let [transform (get-component go UnityEngine.Transform)]
-    ; Transform acts as a collection of its children, so we
-    ; can easily pull them out
-    (seq transform)))
+(defn add-component
+  [go c]
+  (.AddComponent (.gameObject go) c))
+
+(defn get-component
+  [go c]
+  (.GetComponent (.gameObject go) c))
+
+(defn object-named
+  [n]
+  (arcadia/object-named n))
 
 (defn ensure-component
   [go c]
-  (or (.GetComponent go c)
-      (.AddComponent go c)))
+  (or (get-component go c)
+      (add-component go c)))
 
 (defn state!
   [go s]
@@ -40,3 +45,10 @@
 (defn swap-state!
   [go f & args]
   (state! go (apply f (state go) args)))
+
+(defn get-children
+  [go]
+  (let [transform (get-component go UnityEngine.Transform)]
+    ; Transform acts as a collection of its children, so we
+    ; can easily pull them out
+    (seq transform)))

@@ -1,9 +1,10 @@
 (ns tushi.board
-  (:use arcadia.core
-        tushi.interop)
+  (:use tushi.interop)
   (:require [tushi.neighbor :as neighbor])
-  (:import [UnityEngine Application Debug]
-           ArcadiaState))
+  (:import [UnityEngine Application Debug]))
+
+; TODO: Profiling and logging with timbre
+; TODO: Debug logging which is disabled in release
 
 (def face-length 5)
 (def save-file (str Application/persistentDataPath "/save"))
@@ -48,7 +49,6 @@
 (defn start-hook
   [this]
   (let [board (object-named "board")
-        children (get-components-in-children board Board.Tile)]
-    (let [rows (hex-rows children face-length)
-          neighbored (neighbor/introduce rows face-length)]
-      (swap-state! this #(assoc % :children neighbored)))))
+        children (get-components-in-children board Board.Tile)
+        rows (hex-rows children face-length)]
+    (Debug/Log (str rows))))

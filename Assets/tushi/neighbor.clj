@@ -1,8 +1,6 @@
 (ns tushi.neighbor
-  (:use arcadia.core
-        tushi.interop)
-  (:import [UnityEngine Application Debug]
-           ArcadiaState))
+  (:use tushi.interop)
+  (:import [UnityEngine Application Debug]))
 
 (defn at-position
   [rows x y]
