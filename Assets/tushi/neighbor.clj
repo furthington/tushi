@@ -132,7 +132,7 @@
           (follow element end-dir)))
 
 (defn build-lines
-  [rows face-length]
+  [rows]
   (map (fn [row]
          (map #(assoc %
                       :lines (map (partial build-line %)
