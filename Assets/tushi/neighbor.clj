@@ -5,6 +5,33 @@
 
 (def face-length 5)
 
+(defn hex-rows
+  [children face-length]
+  (loop [rows []
+         remaining-children children
+         row-width face-length
+         top-half? true]
+    (let [half-way? (= row-width (- (* 2 face-length) 1))
+          y (count rows)
+          new-rows (conj rows
+                         (into []
+                               (keep-indexed
+                                 (fn [index elem]
+                                   {:element elem
+                                    :position {:x index
+                                               :y y}})
+                                 (take row-width remaining-children))))]
+      (if (and (not top-half?) (= row-width face-length))
+        new-rows
+        (recur new-rows
+               (drop row-width remaining-children)
+               (if (and top-half? (not half-way?))
+                 (+ 1 row-width)
+                 (- row-width 1))
+               (if half-way?
+                 (not top-half?)
+                 top-half?))))))
+
 (defn at-position
   [rows x y]
   (nth (nth rows y) x))
@@ -90,32 +117,29 @@
                     (map (partial meet rows face-length) %))
              rows)))
 
-(defn hex-rows
-  [children face-length]
-  (loop [rows []
-         remaining-children children
-         row-width face-length
-         top-half? true]
-    (let [half-way? (= row-width (- (* 2 face-length) 1))
-          y (count rows)
-          new-rows (conj rows
-                         (into []
-                               (keep-indexed
-                                 (fn [index elem]
-                                   {:element elem
-                                    :position {:x index
-                                               :y y}})
-                                 (take row-width remaining-children))))]
-      (if (and (not top-half?) (= row-width face-length))
-        new-rows
-        (recur new-rows
-               (drop row-width remaining-children)
-               (if (and top-half? (not half-way?))
-                 (+ 1 row-width)
-                 (- row-width 1))
-               (if half-way?
-                 (not top-half?)
-                 top-half?))))))
+(defn follow
+  [element dir]
+  (loop [acc []
+         el element]
+    (if-let [x (dir el)]
+      (recur (conj acc x) x)
+      acc)))
+
+(defn build-line
+  [element start-dir end-dir]
+  (concat (follow element start-dir)
+          [element]
+          (follow element end-dir)))
+
+(defn build-lines
+  [rows face-length]
+  (map (fn [row]
+         (map #(assoc %
+                      :lines (map (partial build-line %)
+                                  [:top-left :bottom-left :left]
+                                  [:bottom-right :top-right :right]))
+              row))
+       rows))
 
 (defn apply-to-editor!
   []
@@ -123,14 +147,8 @@
   (let [board (object-named "board")
         children (get-components-in-children board Board.Tile)
         rows (hex-rows children face-length)
-        neighbored (introduce rows face-length)]
-    (doseq [row neighbored
+        neighbored (introduce rows face-length)
+        lined (build-lines neighbored face-length)]
+    (doseq [row lined
             item row]
-      (swap-state! (:element item)
-                   #(assoc %
-                           :left (:left item)
-                           :top-left (:top-left item)
-                           :top-right (:top-right item)
-                           :right (:right item)
-                           :bottom-right (:bottom-right item)
-                           :bottom-left (:bottom-left item))))))
+      (state! (:element item) item))))
