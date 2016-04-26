@@ -9,4 +9,4 @@
 (defmacro log
   [& args]
   (when app/debug?
-    `(platform-log ~(apply pr-str args))))
+    `(platform-log (str ~@args))))
