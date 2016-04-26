@@ -17,7 +17,7 @@
   ; TODO: Verify file exists
   (state! this (read-string (slurp save-file))))
 
-(defn start
+(defn start!
   [this]
   (let [board (object-named "board")
         children (get-components-in-children board Board.Tile)]
