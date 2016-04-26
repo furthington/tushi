@@ -3,6 +3,23 @@
   (:use tushi.interop)
   (:import [UnityEngine Debug]))
 
-(defn on-click
+; TODO: line ns?
+(defn complete-line?
+  [line]
+  true)
+
+(defn clear!
+  [element]
+  (-> element
+      (get-component UnityEngine.UI.Image)
+      .color
+      (set! UnityEngine.Color/red)))
+
+(defn on-click!
   [this data]
-  (debug/log "clicked: " data))
+  (debug/log "clicked: " data)
+  (let [s (state this)
+        complete (filter complete-line? (:lines s))]
+    (doseq [line complete
+            element line]
+      (clear! (:element element)))))
