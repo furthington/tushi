@@ -1,8 +1,12 @@
 (ns tushi.debug
   (:require [tushi.application :as app])
-  (:import [Debug]))
+  (:import [UnityEngine Debug]))
+
+(defn platform-log
+  [msg]
+  (Debug/Log msg))
 
 (defmacro log
   [& args]
   (when app/debug?
-    (Debug/Log (apply pr-str args))))
+    `(platform-log ~(apply pr-str args))))
