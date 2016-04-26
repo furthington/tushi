@@ -118,24 +118,26 @@
              rows)))
 
 (defn follow
-  [element dir]
+  [rows element dir]
   (loop [acc []
          el element]
     (if-let [x (dir el)]
-      (recur (conj acc x) x)
+      (recur (conj acc x) (at-position rows
+                                       (:x (:position x))
+                                       (:y (:position x))))
       acc)))
 
 (defn build-line
-  [element start-dir end-dir]
-  (concat (follow element start-dir)
+  [rows element start-dir end-dir]
+  (concat (follow rows element start-dir)
           [element]
-          (follow element end-dir)))
+          (follow rows element end-dir)))
 
 (defn build-lines
   [rows]
   (map (fn [row]
          (map #(assoc %
-                      :lines (map (partial build-line %)
+                      :lines (map (partial build-line rows %)
                                   [:top-left :bottom-left :left]
                                   [:bottom-right :top-right :right]))
               row))
@@ -143,12 +145,12 @@
 
 (defn apply-to-editor!
   []
-  (assert (arcadia/editor?) "must be in editor")
+  ;(assert (arcadia/editor?) "must be in editor")
   (let [board (object-named "board")
         children (get-components-in-children board Board.Tile)
         rows (hex-rows children face-length)
         neighbored (introduce rows face-length)
-        lined (build-lines neighbored face-length)]
+        lined (build-lines neighbored)]
     (doseq [row lined
             item row]
       (state! (:element item) item))))
