@@ -1,6 +1,6 @@
 (ns tushi.board
   (:use tushi.interop)
-  (:import [UnityEngine Application Debug]))
+  (:import [UnityEngine]))
 
 ; TODO: Profiling and logging with timbre
 ; TODO: Debug logging which is disabled in release
