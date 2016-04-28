@@ -1,5 +1,6 @@
 (ns tushi.neighbor
-  (:require [arcadia.core :as arcadia])
+  (:require [arcadia.core :as arcadia]
+            [tushi.debug :as debug])
   (:use tushi.interop)
   (:import [UnityEngine]))
 
@@ -153,4 +154,20 @@
         lined (build-lines neighbored)]
     (doseq [row lined
             item row]
-      (state! (:element item) item))))
+      (let [tile (-> (:element item)
+                     (get-component Board.Tile))
+            elem #(:element (% item))]
+
+        (set! (.top_right tile) (elem :top-right))
+        (set! (.top_left tile) (elem :top-left))
+        (set! (.left tile) (elem :left))
+        (set! (.right tile) (elem :right))
+        (set! (.bottom_right tile) (elem :bottom-right))
+        (set! (.bottom_left tile) (elem :bottom-left))
+        (.Clear (.flat_lines tile))
+        (doseq [line (:lines item)]
+          (doseq [el line]
+            (.Add (.flat_lines tile) (:element el)))
+          (.Add (.flat_lines tile) nil))
+        (println "lines: " (.Count (.flat_lines tile)))
+        ))))
