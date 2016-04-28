@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace Board
@@ -8,18 +8,18 @@ namespace Board
     public List<GameObject> PrefabsLowProb;
     public List<GameObject> PrefabsHighProb;
 
-    public void Regenerate()
+    public void UsePiece(int i)
     {
-      foreach (Transform child in transform)
-      { Destroy(child.gameObject); }
+      Destroy(transform.GetChild(i).gameObject);
 
-      for(int i = 0; i < 3; ++i)
-      {
-        if(Random.Range(0.0f, 1.0f) <= 0.2f)
-        { Instantiate(PrefabsLowProb[Random.Range(0, PrefabsLowProb.Count)]).transform.SetParent(transform, false); }
-        else
-        { Instantiate(PrefabsHighProb[Random.Range(0, PrefabsHighProb.Count)]).transform.SetParent(transform, false); }
-      }
+      GameObject new_child;
+      if(Random.Range(0.0f, 1.0f) <= 0.1f)
+      { new_child = Instantiate(PrefabsLowProb[Random.Range(0, PrefabsLowProb.Count)]); }
+      else
+      { new_child = Instantiate(PrefabsHighProb[Random.Range(0, PrefabsHighProb.Count)]); }
+
+      new_child.transform.SetParent(transform, false);
+      new_child.transform.SetSiblingIndex(i);
     }
 
     public void Rotate()
