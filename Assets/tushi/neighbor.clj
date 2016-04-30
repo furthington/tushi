@@ -164,10 +164,13 @@
         (set! (.right tile) (elem :right))
         (set! (.bottom_right tile) (elem :bottom-right))
         (set! (.bottom_left tile) (elem :bottom-left))
-        (.Clear (.flat_lines tile))
-        (doseq [line (:lines item)]
-          (doseq [el line]
-            (.Add (.flat_lines tile) (:element el)))
-          (.Add (.flat_lines tile) nil))
-        (println "lines: " (.Count (.flat_lines tile)))
+        (.Clear (.line0 tile))
+        (.Clear (.line1 tile))
+        (.Clear (.line2 tile))
+        (doseq [el (nth (:lines item) 0)]
+          (.Add (.line0 tile) (:element el)))
+        (doseq [el (nth (:lines item) 1)]
+          (.Add (.line1 tile) (:element el)))
+        (doseq [el (nth (:lines item) 2)]
+          (.Add (.line2 tile) (:element el)))
         ))))
