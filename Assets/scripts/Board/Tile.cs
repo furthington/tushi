@@ -16,17 +16,19 @@ namespace Board
     public List<Tile> flat_lines; /* null-separated */
     public List<List<Tile>> lines;
 
-    private Image img;
+    public Block block = null;
 
     public void Start()
-    {
-      Debug.Log(flat_lines.Count.ToString());
-      img = GetComponent<Image>(); }
+    { Debug.Log(flat_lines.Count.ToString()); }
 
     public void OnPointerClick(PointerEventData data)
     {
-      Image color_holder = GameObject.FindGameObjectWithTag("color").GetComponent<Image>();
-      img.color = color_holder.color;
+      Debug.Log("DING!");
+      if(block != null)
+      {
+        block.Remove();
+        block = null;
+      }
     }
   }
 }
