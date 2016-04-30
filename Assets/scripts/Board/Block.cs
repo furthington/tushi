@@ -27,11 +27,13 @@ namespace Board
       cg.interactable = false;
     }
 
-    public void OnDrag()
+    public void OnDrag(Vector3 snap_correction)
     {
       /* Raycast from object's position */
       PointerEventData p = new PointerEventData(EventSystem.current);
-      p.position = canvas.transform.worldToLocalMatrix * transform.position;
+      Vector3 pos = canvas.transform.worldToLocalMatrix * transform.position;
+      pos += snap_correction;
+      p.position = pos;
       List<RaycastResult> results = new List<RaycastResult>();
       EventSystem.current.RaycastAll(p, results);
       foreach(RaycastResult result in results)
@@ -40,10 +42,7 @@ namespace Board
         {
           currently_over = result.gameObject.GetComponent<Tile>();
           if(currently_over != null)
-          {
-            Debug.Log("currently over " + currently_over.name);
-            return;
-          }
+          { return; }
         }
       }
       currently_over = null;

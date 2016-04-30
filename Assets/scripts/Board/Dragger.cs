@@ -8,10 +8,13 @@ namespace Board
   {
     private GameObject currently_dragged;
     private List<Block> blocks = new List<Block>();
+    private GameObject canvas;
+
+    private void Awake()
+    { canvas = GameObject.FindGameObjectWithTag("main_canvas"); }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      GameObject canvas = GameObject.FindGameObjectWithTag("main_canvas");
       currently_dragged = Instantiate(gameObject);
       currently_dragged.transform.SetParent(canvas.transform);
       currently_dragged.GetComponent<RectTransform>().anchoredPosition = eventData.position;
@@ -27,20 +30,23 @@ namespace Board
     public void OnDrag(PointerEventData eventData)
     {
       currently_dragged.GetComponent<RectTransform>().anchoredPosition = eventData.position;
+      RaycastResult r = eventData.pointerCurrentRaycast;
+      Vector3 snap_correction = new Vector3();
+      if(r.gameObject != null && r.gameObject.GetComponent<Tile>() != null)
+      { snap_correction = (canvas.transform.worldToLocalMatrix * r.gameObject.transform.position) - new Vector4(eventData.position.x, eventData.position.y); }
 
       int valid = 0;
       foreach(Block b in blocks)
       {
-        b.OnDrag();
+        b.OnDrag(snap_correction);
         if(b.IsInValidPosition())
         { ++valid; }
       }
-      Debug.Log("=====");
 
       /* If they are all valid, snap to position.
        * This snapping assumes that you are dragging a block right under the cursor. */
       if(valid == blocks.Count)
-      { currently_dragged.GetComponent<RectTransform>().position = eventData.pointerCurrentRaycast.gameObject.GetComponent<RectTransform>().position; }
+      { currently_dragged.GetComponent<RectTransform>().position = r.gameObject.GetComponent<RectTransform>().position; }
     }
 
     public void OnEndDrag(PointerEventData eventData)
