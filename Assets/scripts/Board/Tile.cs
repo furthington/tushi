@@ -13,13 +13,18 @@ namespace Board
     public Tile bottom_left;
     public Tile left;
     public Tile top_left;
-    public List<Tile> flat_lines; /* null-separated */
-    public List<List<Tile>> lines;
+    public List<Tile> line0;
+    public List<Tile> line1;
+    public List<Tile> line2;
 
     public Block block = null;
 
     public void Start()
-    { Debug.Log(flat_lines.Count.ToString()); }
+    {
+      Debug.Log("line0: " + line0.Count.ToString());
+      Debug.Log("line1: " + line0.Count.ToString());
+      Debug.Log("line2: " + line0.Count.ToString());
+    }
 
     public void OnPointerClick(PointerEventData data)
     {
