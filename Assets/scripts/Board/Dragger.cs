@@ -17,7 +17,7 @@ namespace Board
     {
       currently_dragged = Instantiate(gameObject);
       currently_dragged.transform.SetParent(canvas.transform);
-      currently_dragged.GetComponent<RectTransform>().anchoredPosition = eventData.position;
+      currently_dragged.transform.position = eventData.position;
       currently_dragged.GetComponentsInChildren<Block>(blocks);
 
       /* Have to manually set size probably because HorizontalLayoutGroup is messing with it? */
@@ -29,7 +29,7 @@ namespace Board
 
     public void OnDrag(PointerEventData eventData)
     {
-      currently_dragged.GetComponent<RectTransform>().anchoredPosition = eventData.position;
+      currently_dragged.transform.position = eventData.position;
       RaycastResult r = eventData.pointerCurrentRaycast;
       Vector3 snap_correction = new Vector3();
       if(r.gameObject != null && r.gameObject.GetComponent<Tile>() != null)
