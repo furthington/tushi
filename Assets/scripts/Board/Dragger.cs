@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace Board
 {
+  [RequireComponent (typeof(CanvasGroup))]
   public class Dragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
   {
     private GameObject currently_dragged;
@@ -25,6 +26,8 @@ namespace Board
 
       /* To raycast to the tiles under it */
       currently_dragged.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+      GetComponent<CanvasGroup>().alpha = 0.0f;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -32,21 +35,23 @@ namespace Board
       currently_dragged.transform.position = eventData.position;
       RaycastResult r = eventData.pointerCurrentRaycast;
       Vector3 snap_correction = new Vector3();
-      if(r.gameObject != null && r.gameObject.GetComponent<Tile>() != null)
-      { snap_correction = (canvas.transform.worldToLocalMatrix * r.gameObject.transform.position) - new Vector4(eventData.position.x, eventData.position.y); }
-
-      int valid = 0;
-      foreach(Block b in blocks)
+      if (r.gameObject != null && r.gameObject.GetComponent<Tile>() != null)
       {
-        b.OnDrag(snap_correction);
-        if(b.IsInValidPosition())
-        { ++valid; }
-      }
+        snap_correction = (canvas.transform.worldToLocalMatrix * r.gameObject.transform.position) - new Vector4(eventData.position.x, eventData.position.y);
 
-      /* If they are all valid, snap to position.
-       * This snapping assumes that you are dragging a block right under the cursor. */
-      if(valid == blocks.Count)
-      { currently_dragged.GetComponent<RectTransform>().position = r.gameObject.GetComponent<RectTransform>().position; }
+        int valid = 0;
+        foreach (Block b in blocks)
+        {
+          b.OnDrag(snap_correction);
+          if (b.IsInValidPosition())
+          { ++valid; }
+        }
+
+        /* If they are all valid, snap to position.
+         * This snapping assumes that you are dragging a block right under the cursor. */
+        if (valid == blocks.Count)
+        { currently_dragged.GetComponent<RectTransform>().position = r.gameObject.GetComponent<RectTransform>().position; }
+      }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -62,6 +67,13 @@ namespace Board
       {
         foreach(Block b in blocks)
         { b.PlaceInTile(); }
+
+        /* TODO: replace with generating next piece */
+        GetComponent<CanvasGroup>().blocksRaycasts = false;
+      }
+      else
+      {
+        GetComponent<CanvasGroup>().alpha = 1.0f;
       }
 
       Destroy(currently_dragged);
