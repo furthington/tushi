@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Board
 {
@@ -19,7 +20,7 @@ namespace Board
     {
       Debug.Assert(currently_over != null, "Trying to place block in invalid tile!");
       transform.SetParent(currently_over.transform);
-      currently_over.block = this;
+      currently_over.Emplace(this);
 
       /*TODO: remove when we no longer click tiles to do anything. */
       CanvasGroup cg = gameObject.AddComponent<CanvasGroup>();
@@ -50,5 +51,15 @@ namespace Board
 
     public void Remove()
     { Destroy(gameObject); }
+
+    public void DeferredRemove()
+    { StartCoroutine(DeferredRemoveImpl()); }
+
+    private IEnumerator DeferredRemoveImpl()
+    {
+      /* Wait for this frame to finish. */
+      yield return new WaitForEndOfFrame();
+      Remove();
+    }
   }
 }
