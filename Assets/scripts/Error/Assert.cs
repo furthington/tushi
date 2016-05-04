@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// TODO: Update asserts
 namespace Error
 {
   public static class Assert

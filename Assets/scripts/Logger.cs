@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// TODO: Update logs
 public static class Logger
 {
   public static void Log(string msg)
