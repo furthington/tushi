@@ -23,7 +23,7 @@ namespace Board
         currently_over != null,
         "Trying to place block in invalid tile!"
       );
-      transform.SetParent(currently_over.transform);
+      transform.SetParent(canvas.transform);
       currently_over.Emplace(this);
 
       /*TODO: remove when we no longer click tiles to do anything. */
