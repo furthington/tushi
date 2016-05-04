@@ -18,7 +18,11 @@ namespace Board
 
     public void PlaceInTile()
     {
-      Debug.Assert(currently_over != null, "Trying to place block in invalid tile!");
+      Debug.Assert
+      (
+        currently_over != null,
+        "Trying to place block in invalid tile!"
+      );
       transform.SetParent(currently_over.transform);
       currently_over.Emplace(this);
 

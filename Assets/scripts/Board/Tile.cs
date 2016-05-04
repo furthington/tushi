@@ -55,10 +55,7 @@ namespace Board
     { return t.block == null; }
 
     private static bool IsRice(Tile t)
-    {
-      /* TODO: Check image or something. */
-      return false;
-    }
+    { return t.block.name == "rice"; }
 
     private static void Clear(List<Tile> line)
     {
