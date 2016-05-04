@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.EventSystems;
+using Profile;
 
 namespace Board
 {
