@@ -52,6 +52,11 @@ namespace Board
         if (valid == blocks.Count)
         { currently_dragged.GetComponent<RectTransform>().position = r.gameObject.GetComponent<RectTransform>().position; }
       }
+      else
+      {
+        foreach (Block b in blocks)
+        { b.InvalidatePosition(); }
+      }
     }
 
     public void OnEndDrag(PointerEventData eventData)

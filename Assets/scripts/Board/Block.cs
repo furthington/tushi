@@ -32,6 +32,9 @@ namespace Board
       cg.interactable = false;
     }
 
+    public void InvalidatePosition()
+    { currently_over = null; }
+
     public void OnDrag(Vector3 snap_correction)
     {
       /* Raycast from object's position */
