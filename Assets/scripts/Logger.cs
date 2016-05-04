@@ -1,6 +1,8 @@
 using UnityEngine;
 
 // TODO: Update logs
+
+// http://forum.unity3d.com/threads/strip-release-build-from-all-debug-log-calls.353600/#post-2292960
 public sealed class Logger
 {
   public const string LOGGER_SYMBOL = "ENABLE_LOG";
