@@ -55,7 +55,9 @@ namespace Board
           return acc;
         }
       );
-      return count.rice > 0 && count.empty == 0;
+      return count.rice > 0 // One or more rice
+             && count.empty == 0 // Every tile filled
+             && count.rice < line.Count; // One more more non-rice
     }
 
     private static bool IsEmpty(Tile t)
