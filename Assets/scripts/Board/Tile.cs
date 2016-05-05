@@ -33,9 +33,9 @@ namespace Board
         if(IsComplete(line))
         {
           Clear(line);
-          /* TODO: Calculate score based on ingredients. */
+          /* TODO: Improve score counting. */
           AddScore s = new AddScore();
-          s.Score = Random.Range(1, 1000);
+          s.Score = line.Count * 6;
           Notification.Pool.Dispatch(s);
         }
       }
