@@ -30,6 +30,7 @@ namespace Board
       block = b;
       foreach(var line in lines)
       {
+        /* TODO: Implement combos. */
         if(IsComplete(line))
         {
           Clear(line);
