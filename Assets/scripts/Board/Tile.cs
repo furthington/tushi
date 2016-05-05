@@ -31,7 +31,13 @@ namespace Board
       foreach(var line in lines)
       {
         if(IsComplete(line))
-        { Clear(line); } /* TODO: Add score */
+        {
+          Clear(line);
+          /* TODO: Calculate score based on ingredients. */
+          AddScore s = new AddScore();
+          s.Score = Random.Range(1, 1000);
+          Notification.Pool.Dispatch(s);
+        }
       }
     }
 

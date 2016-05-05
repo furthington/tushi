@@ -40,6 +40,8 @@ namespace Board
       GameObject new_child = GeneratePiece();
       new_child.transform.SetParent(transform, false);
       new_child.transform.SetAsLastSibling();
+
+      /* TODO: Check lose state. */
     }
 
     private GameObject GeneratePiece()
