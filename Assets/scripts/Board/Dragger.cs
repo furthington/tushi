@@ -73,8 +73,8 @@ namespace Board
         foreach(Block b in blocks)
         { b.PlaceInTile(); }
 
-        /* TODO: replace with generating next piece */
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
+        Notification.Pool.Dispatch(new AddNewPiece());
+        Destroy(gameObject);
       }
       else
       {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Board
 {
+  public struct AddNewPiece { }
+
   public class PieceTray : MonoBehaviour
   {
     public List<GameObject> PrefabsLowProb;
@@ -13,16 +15,31 @@ namespace Board
 
     private const float rice_prob_min = 0.1f;
     private float rice_prob = 0.0f;
+    private Notification.SubscriptionStack subscriptions = new Notification.SubscriptionStack();
 
     private void Start()
-    { rice_prob = rice_prob_min; }
-
-    public void UsePiece(int i)
     {
-      Destroy(transform.GetChild(i).gameObject);
+      rice_prob = rice_prob_min;
+
+      subscriptions.Add
+      (
+        Notification.Pool.Subscribe<AddNewPiece>
+        (_ => AddPiece())
+      );
+
+      /* TODO: figure out why this doesn't work, pieces are added but not showing. */
+      //for(int i = 0; i < 3; ++i)
+      //{ AddPiece(); }
+    }
+
+    private void OnDisable()
+    { subscriptions.Clear(); }
+
+    public void AddPiece()
+    {
       GameObject new_child = GeneratePiece();
       new_child.transform.SetParent(transform, false);
-      new_child.transform.SetSiblingIndex(i);
+      new_child.transform.SetAsLastSibling();
     }
 
     private GameObject GeneratePiece()
