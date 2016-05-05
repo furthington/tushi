@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Board
 {
@@ -27,9 +28,16 @@ namespace Board
         (_ => AddPiece())
       );
 
-      /* TODO: figure out why this doesn't work, pieces are added but not showing. */
-      //for(int i = 0; i < 3; ++i)
-      //{ AddPiece(); }
+      /* Need to add pieces only after tiles are created,
+       * since they are scaled based on the size of the tiles. */
+      StartCoroutine(InitializePieces());
+    }
+
+    private IEnumerator InitializePieces()
+    {
+      yield return new WaitForEndOfFrame();
+      for (int i = 0; i < 3; ++i)
+      { AddPiece(); }
     }
 
     private void OnDisable()
