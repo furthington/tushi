@@ -72,6 +72,7 @@ namespace Board
       { tile.block.DeferredRemove(); }
     }
 
+    /* TODO: Remove for release. */
     public void OnPointerClick(PointerEventData data)
     {
       if(block != null)
