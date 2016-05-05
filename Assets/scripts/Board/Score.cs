@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Notification;
 
 namespace Board
 {
@@ -14,7 +15,7 @@ namespace Board
   {
     private Text text;
     private int score = 0;
-    private Notification.SubscriptionStack subscriptions = new Notification.SubscriptionStack();
+    private SubscriptionStack subscriptions = new SubscriptionStack();
 
     private void Awake()
     {
@@ -26,7 +27,7 @@ namespace Board
     {
       subscriptions.Add
       (
-        Notification.Pool.Subscribe<AddScore>
+        Pool.Subscribe<AddScore>
         ( s =>
           {
             /* TODO: Make score count up? */
