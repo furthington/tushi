@@ -73,6 +73,13 @@ namespace Board
         foreach(Block b in blocks)
         { b.PlaceInTile(); }
 
+        Piece p = currently_dragged.GetComponentInChildren<Piece>();
+        if (p != null)
+        {
+          p.transform.SetParent(canvas.transform);
+          p.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        }
+
         Notification.Pool.Dispatch(new AddNewPiece());
         Destroy(gameObject);
       }
