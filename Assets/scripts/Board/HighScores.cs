@@ -15,23 +15,30 @@ namespace Board
     public int AllTime
     { get; set; }
   }
+  public struct WriteHighScores
+  {
+    public int Score
+    { get; set; }
+  }
 
   public class HighScores : MonoBehaviour
   {
     private string file = Application.persistentDataPath
-                          + "/high-scores";
+                          + "/high-scores"; // TODO: encrypt
     private SubscriptionStack subscriptions = new SubscriptionStack();
+    private int last = 0;
+    private int all_time = 0;
 
     public void Start()
     {
       subscriptions.Add
       (Pool.Subscribe<ReadHighScores>(_ => Read()));
+      subscriptions.Add
+      (Pool.Subscribe<WriteHighScores>(_ => Write()));
     }
 
     private void Read()
     {
-      int last = 0;
-      int all_time = 0;
       /* TODO: Use a future here. */
       using(var reader = new StreamReader(file))
       {
@@ -44,6 +51,16 @@ namespace Board
       ret.AllTime = all_time;
       Logger.LogFormat("last: {0} all time: {1}", last, all_time);
       Pool.Dispatch(ret);
+    }
+
+    private void Write(WriteHighScores whs)
+    {
+      using(var writer = new StreamWriter(file))
+      {
+        writer.WriteLine(whs.Score);
+        writer.WriteLine(Math.Max(all_time, whs.Score));
+      }
+      Logger.LogFormat("wrote high scores to disk");
     }
   }
 }
