@@ -27,9 +27,6 @@ namespace HighScore
     private int last = 0;
     private int all_time = 0;
 
-    private void Awake()
-    { Read(); }
-
     private void Start()
     {
       subscriptions.Add
