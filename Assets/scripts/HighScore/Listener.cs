@@ -18,6 +18,9 @@ namespace HighScore
   {
     public int Score
     { get; set; }
+
+    public Write(int s)
+    { Score = s; }
   }
 
   public class Listener : MonoBehaviour
@@ -30,41 +33,44 @@ namespace HighScore
     private void Start()
     {
       subscriptions.Add
-      (Pool.Subscribe<Read>(_ => Read()));
+      (Pool.Subscribe<Read>(_ => DoRead()));
       subscriptions.Add
-      (Pool.Subscribe<Write>(Write));
+      (Pool.Subscribe<Write>(DoWrite));
       Logger.LogFormat("High score path: {0}", Path());
     }
 
-    private void Read()
+    private void DoRead()
     {
-      using(var timer = new Profile.TaskTimer())
+      using(var timer = new Profile.TaskTimer("Read high scores"))
       {
-      if(File.Exists(Path()))
-      {
-        using(var reader = new StreamReader(Path()))
+        if(File.Exists(Path()))
         {
-          last = Int32.Parse(reader.ReadLine());
-          all_time = Int32.Parse(reader.ReadLine());
+          using(var reader = new StreamReader(Path()))
+          {
+            last = Int32.Parse(reader.ReadLine());
+            all_time = Int32.Parse(reader.ReadLine());
+          }
         }
-      }
 
-      var ret = new ReadReply();
-      ret.Last = last;
-      ret.Best = all_time;
-      Logger.LogFormat("Read scores; last: {0} best: {1}", last, all_time);
-      Pool.Dispatch(ret);
+        var ret = new ReadReply();
+        ret.Last = last;
+        ret.Best = all_time;
+        Logger.LogFormat("Read scores; last: {0} best: {1}", last, all_time);
+        Pool.Dispatch(ret);
       }
     }
 
-    private void Write(Write whs)
+    private void DoWrite(Write whs)
     {
-      using(var writer = new StreamWriter(Path()))
+      using(var timer = new Profile.TaskTimer("Write high scores"))
       {
-        writer.WriteLine(whs.Score);
-        writer.WriteLine(Math.Max(all_time, whs.Score));
+        using(var writer = new StreamWriter(Path()))
+        {
+          writer.WriteLine(whs.Score);
+          writer.WriteLine(Math.Max(all_time, whs.Score));
+        }
+        Logger.LogFormat("wrote high scores to disk");
       }
-      Logger.LogFormat("wrote high scores to disk");
     }
 
     private string Path() /* TODO: encrypt */
