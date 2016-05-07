@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ namespace Board
 {
   public class Block : MonoBehaviour
   {
+    public Piece piece; /* Assign in editor */
     private Tile currently_over = null;
     private GameObject canvas;
 
@@ -60,7 +62,13 @@ namespace Board
     { Destroy(gameObject); }
 
     public void DeferredRemove()
-    { StartCoroutine(DeferredRemoveImpl()); }
+    {
+      /* Destroy the big piece and show the little blocks. */
+      if (!GetComponent<Image>().enabled)
+      { piece.BreakDown(); }
+
+      StartCoroutine(DeferredRemoveImpl());
+    }
 
     private IEnumerator DeferredRemoveImpl()
     {
