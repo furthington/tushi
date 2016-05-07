@@ -4,24 +4,24 @@ using System;
 using System.IO;
 using Notification;
 
-namespace Board
+namespace HighScore
 {
-  public struct ReadHighScores
+  public struct Read
   { }
-  public struct ReadHighScoresReply
+  public struct ReadReply
   {
     public int Last
     { get; set; }
     public int AllTime
     { get; set; }
   }
-  public struct WriteHighScores
+  public struct Write
   {
     public int Score
     { get; set; }
   }
 
-  public class HighScores : MonoBehaviour
+  public class Listener : MonoBehaviour
   {
     private string file = Application.persistentDataPath
                           + "/high-scores"; // TODO: encrypt
@@ -32,9 +32,9 @@ namespace Board
     public void Start()
     {
       subscriptions.Add
-      (Pool.Subscribe<ReadHighScores>(_ => Read()));
+      (Pool.Subscribe<Read>(_ => Read()));
       subscriptions.Add
-      (Pool.Subscribe<WriteHighScores>(Write));
+      (Pool.Subscribe<Write>(Write));
     }
 
     private void Read()
@@ -46,14 +46,14 @@ namespace Board
         all_time = Int32.Parse(reader.ReadLine());
       }
 
-      var ret = new ReadHighScoresReply();
+      var ret = new ReadReply();
       ret.Last = last;
       ret.AllTime = all_time;
       Logger.LogFormat("last: {0} all time: {1}", last, all_time);
       Pool.Dispatch(ret);
     }
 
-    private void Write(WriteHighScores whs)
+    private void Write(Write whs)
     {
       using(var writer = new StreamWriter(file))
       {
