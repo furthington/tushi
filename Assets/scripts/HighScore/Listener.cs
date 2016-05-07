@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using System.IO;
 using Notification;
@@ -23,13 +22,15 @@ namespace HighScore
 
   public class Listener : MonoBehaviour
   {
-    private string file = Application.persistentDataPath
-                          + "/high-scores"; // TODO: encrypt
     private SubscriptionStack subscriptions = new SubscriptionStack();
+    /* TODO: Only hit disk once. */
     private int last = 0;
     private int all_time = 0;
 
-    public void Start()
+    private void Awake()
+    { Read(); }
+
+    private void Start()
     {
       subscriptions.Add
       (Pool.Subscribe<Read>(_ => Read()));
@@ -40,10 +41,13 @@ namespace HighScore
     private void Read()
     {
       /* TODO: Use a future here. */
-      using(var reader = new StreamReader(file))
+      if(File.Exists(Path()))
       {
-        last = Int32.Parse(reader.ReadLine());
-        all_time = Int32.Parse(reader.ReadLine());
+        using(var reader = new StreamReader(Path()))
+        {
+          last = Int32.Parse(reader.ReadLine());
+          all_time = Int32.Parse(reader.ReadLine());
+        }
       }
 
       var ret = new ReadReply();
@@ -55,12 +59,15 @@ namespace HighScore
 
     private void Write(Write whs)
     {
-      using(var writer = new StreamWriter(file))
+      using(var writer = new StreamWriter(Path()))
       {
         writer.WriteLine(whs.Score);
         writer.WriteLine(Math.Max(all_time, whs.Score));
       }
       Logger.LogFormat("wrote high scores to disk");
     }
+
+    private string Path() /* TODO: encrypt */
+    { return Application.persistentDataPath + "/high-scores"; }
   }
 }
