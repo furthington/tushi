@@ -34,7 +34,7 @@ namespace Board
       subscriptions.Add
       (Pool.Subscribe<ReadHighScores>(_ => Read()));
       subscriptions.Add
-      (Pool.Subscribe<WriteHighScores>(_ => Write()));
+      (Pool.Subscribe<WriteHighScores>(Write));
     }
 
     private void Read()
