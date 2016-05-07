@@ -66,6 +66,8 @@ namespace Board
       {
         if (b.IsInValidPosition())
         { ++valid; }
+        else
+        { break; }
       }
 
       if(valid == blocks.Count)
