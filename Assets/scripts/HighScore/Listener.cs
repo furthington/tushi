@@ -26,9 +26,8 @@ namespace HighScore
   public class Listener : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
-    /* TODO: Only hit disk once. */
-    private int last = 0;
-    private int all_time = 0;
+    private int? last = null;
+    private int? all_time = null;
 
     private void Start()
     {
@@ -43,7 +42,7 @@ namespace HighScore
     {
       using(var timer = new Profile.TaskTimer("Read high scores"))
       {
-        if(File.Exists(Path()))
+        if((last == null || all_time == null) && File.Exists(Path()))
         {
           using(var reader = new StreamReader(Path()))
           {
@@ -53,8 +52,8 @@ namespace HighScore
         }
 
         var ret = new ReadReply();
-        ret.Last = last;
-        ret.Best = all_time;
+        ret.Last = last ?? 0;
+        ret.Best = all_time ?? 0;
         Logger.LogFormat("Read scores; last: {0} best: {1}", last, all_time);
         Pool.Dispatch(ret);
       }
@@ -67,7 +66,7 @@ namespace HighScore
         using(var writer = new StreamWriter(Path()))
         {
           writer.WriteLine(whs.Score);
-          writer.WriteLine(Math.Max(all_time, whs.Score));
+          writer.WriteLine(Math.Max(all_time ?? 0, whs.Score));
         }
         Logger.LogFormat("wrote high scores to disk");
       }
