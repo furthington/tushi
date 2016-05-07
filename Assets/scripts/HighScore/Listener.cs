@@ -11,7 +11,7 @@ namespace HighScore
   {
     public int Last
     { get; set; }
-    public int AllTime
+    public int Best
     { get; set; }
   }
   public struct Write
@@ -33,11 +33,13 @@ namespace HighScore
       (Pool.Subscribe<Read>(_ => Read()));
       subscriptions.Add
       (Pool.Subscribe<Write>(Write));
+      Logger.LogFormat("High score path: {0}", Path());
     }
 
     private void Read()
     {
-      /* TODO: Use a future here. */
+      using(var timer = new Profile.TaskTimer())
+      {
       if(File.Exists(Path()))
       {
         using(var reader = new StreamReader(Path()))
@@ -49,9 +51,10 @@ namespace HighScore
 
       var ret = new ReadReply();
       ret.Last = last;
-      ret.AllTime = all_time;
-      Logger.LogFormat("last: {0} all time: {1}", last, all_time);
+      ret.Best = all_time;
+      Logger.LogFormat("Read scores; last: {0} best: {1}", last, all_time);
       Pool.Dispatch(ret);
+      }
     }
 
     private void Write(Write whs)

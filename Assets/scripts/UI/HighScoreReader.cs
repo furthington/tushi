@@ -7,7 +7,7 @@ namespace UI
   public enum HighScoreState
   {
     Last,
-    AllTime
+    Best
   }
 
   [RequireComponent (typeof(Text))]
@@ -31,8 +31,8 @@ namespace UI
         case HighScoreState.Last:
           GetComponent<Text>().text = "Last Score: " + rr.Last.ToString();
           break;
-        case HighScoreState.AllTime:
-          GetComponent<Text>().text = "High Score: " + rr.AllTime.ToString();
+        case HighScoreState.Best:
+          GetComponent<Text>().text = "Best Score: " + rr.Best.ToString();
           break;
       }
     }
