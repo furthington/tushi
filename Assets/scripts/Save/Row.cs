@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Notification;
 using System.Collections.Generic;
 
@@ -10,10 +11,10 @@ namespace Save
     { get; set; }
     public Vector3 Scale
     { get; set; }
-    public float Rotation
+    public Quaternion Rotation
     { get; set; }
 
-    public TileInfo(string n, Vector3 s, float r)
+    public TileInfo(string n, Vector3 s, Quaternion r)
     {
       Name = n;
       Scale = s;
@@ -78,7 +79,7 @@ namespace Save
           (
             cur.name,
             cur.transform.localScale,
-            cur.transform.rotation.z
+            cur.transform.rotation
           )
         );
       }
@@ -96,7 +97,11 @@ namespace Save
           cur = cur.right, ++i)
       {
         Debug.Assert(i < wr.Tiles.Count, "Not enough tiles while loading");
-        // TODO: Assign wr.Tiles[i] to cur
+        cur.transform.localScale = wr.Tiles[i].Scale;
+        cur.transform.rotation = wr.Tiles[i].Rotation;
+        cur.block = new GameObject().AddComponent<Board.Block>();
+        cur.block.GetComponent<Image>()
+           .sprite = Resources.Load<Sprite>(wr.Tiles[i].Name);
       }
     }
   }
