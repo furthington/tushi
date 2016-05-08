@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace Save
 {
-  public struct GameExists
+  public class GameExists
   { }
-  public struct LoadGame
+  public class LoadGame
   { }
-  public struct SaveGame
+  public class SaveGame
   { }
 
   public class Loader : MonoBehaviour
@@ -23,7 +23,7 @@ namespace Save
       subscriptions.Add
       (Pool.Subscribe<LoadGame>(_ => Load()));
       subscriptions.Add
-      (Pool.Subscribe<SaveGame>(Save));
+      (Pool.Subscribe<SaveGame>(_ => Save()));
       subscriptions.Add
       (Pool.Subscribe<ReadRowReply>(SaveRow));
 

@@ -4,7 +4,7 @@ using Notification;
 
 namespace Board
 {
-  public struct AddScore
+  public class AddScore
   {
     public int Score
     { get; set; }

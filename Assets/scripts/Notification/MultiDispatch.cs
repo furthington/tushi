@@ -2,10 +2,10 @@ using System;
 
 namespace Notification
 {
-  public struct Pre<T>
+  public class Pre<T>
   { }
-  public struct Post<T>
+  public class Post<T>
   { }
-  public struct Intercept<T>
+  public class Intercept<T>
   { }
 }

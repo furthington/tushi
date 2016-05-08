@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Notification
 {
-  public struct Subscription<T>
+  public class Subscription<T>
   {
     public int ID
     { get; set; }
@@ -25,7 +25,7 @@ namespace Notification
     { return ID; }
   }
 
-  public struct Subscribed<A, T>
+  public class Subscribed<A, T>
   {
     public readonly Subscription<T> subscription;
     public readonly A action;

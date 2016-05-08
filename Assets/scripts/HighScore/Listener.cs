@@ -5,16 +5,16 @@ using Notification;
 
 namespace HighScore
 {
-  public struct Read
+  public class Read
   { }
-  public struct ReadReply
+  public class ReadReply
   {
     public int Last
     { get; set; }
     public int Best
     { get; set; }
   }
-  public struct Write
+  public class Write
   {
     public int Score
     { get; set; }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Save
 {
-  public struct ReadRow
+  public class ReadRow
   { }
   public class ReadRowReply
   {
@@ -19,7 +19,7 @@ namespace Save
       Tiles = t;
     }
   }
-  public struct WriteRow
+  public class WriteRow
   {
     public int Number
     { get; set; }

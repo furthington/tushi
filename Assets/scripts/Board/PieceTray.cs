@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Board
 {
-  public struct AddNewPiece { }
+  public class AddNewPiece { }
 
   public class PieceTray : MonoBehaviour
   {
