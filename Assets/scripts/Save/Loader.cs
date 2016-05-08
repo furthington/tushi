@@ -48,6 +48,7 @@ namespace Save
     private void Save()
     {
       /* Ask each row to respond. */
+      replies.Clear();
       Pool.Dispatch(new ReadRow());
     }
 
