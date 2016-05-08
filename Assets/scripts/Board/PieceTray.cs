@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Notification;
 
 namespace Board
 {
@@ -16,7 +17,7 @@ namespace Board
 
     private const float rice_prob_min = 0.1f;
     private float rice_prob = 0.0f;
-    private Notification.SubscriptionStack subscriptions = new Notification.SubscriptionStack();
+    private SubscriptionStack subscriptions = new SubscriptionStack();
 
     private void Start()
     {
@@ -24,7 +25,7 @@ namespace Board
 
       subscriptions.Add
       (
-        Notification.Pool.Subscribe<AddNewPiece>
+        Pool.Subscribe<AddNewPiece>
         (_ => AddPiece())
       );
 
