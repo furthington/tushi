@@ -19,6 +19,19 @@ namespace Save
       Tiles = t;
     }
   }
+  public struct WriteRow
+  {
+    public int Number
+    { get; set; }
+    public List<string> Tiles
+    { get; set; }
+
+    public WriteRow(int n, List<string> t)
+    {
+      Number = n;
+      Tiles = t;
+    }
+  }
 
   [RequireComponent (typeof(Board.Tile))]
   public class Row : MonoBehaviour
@@ -31,6 +44,8 @@ namespace Save
     {
       subscriptions.Add
       (Pool.Subscribe<ReadRow>(_ => Read()));
+      subscriptions.Add
+      (Pool.Subscribe<WriteRow>(Write));
     }
 
     private void Read()
@@ -43,12 +58,19 @@ namespace Save
       Pool.Dispatch(new ReadRowReply(number, states));
     }
 
-    //private void Write()
-    //{
-    //  for(var cur = GetComponent<Board.Tile>();
-    //      cur != null;
-    //      cur = cur.right)
-    //  { }
-    //}
+    private void Write(WriteRow wr)
+    {
+      if(wr.Number != number)
+      { return; }
+
+      var i = 0;
+      for(var cur = GetComponent<Board.Tile>();
+          cur != null;
+          cur = cur.right, ++i)
+      {
+        Debug.Assert(i < wr.Tiles.Count, "Not enough tiles while loading");
+        // TODO: Assign wr.Tiles[i] to cur
+      }
+    }
   }
 }
