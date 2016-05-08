@@ -4,16 +4,33 @@ using System.Collections.Generic;
 
 namespace Save
 {
+  public class TileInfo
+  {
+    public string Name
+    { get; set; }
+    public Vector3 Scale
+    { get; set; }
+    public float Rotation
+    { get; set; }
+
+    public TileInfo(string n, Vector3 s, float r)
+    {
+      Name = n;
+      Scale = s;
+      Rotation = r;
+    }
+  }
+
   public class ReadRow
   { }
   public class ReadRowReply
   {
     public int Number
     { get; set; }
-    public List<string> Tiles
+    public List<TileInfo> Tiles
     { get; set; }
 
-    public ReadRowReply(int n, List<string> t)
+    public ReadRowReply(int n, List<TileInfo> t)
     {
       Number = n;
       Tiles = t;
@@ -23,10 +40,10 @@ namespace Save
   {
     public int Number
     { get; set; }
-    public List<string> Tiles
+    public List<TileInfo> Tiles
     { get; set; }
 
-    public WriteRow(int n, List<string> t)
+    public WriteRow(int n, List<TileInfo> t)
     {
       Number = n;
       Tiles = t;
@@ -50,11 +67,21 @@ namespace Save
 
     private void Read()
     {
-      var states = new List<string>();
+      var states = new List<TileInfo>();
       for(var cur = GetComponent<Board.Tile>();
           cur != null;
           cur = cur.right)
-      { states.Add(cur.name); } // TODO: Add the correct thing here
+      {
+        states.Add
+        (
+          new TileInfo
+          (
+            cur.name,
+            cur.transform.localScale,
+            cur.transform.rotation.z
+          )
+        );
+      }
       Pool.Dispatch(new ReadRowReply(number, states));
     }
 
