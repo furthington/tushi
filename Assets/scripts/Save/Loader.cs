@@ -67,6 +67,9 @@ namespace Save
 
     private void Write()
     {
+      var filled = replies.Count(x => x != null);
+      Debug.Assert(filled == replies.Count, "Cannot write incomplete data");
+
       using(var timer = new Profile.TaskTimer("Write save game"))
       {
         using(var writer = new StreamWriter(Path()))
