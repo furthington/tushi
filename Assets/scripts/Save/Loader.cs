@@ -36,9 +36,12 @@ namespace Save
       /* TODO: Load the main level. */
 
       Debug.Assert(File.Exists(Path()), "Trying to load non-existent save");
-      using(var reader = new StreamReader(Path()))
+      using(var timer = new Profile.TaskTimer("Read saved game"))
       {
-        /* TODO: Parse each line for each row. */
+        using(var reader = new StreamReader(Path()))
+        {
+          /* TODO: Parse each line for each row. */
+        }
       }
     }
 
@@ -64,9 +67,12 @@ namespace Save
 
     private void Write()
     {
-      using(var writer = new StreamWriter(Path()))
+      using(var timer = new Profile.TaskTimer("Write save game"))
       {
-        /* TODO: Write replies to file. */
+        using(var writer = new StreamWriter(Path()))
+        {
+          /* TODO: Write replies to file. */
+        }
       }
     }
 
