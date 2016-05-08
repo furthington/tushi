@@ -6,7 +6,7 @@ namespace Save
 {
   public struct ReadRow
   { }
-  public struct ReadRowReply
+  public class ReadRowReply
   {
     public int Number
     { get; set; }
