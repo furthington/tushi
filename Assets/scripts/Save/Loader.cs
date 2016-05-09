@@ -19,6 +19,9 @@ namespace Save
   public class Data
   {
     public ReadRowReply[] rows;
+    /* TODO: Save the current piece tray. */
+    /* TODO: Save the current score. */
+    /* TODO: Save the whole pieces. */
   }
 
   public class Loader : MonoBehaviour
@@ -41,15 +44,17 @@ namespace Save
 
     private void Load()
     {
-      /* TODO: Load the main level. */
-
       Debug.Assert(File.Exists(Path()), "Trying to load non-existent save");
       using(var timer = new Profile.TaskTimer("Read saved game"))
       {
-        using(var reader = new StreamReader(Path()))
-        {
-          /* TODO: Parse each line for each row. */
-        }
+        Data data = null;
+
+        var bf = new BinaryFormatter();
+        using(var file = File.Open(Path(), FileMode.Open))
+        { data = (Data)bf.Deserialize(file); }
+
+        foreach(var row in data.rows)
+        { Pool.Dispatch(new WriteRow(row.Number, row.Tiles)); }
       }
     }
 
