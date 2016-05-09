@@ -58,7 +58,7 @@ namespace Save
       }
     }
 
-    private void Save()
+    public void Save() // TODO private
     {
       /* Ask each row to respond. */
       replies.Clear();
@@ -70,7 +70,10 @@ namespace Save
       if(rrr.Number >= replies.Count)
       {
         replies.AddRange
-        (Enumerable.Repeat<ReadRowReply>(null, rrr.Number - replies.Count));
+        (
+          Enumerable.Repeat<ReadRowReply>
+          (null, (rrr.Number - replies.Count) + 1)
+        );
       }
       replies[rrr.Number] = rrr;
 
