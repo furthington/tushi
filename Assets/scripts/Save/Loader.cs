@@ -1,8 +1,10 @@
 using UnityEngine;
 using Notification;
+using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Save
 {
@@ -12,6 +14,12 @@ namespace Save
   { }
   public class SaveGame
   { }
+
+  [Serializable]
+  public class Data
+  {
+    public ReadRowReply[] rows;
+  }
 
   public class Loader : MonoBehaviour
   {
@@ -73,10 +81,12 @@ namespace Save
 
       using(var timer = new Profile.TaskTimer("Write save game"))
       {
-        using(var writer = new StreamWriter(Path()))
-        {
-          /* TODO: Write replies to file. */
-        }
+        var data = new Data();
+        data.rows = replies.ToArray();
+
+        var bf = new BinaryFormatter();
+        using(var file = File.Open(Path(), FileMode.OpenOrCreate))
+        { bf.Serialize(file, data); }
       }
     }
 

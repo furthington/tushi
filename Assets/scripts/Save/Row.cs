@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Notification;
+using System;
 using System.Collections.Generic;
 
 namespace Save
 {
+  [Serializable]
   public class TileInfo
   {
     public string Name
@@ -24,14 +26,15 @@ namespace Save
 
   public class ReadRow
   { }
+  [Serializable]
   public class ReadRowReply
   {
     public int Number
     { get; set; }
-    public List<TileInfo> Tiles
+    public TileInfo[] Tiles
     { get; set; }
 
-    public ReadRowReply(int n, List<TileInfo> t)
+    public ReadRowReply(int n, TileInfo[] t)
     {
       Number = n;
       Tiles = t;
@@ -41,10 +44,10 @@ namespace Save
   {
     public int Number
     { get; set; }
-    public List<TileInfo> Tiles
+    public TileInfo[] Tiles
     { get; set; }
 
-    public WriteRow(int n, List<TileInfo> t)
+    public WriteRow(int n, TileInfo[] t)
     {
       Number = n;
       Tiles = t;
@@ -83,7 +86,7 @@ namespace Save
           )
         );
       }
-      Pool.Dispatch(new ReadRowReply(number, states));
+      Pool.Dispatch(new ReadRowReply(number, states.ToArray()));
     }
 
     private void Write(WriteRow wr)
@@ -96,7 +99,7 @@ namespace Save
           cur != null;
           cur = cur.right, ++i)
       {
-        Debug.Assert(i < wr.Tiles.Count, "Not enough tiles while loading");
+        Debug.Assert(i < wr.Tiles.Length, "Not enough tiles while loading");
         cur.transform.localScale = wr.Tiles[i].Scale;
         cur.transform.rotation = wr.Tiles[i].Rotation;
         cur.block = new GameObject().AddComponent<Board.Block>();
