@@ -11,12 +11,12 @@ namespace Save
   {
     public string Name
     { get; set; }
-    public Vector3 Scale
+    public float[] Scale
     { get; set; }
-    public Quaternion Rotation
+    public float[] Rotation
     { get; set; }
 
-    public TileInfo(string n, Vector3 s, Quaternion r)
+    public TileInfo(string n, float[] s, float[] r)
     {
       Name = n;
       Scale = s;
@@ -81,8 +81,19 @@ namespace Save
           new TileInfo
           (
             cur.name,
-            cur.transform.localScale,
-            cur.transform.rotation
+            new float[]
+            {
+              cur.transform.localScale.x,
+              cur.transform.localScale.y,
+              cur.transform.localScale.z
+            },
+            new float[]
+            {
+              cur.transform.rotation.x,
+              cur.transform.rotation.y,
+              cur.transform.rotation.z,
+              cur.transform.rotation.w
+            }
           )
         );
       }
@@ -100,8 +111,19 @@ namespace Save
           cur = cur.right, ++i)
       {
         Debug.Assert(i < wr.Tiles.Length, "Not enough tiles while loading");
-        cur.transform.localScale = wr.Tiles[i].Scale;
-        cur.transform.rotation = wr.Tiles[i].Rotation;
+        cur.transform.localScale = new Vector3
+        (
+          wr.Tiles[i].Scale[0],
+          wr.Tiles[i].Scale[1],
+          wr.Tiles[i].Scale[2]
+        );
+        cur.transform.rotation = new Quaternion
+        (
+          wr.Tiles[i].Rotation[0],
+          wr.Tiles[i].Rotation[1],
+          wr.Tiles[i].Rotation[2],
+          wr.Tiles[i].Rotation[3]
+        );
         cur.block = new GameObject().AddComponent<Board.Block>();
         cur.block.GetComponent<Image>()
            .sprite = Resources.Load<Sprite>(wr.Tiles[i].Name);
