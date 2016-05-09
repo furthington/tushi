@@ -81,15 +81,5 @@ namespace Board
       foreach (Transform child in transform)
       { child.Rotate(new Vector3(0, 0, -60)); }
     }
-
-    public void Mirror()
-    {
-      foreach (Transform child in transform)
-      {
-        Vector3 scale = child.localScale;
-        scale.x *= -1;
-        child.localScale = scale;
-      }
-    }
   }
 }
