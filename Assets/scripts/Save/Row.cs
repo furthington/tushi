@@ -143,7 +143,6 @@ namespace Save
         cur.block.GetComponent<Image>()
            .sprite = Resources.Load<Sprite>(wr.Tiles[i].Name);
         cur.block.GetComponent<Image>().SetNativeSize();
-        Logger.LogFormat("Tile ({0},{1}) {2}", number, i, wr.Tiles[i].Name);
       }
     }
   }
