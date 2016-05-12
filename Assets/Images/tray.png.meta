@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: c3a74c3d0d2c06348a1009f24f4e0011
-timeCreated: 1463077944
+guid: 94bd209641264d547929c7dd9c884d42
+timeCreated: 1463084223
 licenseType: Pro
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: tray_split
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +39,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +50,23 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: tray_split
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 13
+        width: 348
+        height: 222
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 21, y: 30, z: 0, w: 21}
+      outline:
+      - - {x: -174, y: 111}
+        - {x: -174, y: -107}
+        - {x: -169, y: -111}
+        - {x: 174, y: -111}
+        - {x: 174, y: 111}
     outline: []
   spritePackingTag: 
   userData: 
