@@ -13,6 +13,26 @@ namespace Board
 
     private void Start()
     {
+      // TODO:
+      // listen for PiecePlaced
+      // start a coroutine
+      //   dispatch ActiveTileRequest(this)
+      //   yield WaitForNotification<Post<ActiveTileRequest>>(n => n.obj == this)
+      //   if fewer active than in piece
+      //     break
+      //   else if more than check threshold
+      //     break
+      //   for each rotation
+      //     subscribe active tiles
+      //     for each valid neighbour
+      //       dispatch NeighbourRequest(this, neighbour_relationship)
+      //       yield WaitForNotification<Post<NeighbourRequest>>(n => n.obj == this)
+      //       if no responses
+      //         break
+      //       responses become new active tiles; resubscribe them
+      //       reset state
+      //     if active tiles remain
+      //       valid position found
       subscriptions.Add
       (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
       subscriptions.Add
