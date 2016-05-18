@@ -72,6 +72,9 @@ namespace Board
 
       if(valid == blocks.Count)
       {
+        /* Placed pieces do not rotate anymore. */
+        currently_dragged.GetComponentInChildren<Root>().ClearSubscriptions();
+
         foreach(Block b in blocks)
         { b.PlaceInTile(); }
 

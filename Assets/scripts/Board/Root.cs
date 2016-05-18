@@ -26,6 +26,9 @@ namespace Board
       );
     }
 
+    public void ClearSubscriptions()
+    { subscriptions.Clear(); }
+
     private void OnDisable()
     { subscriptions.Clear(); }
   }
