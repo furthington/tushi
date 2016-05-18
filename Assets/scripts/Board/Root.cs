@@ -6,6 +6,7 @@ namespace Board
   public class RotateNeighbours { }
   public class PrintDebug { }
 
+  [RequireComponent (typeof(Neighbour))]
   public class Root : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();

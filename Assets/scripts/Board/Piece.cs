@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Board
 {
@@ -15,9 +15,9 @@ namespace Board
     private IEnumerator DeferredRemove()
     {
       yield return new WaitForEndOfFrame();
-      Destroy(gameObject);
       foreach (Image img in block_images)
       { img.enabled = true; }
+      Destroy(gameObject);
     }
   }
 }
