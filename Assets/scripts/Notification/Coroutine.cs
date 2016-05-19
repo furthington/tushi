@@ -6,6 +6,9 @@ namespace Notification
 {
   public static class Coroutine
   {
+    public static IEnumerator WaitFor<T>()
+    { yield return WaitFor<T>(_ => true); }
+
     public static IEnumerator WaitFor<T>(Predicate<T> filter)
     {
       bool found = false;
