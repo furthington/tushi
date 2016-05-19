@@ -31,6 +31,9 @@ namespace Notification
       Pool.Unsubscribe(sub);
     }
 
+    public static IEnumerator WaitForReplies<T>()
+    { yield return WaitForReplies<T>(_ => true); }
+
     public static IEnumerator WaitForReplies<T>(Predicate<T> filter)
     {
       bool found = false;
