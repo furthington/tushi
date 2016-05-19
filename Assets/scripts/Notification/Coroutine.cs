@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Notification
 {
-  public struct RepliesComplete<T>
+  public class RepliesComplete<T>
   {
     public int ID
     { get; set; }
