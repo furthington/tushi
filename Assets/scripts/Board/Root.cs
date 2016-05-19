@@ -5,13 +5,64 @@ namespace Board
 {
   public class RotateNeighbours { }
   public class PrintDebug { }
+  public class ActiveTileRequest
+  {
+    public GameObject Requestor
+    { get; set; }
+
+    public ActiveTileRequest(GameObject r)
+    { Requestor = r; }
+  }
+  public class ActiveTileReply
+  {
+    public Tile Active
+    { get; set; }
+    public ActiveTileRequest Request
+    { get; set; }
+
+    public ActiveTileReply(Tile t, ActiveTileRequest r)
+    {
+      Active = t;
+      Request = r;
+    }
+  }
 
   [RequireComponent (typeof(Neighbour))]
   public class Root : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
+    private List<Tile> active = new List<Tile>();
 
     private void Start()
+    {
+      subscriptions.Add
+      (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
+      subscriptions.Add
+      (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement());
+      subscriptions.Add
+      (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
+      subscriptions.Add
+      (
+        Pool.Subscribe<PrintDebug>
+        (_ =>
+          {
+            Logger.Log("Printing from root:");
+            GetComponent<Neighbour>().PrintDebug();
+          }
+        )
+      );
+    }
+
+    public void ClearSubscriptions()
+    { subscriptions.Clear(); }
+
+    private void OnDisable()
+    { subscriptions.Clear(); }
+
+    private void FindPlacement()
+    { StartCoroutine(FindPlacementAsync()); }
+
+    private IEnumerator FindPlacementAsync()
     {
       // TODO:
       // listen for PiecePlaced
@@ -33,24 +84,21 @@ namespace Board
       //       reset state
       //     if active tiles remain
       //       valid position found
-      subscriptions.Add
-      (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
-      subscriptions.Add
-      (
-        Pool.Subscribe<PrintDebug>
-        (_ =>
-          {
-            Logger.Log("Printing from root:");
-            GetComponent<Neighbour>().PrintDebug();
-          }
-        )
-      );
+      active.Clear();
+      Pool.Dispatch(new ActiveTileRequest(this));
+      yield return Coroutine.WaitForReplies<ActiveTileRequest>
+      (n => n.Requestor == this);
+
+      var active_subs = new SubscriptionStack();
+      foreach(var t in active)
+      { active_subs.Add<NeighbourRequest>(n => t.ReportNeighbour(n)); }
     }
 
-    public void ClearSubscriptions()
-    { subscriptions.Clear(); }
-
-    private void OnDisable()
-    { subscriptions.Clear(); }
+    private void StoreActiveTile(ActiveTileReply r)
+    {
+      if(r.Request.Requestor != this)
+      { return; }
+      active.Add(r.Active);
+    }
   }
 }

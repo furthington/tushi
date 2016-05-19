@@ -22,8 +22,13 @@ namespace Board
 
     public Block block = null;
 
+    private SubscriptionStack subscriptions = new SubscriptionStack();
+
     public void Start()
-    { lines = new List<Tile>[]{ line0, line1, line2 }; }
+    {
+      lines = new List<Tile>[]{ line0, line1, line2 };
+      subscriptions.Add<ActiveTileRequest>(ActiveReply);
+    }
 
     public void Emplace(Block b)
     {
@@ -81,6 +86,12 @@ namespace Board
         block.Remove();
         block = null;
       }
+    }
+
+    private void ActiveReply(ActiveTileRequest r)
+    {
+      if(block != null)
+      { Pool.Dispatch(new ActiveTileReply(this, r)); }
     }
   }
 }
