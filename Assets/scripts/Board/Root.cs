@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using Notification;
 
 namespace Board
@@ -38,7 +40,7 @@ namespace Board
       subscriptions.Add
       (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
       subscriptions.Add
-      (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement());
+      (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
       subscriptions.Add
@@ -85,18 +87,20 @@ namespace Board
       //     if active tiles remain
       //       valid position found
       active.Clear();
-      Pool.Dispatch(new ActiveTileRequest(this));
-      yield return Coroutine.WaitForReplies<ActiveTileRequest>
-      (n => n.Requestor == this);
+      Pool.Dispatch(new ActiveTileRequest(gameObject));
+      yield return Notification.Coroutine.WaitForReplies<ActiveTileRequest>
+      (n => n.Requestor == gameObject);
 
       var active_subs = new SubscriptionStack();
       foreach(var t in active)
-      { active_subs.Add<NeighbourRequest>(n => t.ReportNeighbour(n)); }
+      {
+        active_subs.Add(Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
+      }
     }
 
     private void StoreActiveTile(ActiveTileReply r)
     {
-      if(r.Request.Requestor != this)
+      if(r.Request.Requestor != gameObject)
       { return; }
       active.Add(r.Active);
     }

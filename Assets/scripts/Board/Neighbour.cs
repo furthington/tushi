@@ -3,18 +3,45 @@ using System.Collections.Generic;
 
 namespace Board
 {
+  public class NeighbourRequest
+  {
+    public GameObject Requestor
+    { get; set; }
+    NeighbourRelationship Relationship
+    { get; set; }
+
+    public NeighbourRequest(GameObject r, NeighbourRelationship nr)
+    {
+      Requestor = r;
+      Relationship = nr;
+    }
+  }
+  public class NeighbourReply
+  {
+    public Tile Neighbour;
+    public NeighbourRequest Request
+    { get; set; }
+
+    public NeighbourReply(Tile t, NeighbourRequest nr)
+    {
+      Neighbour = t;
+      Request = nr;
+    }
+  }
+
+  public enum NeighbourRelationship
+  {
+    Right,
+    TopRight,
+    TopLeft,
+    Left,
+    BottomLeft,
+    BottomRight
+  }
+
   public class Neighbour : MonoBehaviour
   {
     public List<Neighbour> neighbours; /* Asssign in editor */
-
-    /* start from the right and go counter-clockwise:
-       0: right
-       1: top-right
-       2: top-left
-       3: left
-       4: bottom-left
-       5: bottom-right
-    */
 
     private void Start()
     { Debug.Assert(neighbours.Count == 6, name + " needs exactly 6 neighbours!"); }

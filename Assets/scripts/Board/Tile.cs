@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
 using Profile;
+using Notification;
 
 namespace Board
 {
@@ -27,7 +28,7 @@ namespace Board
     public void Start()
     {
       lines = new List<Tile>[]{ line0, line1, line2 };
-      subscriptions.Add<ActiveTileRequest>(ActiveReply);
+      subscriptions.Add(Pool.Subscribe<ActiveTileRequest>(ActiveReply));
     }
 
     public void Emplace(Block b)
@@ -92,6 +93,11 @@ namespace Board
     {
       if(block != null)
       { Pool.Dispatch(new ActiveTileReply(this, r)); }
+    }
+
+    public void ReportNeighbour(NeighbourRequest nr)
+    {
+      /* TODO: Check for a neighbour with this relationship. */
     }
   }
 }
