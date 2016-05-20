@@ -34,6 +34,7 @@ namespace Board
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
+    private List<Tile> new_active = new List<Tile>();
 
     private void Start()
     {
@@ -43,6 +44,8 @@ namespace Board
       (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
+      subscriptions.Add
+      (Pool.Subscribe<NeighbourReply>(StoreNeighbor));
       subscriptions.Add
       (
         Pool.Subscribe<PrintDebug>
@@ -96,6 +99,7 @@ namespace Board
       else if(active.Count > 30) // TODO: Calculate
       { return; }
 
+      // TODO: For each rotation
       var active_subs = new SubscriptionStack();
       foreach(var t in active)
       {
@@ -104,9 +108,29 @@ namespace Board
       }
 
       var neighbours = GetComponent<Neighbour>();
-      foreach(var neighbour in neighbours.neighbours)
+      for(int i = 0; i < neighbours.neighbours.Count; ++i)
       {
-        
+        // dispatch NeighbourRequest(this, neighbour_relationship)
+        // yield WaitForNotification<Post<NeighbourRequest>>(n => n.obj == this)
+        // if no responses
+        //   break
+        // responses become new active tiles; resubscribe them
+        // reset state
+        var n = neighbours.neighbours[i];
+        if(n == null)
+        { continue; }
+
+        new_active.Clear();
+        Pool.Dispatch
+        (new NeighbourRequest(gameObject, (NeighbourRelationship)i));
+        yield return Notification.Coroutine.WaitForReplies<NeighbourRequest>
+        (n => n.Requestor == gameObject);
+
+        if(new_active.IsEmpty())
+        { continue; }
+
+        active = new_active;
+        new_active.Clear();
       }
     }
 
@@ -115,6 +139,13 @@ namespace Board
       if(r.Request.Requestor != gameObject)
       { return; }
       active.Add(r.Active);
+    }
+
+    private void StoreNeighbor(NeighbourReply r)
+    {
+      if(r.Request.Requestor != gameObject)
+      { return; }
+      new_active.Add(r.Neighbour);
     }
   }
 }
