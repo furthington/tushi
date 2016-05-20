@@ -94,10 +94,10 @@ namespace Board
       yield return Notification.Coroutine.WaitForReplies<ActiveTileRequest>
       (n => n.Requestor == gameObject);
 
-      if(active.IsEmpty())
-      { return; } // TODO: Notif?
+      if(active.Count == 0)
+      { yield break; } // TODO: Notif?
       else if(active.Count > 30) // TODO: Calculate
-      { return; }
+      { yield break; }
 
       // TODO: For each rotation
       var active_subs = new SubscriptionStack();
@@ -107,30 +107,15 @@ namespace Board
         (Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
       }
 
-      var neighbours = GetComponent<Neighbour>();
-      for(int i = 0; i < neighbours.neighbours.Count; ++i)
+      foreach(var act in active)
       {
-        // dispatch NeighbourRequest(this, neighbour_relationship)
-        // yield WaitForNotification<Post<NeighbourRequest>>(n => n.obj == this)
-        // if no responses
-        //   break
-        // responses become new active tiles; resubscribe them
-        // reset state
-        var n = neighbours.neighbours[i];
-        if(n == null)
-        { continue; }
-
-        new_active.Clear();
-        Pool.Dispatch
-        (new NeighbourRequest(gameObject, (NeighbourRelationship)i));
-        yield return Notification.Coroutine.WaitForReplies<NeighbourRequest>
-        (n => n.Requestor == gameObject);
-
-        if(new_active.IsEmpty())
-        { continue; }
-
-        active = new_active;
-        new_active.Clear();
+        /* TODO: Coroutine. */
+        var valid = Walk(GetComponent<Neighbour>(), act);
+        if(valid)
+        {
+          Logger.Log("Found valid position for piece");
+          break; /* TODO: Notif? */
+        }
       }
     }
 
@@ -146,6 +131,44 @@ namespace Board
       if(r.Request.Requestor != gameObject)
       { return; }
       new_active.Add(r.Neighbour);
+    }
+
+    private bool WalkImpl(Neighbour neighbour, Tile tile)
+    {
+      if(neighbour != null)
+      {
+        if(tile == null)
+        { return false; }
+        return Walk(neighbour, tile);
+      }
+      return true;
+    }
+    private bool Walk(Neighbour neighbour, Tile tile)
+    {
+      /* We've hit a leaf. */
+      if(neighbour == null && tile == null)
+      { return true; }
+
+      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.Right],
+                   tile.right))
+      { return false; }
+      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.TopRight],
+                   tile.top_right))
+      { return false; }
+      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.TopLeft],
+                   tile.top_left))
+      { return false; }
+      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.Left],
+                   tile.left))
+      { return false; }
+      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.BottomLeft],
+                   tile.bottom_left))
+      { return false; }
+      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.BottomRight],
+                   tile.bottom_right))
+      { return false; }
+
+      return true;
     }
   }
 }
