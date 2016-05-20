@@ -89,10 +89,13 @@ namespace Board
       //       reset state
       //     if active tiles remain
       //       valid position found
-      active.Clear();
-      Pool.Dispatch(new ActiveTileRequest(gameObject));
-      yield return Notification.Coroutine.WaitForReplies<ActiveTileRequest>
-      (n => n.Requestor == gameObject);
+      using(var timer = new Profile.TaskTimer("Active tile request"))
+      {
+        active.Clear();
+        Pool.Dispatch(new ActiveTileRequest(gameObject));
+        yield return Notification.Coroutine.WaitForReplies<ActiveTileRequest>
+        (n => n.Requestor == gameObject);
+      }
 
       if(active.Count == 0)
       { yield break; } // TODO: Notif?
@@ -107,14 +110,17 @@ namespace Board
         (Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
       }
 
-      foreach(var act in active)
+      using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
-        /* TODO: Coroutine. */
-        var valid = Walk(GetComponent<Neighbour>(), act);
-        if(valid)
+        foreach(var act in active)
         {
-          Logger.Log("Found valid position for piece");
-          break; /* TODO: Notif? */
+          /* TODO: Coroutine. */
+          var valid = Walk(GetComponent<Neighbour>(), act);
+          if(valid)
+          {
+            Logger.Log("Found valid position for piece");
+            break; /* TODO: Notif? */
+          }
         }
       }
     }
