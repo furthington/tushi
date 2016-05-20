@@ -91,10 +91,22 @@ namespace Board
       yield return Notification.Coroutine.WaitForReplies<ActiveTileRequest>
       (n => n.Requestor == gameObject);
 
+      if(active.IsEmpty())
+      { return; } // TODO: Notif?
+      else if(active.Count > 30) // TODO: Calculate
+      { return; }
+
       var active_subs = new SubscriptionStack();
       foreach(var t in active)
       {
-        active_subs.Add(Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
+        active_subs.Add
+        (Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
+      }
+
+      var neighbours = GetComponent<Neighbour>();
+      foreach(var neighbour in neighbours.neighbours)
+      {
+        
       }
     }
 
