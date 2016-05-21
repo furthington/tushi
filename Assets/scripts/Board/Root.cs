@@ -97,10 +97,23 @@ namespace Board
         (n => n.Requestor == gameObject);
       }
 
-      if(active.Count == 0)
-      { yield break; } // TODO: Notif?
+      if(active.Count == 0) // TODO: Notif?
+      {
+        Logger.Log("Board is full...?");
+        yield break;
+      }
       else if(active.Count > 30) // TODO: Calculate
-      { yield break; }
+      {
+        Logger.Log("Active count greater than threshold");
+        yield break;
+      }
+
+      foreach(var t in active)
+      { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 255, 0, 255); }
+      yield return new WaitForSeconds(3);
+
+      foreach(var t in active)
+      { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0, 0); }
 
       // TODO: For each rotation
       var active_subs = new SubscriptionStack();
@@ -110,6 +123,7 @@ namespace Board
         (Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
       }
 
+      bool found = false;
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
         foreach(var act in active)
@@ -119,10 +133,13 @@ namespace Board
           if(valid)
           {
             Logger.Log("Found valid position for piece");
+            found = true;
             break; /* TODO: Notif? */
           }
         }
       }
+      if(!found)
+      { Logger.Log("No piece found"); } 
     }
 
     private void StoreActiveTile(ActiveTileReply r)
@@ -143,7 +160,7 @@ namespace Board
     {
       if(neighbour != null)
       {
-        if(tile == null)
+        if(tile == null || tile.block != null)
         { return false; }
         return Walk(neighbour, tile);
       }
