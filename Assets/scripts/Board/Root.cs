@@ -6,7 +6,6 @@ using Notification;
 namespace Board
 {
   public class RotateNeighbours { }
-  public class PrintDebug { }
   public class ActiveTileRequest
   {
     public GameObject Requestor
@@ -46,16 +45,6 @@ namespace Board
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
       subscriptions.Add
       (Pool.Subscribe<NeighbourReply>(StoreNeighbor));
-      subscriptions.Add
-      (
-        Pool.Subscribe<PrintDebug>
-        (_ =>
-          {
-            Logger.Log("Printing from root:");
-            GetComponent<Neighbour>().PrintDebug();
-          }
-        )
-      );
     }
 
     public void ClearSubscriptions()

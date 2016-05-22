@@ -56,23 +56,5 @@ namespace Board
         { n.Rotate(); }
       }
     }
-
-    public void PrintDebug()
-    {
-      string[] dir = new string[6] { "right", "top right", "top left", "left", "bottom left", "bottom right" };
-      int i = 0;
-      foreach (Neighbour n in neighbours)
-      {
-        if (n != null)
-        { Logger.Log("Neighbour to my " + dir[i]); }
-        ++i;
-      }
-      Logger.Log("====");
-      foreach (Neighbour n in neighbours)
-      {
-        if (n != null)
-        { n.PrintDebug(); }
-      }
-    }
   }
 }
