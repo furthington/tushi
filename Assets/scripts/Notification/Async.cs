@@ -14,7 +14,7 @@ namespace Notification
     { ID = id; }
   };
 
-  public static class Coroutine
+  public static class Async
   {
     /* XXX: Thread-safe. */
     private static int counter = 0;
@@ -25,7 +25,7 @@ namespace Notification
     public static IEnumerator WaitFor<T>(Predicate<T> filter)
     {
       bool found = false;
-      var sub = Pool.Subscribe<T>(n => found = filter(n));
+      var sub = Pool.PostSubscribe<T>(n => found = filter(n));
       while(!found)
       { yield return new WaitForEndOfFrame(); }
       Pool.Unsubscribe(sub);
@@ -36,7 +36,7 @@ namespace Notification
 
     public static IEnumerator WaitForReplies<T>(Predicate<T> filter)
     {
-      bool found = false;
+      bool found = false; // TODO: refactor?
       var sub = Pool.PostSubscribe<T>(n => found = filter(n));
       while(!found)
       { yield return new WaitForEndOfFrame(); }

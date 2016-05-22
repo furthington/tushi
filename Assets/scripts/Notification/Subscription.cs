@@ -37,7 +37,7 @@ namespace Notification
     }
   }
 
-  public class SubscriptionStack : IDisposable
+  public class SubscriptionStack
   {
     private readonly List<Action> unsubscribe = new List<Action>();
 
@@ -49,8 +49,5 @@ namespace Notification
       unsubscribe.ForEach(a => a());
       unsubscribe.Clear();
     }
-
-    public void Dispose()
-    { Clear(); }
   }
 }
