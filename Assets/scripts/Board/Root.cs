@@ -72,16 +72,12 @@ namespace Board
 
     private IEnumerator FindPlacementAsync()
     {
-      Logger.Log("Finding placement");
       using(var timer = new Profile.TaskTimer("Active tile request"))
       {
         active.Clear();
-        Logger.Log("Sending out request");
         Pool.Dispatch(new ActiveTileRequest(gameObject));
-        Logger.Log("Waiting for replies");
         yield return Notification.Async.WaitForReplies<ActiveTileRequest>
-        (n => { Logger.Log("Active filter"); return n.Requestor == gameObject; });
-        Logger.Log("Back with all replies");
+        (n => n.Requestor == gameObject);
       }
 
       if(active.Count == 0) // TODO: Notif?
@@ -125,10 +121,7 @@ namespace Board
     private void StoreActiveTile(ActiveTileReply r)
     {
       if(r.Request.Requestor != gameObject)
-      {
-        Logger.Log("Got somone else's active reply");
-        return; }
-      Logger.Log("Got active reply");
+      { return; }
       active.Add(r.Active);
     }
 

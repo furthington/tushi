@@ -94,7 +94,6 @@ namespace Board
 
     private void ActiveReply(ActiveTileRequest r)
     {
-      Logger.Log("Replying with active status");
       if(block == null)
       { Pool.Dispatch(new ActiveTileReply(this, r)); }
     }
