@@ -38,6 +38,9 @@ namespace HighScore
       Logger.LogFormat("High score path: {0}", Path());
     }
 
+    private void OnDisable()
+    { subscriptions.Clear(); }
+
     private void DoRead()
     {
       using(var timer = new Profile.TaskTimer("Read high scores"))
