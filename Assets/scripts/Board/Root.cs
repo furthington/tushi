@@ -65,10 +65,14 @@ namespace Board
     { subscriptions.Clear(); }
 
     private void FindPlacement()
-    { StartCoroutine(FindPlacementAsync()); }
+    {
+      StopAllCoroutines();
+      StartCoroutine(FindPlacementAsync());
+    }
 
     private IEnumerator FindPlacementAsync()
     {
+      Logger.Log("Finding placement");
       // TODO:
       // listen for PiecePlaced
       // start a coroutine
@@ -92,9 +96,12 @@ namespace Board
       using(var timer = new Profile.TaskTimer("Active tile request"))
       {
         active.Clear();
+        Logger.Log("Sending out request");
         Pool.Dispatch(new ActiveTileRequest(gameObject));
-        yield return Notification.Coroutine.WaitForReplies<ActiveTileRequest>
-        (n => n.Requestor == gameObject);
+        Logger.Log("Waiting for replies");
+        yield return Notification.Async.WaitForReplies<ActiveTileRequest>
+        (n => { Logger.Log("Active filter"); return n.Requestor == gameObject; });
+        Logger.Log("Back with all replies");
       }
 
       if(active.Count == 0) // TODO: Notif?
@@ -116,13 +123,6 @@ namespace Board
       { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0, 0); }
 
       // TODO: For each rotation
-      var active_subs = new SubscriptionStack();
-      foreach(var t in active)
-      {
-        active_subs.Add
-        (Pool.Subscribe<NeighbourRequest>(n => t.ReportNeighbour(n)));
-      }
-
       bool found = false;
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
@@ -145,7 +145,10 @@ namespace Board
     private void StoreActiveTile(ActiveTileReply r)
     {
       if(r.Request.Requestor != gameObject)
-      { return; }
+      {
+        Logger.Log("Got somone else's active reply");
+        return; }
+      Logger.Log("Got active reply");
       active.Add(r.Active);
     }
 
@@ -166,6 +169,7 @@ namespace Board
       }
       return true;
     }
+
     private bool Walk(Neighbour neighbour, Tile tile)
     {
       /* We've hit a leaf. */

@@ -25,11 +25,14 @@ namespace Board
 
     private SubscriptionStack subscriptions = new SubscriptionStack();
 
-    public void Start()
+    private void Start()
     {
       lines = new List<Tile>[]{ line0, line1, line2 };
       subscriptions.Add(Pool.Subscribe<ActiveTileRequest>(ActiveReply));
     }
+
+    private void OnDisable()
+    { subscriptions.Clear(); }
 
     public void Emplace(Block b)
     {
@@ -91,7 +94,8 @@ namespace Board
 
     private void ActiveReply(ActiveTileRequest r)
     {
-      if(block != null)
+      Logger.Log("Replying with active status");
+      if(block == null)
       { Pool.Dispatch(new ActiveTileReply(this, r)); }
     }
 
