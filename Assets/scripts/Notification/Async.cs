@@ -36,11 +36,7 @@ namespace Notification
 
     public static IEnumerator WaitForReplies<T>(Predicate<T> filter)
     {
-      bool found = false; // TODO: refactor?
-      var sub = Pool.PostSubscribe<T>(n => found = filter(n));
-      while(!found)
-      { yield return new WaitForEndOfFrame(); }
-      Pool.Unsubscribe(sub);
+      yield return WaitFor<T>(filter);
 
       var id = Interlocked.Increment(ref counter);
       Pool.Dispatch(new RepliesComplete<T>(id));
