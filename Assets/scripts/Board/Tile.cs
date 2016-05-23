@@ -97,10 +97,5 @@ namespace Board
       if(block == null)
       { Pool.Dispatch(new ActiveTileReply(this, r)); }
     }
-
-    public void ReportNeighbour(NeighbourRequest nr)
-    {
-      /* TODO: Check for a neighbour with this relationship. */
-    }
   }
 }

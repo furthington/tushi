@@ -43,8 +43,6 @@ namespace Board
       (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
-      subscriptions.Add
-      (Pool.Subscribe<NeighbourReply>(StoreNeighbor));
     }
 
     public void ClearSubscriptions()
@@ -112,13 +110,6 @@ namespace Board
       if(r.Request.Requestor != gameObject)
       { return; }
       active.Add(r.Active);
-    }
-
-    private void StoreNeighbor(NeighbourReply r)
-    {
-      if(r.Request.Requestor != gameObject)
-      { return; }
-      new_active.Add(r.Neighbour);
     }
 
     private bool WalkImpl(Neighbour neighbour, Tile tile)
