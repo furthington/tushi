@@ -86,7 +86,6 @@ namespace Board
       { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0, 0); }
 
       // TODO: For each rotation
-      bool found = false;
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
         foreach(var act in active)
@@ -96,13 +95,11 @@ namespace Board
           if(valid)
           {
             Logger.Log("Found valid position for piece");
-            found = true;
-            break; /* TODO: Notif? */
+            yield break; /* TODO: Notif? */
           }
         }
       }
-      if(!found)
-      { Logger.Log("No piece found"); } 
+      Logger.Log("No piece found");
     }
 
     private void StoreActiveTile(ActiveTileReply r)
