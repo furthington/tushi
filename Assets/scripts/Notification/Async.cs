@@ -24,8 +24,12 @@ namespace Notification
 
     public static IEnumerator WaitFor<T>(Predicate<T> filter)
     {
-      bool found = false;
-      var sub = Pool.PostSubscribe<T>(n => found = filter(n));
+      var found = false;
+      var sub = Pool.PostSubscribe<T>(n =>
+      {
+        if(filter(n))
+        { found = true; }
+      });
       while(!found)
       { yield return new WaitForEndOfFrame(); }
       Pool.Unsubscribe(sub);
