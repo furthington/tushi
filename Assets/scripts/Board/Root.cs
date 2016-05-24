@@ -62,6 +62,7 @@ namespace Board
       using(var timer = new Profile.TaskTimer("Active tile request"))
       {
         active.Clear();
+        /* TODO: Only do this once, not per piece. */
         Pool.Dispatch(new ActiveTileRequest(gameObject));
         yield return Notification.Async.WaitForReplies<ActiveTileRequest>
         (n => n.Requestor == gameObject);
