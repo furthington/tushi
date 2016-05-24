@@ -7,7 +7,6 @@ namespace Board
 {
   public class GlowStart { }
   public class GlowStop { }
-  public class GlowOnce { }
   [RequireComponent(typeof(Image))]
   [RequireComponent (typeof(Tile))]
   public class Highlighter : MonoBehaviour
@@ -27,7 +26,6 @@ namespace Board
       tile = GetComponent<Tile>();
       total_time = curve_short.keys[curve_short.length - 1].time;
 
-      subscriptions.Add(Pool.Subscribe<GlowOnce>(_ => Glow()));
       subscriptions.Add(Pool.Subscribe<GlowStart>(_ => StartGlow()));
       subscriptions.Add(Pool.Subscribe<GlowStop>(_ => StopGlow()));
     }
@@ -50,7 +48,7 @@ namespace Board
       StartCoroutine(StopGlowAux());
     }
 
-    private void Glow()
+    public void Glow()
     {
       StopAllCoroutines();
 
