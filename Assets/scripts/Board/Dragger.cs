@@ -28,6 +28,8 @@ namespace Board
       currently_dragged.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
       GetComponent<CanvasGroup>().alpha = 0.0f;
+
+      Notification.Pool.Dispatch(new GlowStart());
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -61,6 +63,8 @@ namespace Board
 
     public void OnEndDrag(PointerEventData eventData)
     {
+      Notification.Pool.Dispatch(new GlowStop());
+
       int valid = 0;
       foreach (Block b in blocks)
       {
