@@ -33,7 +33,6 @@ namespace Board
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
-    private List<Tile> new_active = new List<Tile>();
 
     private void Start()
     {
