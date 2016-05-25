@@ -45,7 +45,13 @@ namespace Board
     private void StopGlow()
     {
       StopAllCoroutines();
-      StartCoroutine(StopGlowAux());
+      /* Hmmm glow fade doesn't feel snappy enough. */
+      //StartCoroutine(StopGlowAux());
+
+      /* This feels snappier, will do for now. */
+      Color clr = img.color;
+      clr.a = 0.0f;
+      img.color = clr;
     }
 
     public void Glow()
