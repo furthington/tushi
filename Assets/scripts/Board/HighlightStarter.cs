@@ -30,17 +30,17 @@ namespace Board
       };
 
       /* Shuffle tiles. TODO: Make generic shuffling? */
-      for (int i = tiles.Count - 1; i > 0; --i)
-      {
-        int k = Random.Range(0, i + 1);
-        Tile temp = tiles[k];
-        tiles[k] = tiles[i];
-        tiles[i] = temp;
-      }
-      //tiles.OrderBy(x => System.Guid.NewGuid());
+      //for (int i = tiles.Count - 1; i > 0; --i)
+      //{
+      //  int k = Random.Range(0, i + 1);
+      //  Tile temp = tiles[k];
+      //  tiles[k] = tiles[i];
+      //  tiles[i] = temp;
+      //}
+      tiles = tiles.OrderBy(x => System.Guid.NewGuid()).ToList();
 
       /* SHUFFLE CHECK */
-      /*List<Tile> tiles_temp = new List<Tile>()
+      List<Tile> tiles_temp = new List<Tile>()
       {
         tile.bottom_left, tile.bottom_right, tile.right,
         tile.top_right, tile.top_left, tile.left
@@ -52,7 +52,9 @@ namespace Board
         { different = true; break; }
       }
       if (different)
-      { Logger.Log("DIFFERENT"); }*/
+      { Logger.Log("DIFFERENT"); }
+      else
+      { Logger.Log("NOT DIFFERENT"); }
 
       for (int i = 0; i < tiles.Count; ++i)
       {
