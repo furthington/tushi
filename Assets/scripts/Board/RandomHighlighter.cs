@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using Notification;
 
-
 namespace Board
 {
   public class RandomHighlighter : MonoBehaviour
@@ -29,7 +28,10 @@ namespace Board
       {
         yield return new WaitForSeconds(Random.Range(5.0f, 10.0f));
         if (!glowing)
-        { tiles[Random.Range(0, tiles.Length)].gameObject.AddComponent<HighlightStarter>(); }
+        {
+          tiles[Random.Range(0, tiles.Length)]
+            .gameObject.AddComponent<HighlightStarter>();
+        }
       }
     }
   }
