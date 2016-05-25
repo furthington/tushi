@@ -32,23 +32,6 @@ namespace Board
       /* Shuffle tiles. */
       tiles = tiles.OrderBy(x => System.Guid.NewGuid()).ToList();
 
-      /* SHUFFLE CHECK */
-      List<Tile> tiles_temp = new List<Tile>()
-      {
-        tile.bottom_left, tile.bottom_right, tile.right,
-        tile.top_right, tile.top_left, tile.left
-      };
-      bool different = false;
-      for (int i = 0; i < tiles.Count; ++i)
-      {
-        if (tiles[i] != tiles_temp[i])
-        { different = true; break; }
-      }
-      if (different)
-      { Logger.Log("DIFFERENT"); }
-      else
-      { Logger.Log("NOT DIFFERENT"); }
-
       for (int i = 0; i < tiles.Count; ++i)
       {
         if (tiles[i] == null || tiles[i].GetComponent<HighlightStarter>() != null)
