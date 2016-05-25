@@ -29,14 +29,7 @@ namespace Board
         tile.top_right, tile.top_left, tile.left
       };
 
-      /* Shuffle tiles. TODO: Make generic shuffling? */
-      //for (int i = tiles.Count - 1; i > 0; --i)
-      //{
-      //  int k = Random.Range(0, i + 1);
-      //  Tile temp = tiles[k];
-      //  tiles[k] = tiles[i];
-      //  tiles[i] = temp;
-      //}
+      /* Shuffle tiles. */
       tiles = tiles.OrderBy(x => System.Guid.NewGuid()).ToList();
 
       /* SHUFFLE CHECK */
