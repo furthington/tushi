@@ -30,7 +30,7 @@ namespace Board
       };
 
       /* Shuffle tiles. */
-      tiles = tiles.OrderBy(x => System.Guid.NewGuid()).ToList();
+      tiles = tiles.OrderBy(x => Random.value).ToList();
 
       for (int i = 0; i < tiles.Count; ++i)
       {
