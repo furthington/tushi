@@ -67,15 +67,15 @@ namespace Board
         (n => n.Requestor == gameObject);
       }
 
-      if(active.Count == 0) // TODO: Notif?
+      if(active.Count == 0)
       {
         Logger.Log("Board is full...?");
-        yield break;
+        yield break; /* TODO: Notif? */
       }
-      else if(active.Count > 30) // TODO: Calculate
+      else if(active.Count > 30) /* TODO: Calculate */
       {
         Logger.Log("Active count greater than threshold");
-        yield break;
+        yield break; /* TODO: Notif? */
       }
 
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
