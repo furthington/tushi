@@ -94,7 +94,7 @@ namespace Board
           }
         }
       }
-      Logger.Log("No piece found");
+      Logger.Log("No piece found"); /* TODO: Notif? */
     }
 
     private void StoreActiveTile(ActiveTileReply r)
