@@ -34,6 +34,10 @@ namespace Board
     {
       StopAllCoroutines();
 
+      HighlightStarter h = GetComponent<HighlightStarter>();
+      if (h != null)
+      { Destroy(h); }
+
       if (tile.block != null)
       { return; }
 
@@ -56,8 +60,6 @@ namespace Board
 
     public void Glow()
     {
-      StopAllCoroutines();
-
       if (tile.block != null)
       { return; }
 
