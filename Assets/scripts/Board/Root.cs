@@ -31,6 +31,7 @@ namespace Board
   [RequireComponent (typeof(Neighbour))]
   public class Root : MonoBehaviour
   {
+    public string neighbour_json; /* Assign in editor. */
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
 
