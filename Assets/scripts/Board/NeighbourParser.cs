@@ -18,12 +18,15 @@ namespace Board
   {
     public static List<List<List<int?>>> GetRotations(string data)
     {
-      var ret = new List<List<List<int?>>>();
-      var first = Parse(data);
-      ret.Add(first);
-      while(ret.Count < 6)
-      { ret.Add(Rotate(ret[ret.Count - 1])); }
-      return ret;
+      using(var timer = new Profile.TaskTimer("Build neighbour rotations"))
+      {
+        var ret = new List<List<List<int?>>>();
+        var first = Parse(data);
+        ret.Add(first);
+        while(ret.Count < 6)
+        { ret.Add(Rotate(ret[ret.Count - 1])); }
+        return ret;
+      }
     }
 
     private static List<List<int?>> Parse(string data)
