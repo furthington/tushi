@@ -28,7 +28,6 @@ namespace Board
     }
   }
 
-  [RequireComponent (typeof(Neighbour))]
   public class Root : MonoBehaviour
   {
     public string neighbour_json; /* Assign in editor. */
@@ -40,8 +39,6 @@ namespace Board
     {
       neighbour_rotations = NeighbourParser.GetRotations(neighbour_json);
 
-      subscriptions.Add
-      (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
       subscriptions.Add /* TODO: Do this on piece placement. */
       (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add

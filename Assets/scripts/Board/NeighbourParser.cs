@@ -4,6 +4,16 @@ using System.Collections.Generic;
 
 namespace Board
 {
+  public enum NeighbourRelationship
+  {
+    Right,
+    TopRight,
+    TopLeft,
+    Left,
+    BottomLeft,
+    BottomRight
+  }
+
   public static class NeighbourParser
   {
     public static List<List<List<int?>>> GetRotations(string data)
