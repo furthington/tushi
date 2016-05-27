@@ -38,7 +38,7 @@ namespace Board
     {
       subscriptions.Add
       (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
-      subscriptions.Add
+      subscriptions.Add /* TODO: Do this on piece placement. */
       (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
