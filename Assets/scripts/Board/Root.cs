@@ -34,11 +34,11 @@ namespace Board
     public string neighbour_json; /* Assign in editor. */
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
-    private List<List<int?>> neighbours;
+    private List<List<List<int?>>> neighbour_rotations;
 
     private void Start()
     {
-      neighbours = NeighbourParser.Parse(neighbour_json);
+      neighbour_rotations = NeighbourParser.GetRotations(neighbour_json);
 
       subscriptions.Add
       (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
@@ -84,12 +84,12 @@ namespace Board
 
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
-        foreach(var rotation in GetComponent<Neighbour>().GetRotations())
+        foreach(var rotation in neighbour_rotations)
         {
           foreach(var act in active)
           {
             /* TODO: Coroutine. */
-            var valid = Walk(rotation, act);
+            var valid = Walk(rotation, 0, act);
             if(valid)
             {
               Logger.Log("Found valid position for piece");
@@ -108,39 +108,46 @@ namespace Board
       active.Add(r.Active);
     }
 
-    private bool WalkImpl(Neighbour neighbour, Tile tile)
+    private bool WalkImpl(List<List<int?>> rotation,
+                          int? next, Tile tile)
     {
-      if(neighbour != null)
+      if(next != null)
       {
         if(tile == null || tile.block != null)
         { return false; }
-        return Walk(neighbour.neighbours, tile);
+        return Walk(rotation, (int)next, tile);
       }
       return true;
     }
 
-    private bool Walk(List<Neighbour> neighbour, Tile tile)
+    private bool Walk(List<List<int?>> rotation, int line, Tile tile)
     {
       /* We've hit a leaf. */
-      if(neighbour == null && tile == null)
+      if(tile == null)
       { return true; }
 
-      if(!WalkImpl(neighbour[(int)NeighbourRelationship.Right],
+      if(!WalkImpl(rotation,
+                   rotation[line][(int)NeighbourRelationship.Right],
                    tile.right))
       { return false; }
-      if(!WalkImpl(neighbour[(int)NeighbourRelationship.TopRight],
+      if(!WalkImpl(rotation,
+                   rotation[line][(int)NeighbourRelationship.TopRight],
                    tile.top_right))
       { return false; }
-      if(!WalkImpl(neighbour[(int)NeighbourRelationship.TopLeft],
+      if(!WalkImpl(rotation,
+                   rotation[line][(int)NeighbourRelationship.TopLeft],
                    tile.top_left))
       { return false; }
-      if(!WalkImpl(neighbour[(int)NeighbourRelationship.Left],
+      if(!WalkImpl(rotation,
+                   rotation[line][(int)NeighbourRelationship.Left],
                    tile.left))
       { return false; }
-      if(!WalkImpl(neighbour[(int)NeighbourRelationship.BottomLeft],
+      if(!WalkImpl(rotation,
+                   rotation[line][(int)NeighbourRelationship.BottomLeft],
                    tile.bottom_left))
       { return false; }
-      if(!WalkImpl(neighbour[(int)NeighbourRelationship.BottomRight],
+      if(!WalkImpl(rotation,
+                   rotation[line][(int)NeighbourRelationship.BottomRight],
                    tile.bottom_right))
       { return false; }
 
