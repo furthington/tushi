@@ -15,7 +15,7 @@ namespace Board
 
   public class Neighbour : MonoBehaviour
   {
-    public List<Neighbour> neighbours; /* Asssign in editor */
+    public List<Neighbour> neighbours;
 
     private void Start()
     { Debug.Assert(neighbours.Count == 6, name + " needs exactly 6 neighbours!"); }
@@ -26,15 +26,19 @@ namespace Board
     public List<List<Neighbour>> GetRotations()
     {
       var ret = new List<List<Neighbour>>();
+
+      /* Iteratively add rotations based on the last. */
       ret.Add(neighbours);
       while(ret.Count < 6)
       { ret.Add(Rotate(ret[ret.Count - 1])); }
+
       Debug.Assert(ret.Count == 6, "Invalid neighbour rotation count");
       return ret;
     }
 
     private List<Neighbour> Rotate(List<Neighbour> ns)
     {
+      /* Deep copy. */
       var clone = ns.ConvertAll
       (
         x =>
@@ -45,6 +49,7 @@ namespace Board
           { return Object.Instantiate(x); }
         }
       );
+
       clone.Add(neighbours[0]);
       clone.RemoveAt(0);
       foreach (Neighbour n in clone)
