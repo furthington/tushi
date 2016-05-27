@@ -85,17 +85,19 @@ namespace Board
       foreach(var t in active)
       { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0, 0); }
 
-      // TODO: For each rotation
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
-        foreach(var act in active)
+        foreach(var rotation in GetComponent<Neighbour>().GetRotations())
         {
-          /* TODO: Coroutine. */
-          var valid = Walk(GetComponent<Neighbour>(), act);
-          if(valid)
+          foreach(var act in active)
           {
-            Logger.Log("Found valid position for piece");
-            yield break; /* TODO: Notif? */
+            /* TODO: Coroutine. */
+            var valid = Walk(rotation, act);
+            if(valid)
+            {
+              Logger.Log("Found valid position for piece");
+              yield break; /* TODO: Notif? */
+            }
           }
         }
       }
@@ -115,33 +117,33 @@ namespace Board
       {
         if(tile == null || tile.block != null)
         { return false; }
-        return Walk(neighbour, tile);
+        return Walk(neighbour.neighbours, tile);
       }
       return true;
     }
 
-    private bool Walk(Neighbour neighbour, Tile tile)
+    private bool Walk(List<Neighbour> neighbour, Tile tile)
     {
       /* We've hit a leaf. */
       if(neighbour == null && tile == null)
       { return true; }
 
-      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.Right],
+      if(!WalkImpl(neighbour[(int)NeighbourRelationship.Right],
                    tile.right))
       { return false; }
-      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.TopRight],
+      if(!WalkImpl(neighbour[(int)NeighbourRelationship.TopRight],
                    tile.top_right))
       { return false; }
-      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.TopLeft],
+      if(!WalkImpl(neighbour[(int)NeighbourRelationship.TopLeft],
                    tile.top_left))
       { return false; }
-      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.Left],
+      if(!WalkImpl(neighbour[(int)NeighbourRelationship.Left],
                    tile.left))
       { return false; }
-      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.BottomLeft],
+      if(!WalkImpl(neighbour[(int)NeighbourRelationship.BottomLeft],
                    tile.bottom_left))
       { return false; }
-      if(!WalkImpl(neighbour.neighbours[(int)NeighbourRelationship.BottomRight],
+      if(!WalkImpl(neighbour[(int)NeighbourRelationship.BottomRight],
                    tile.bottom_right))
       { return false; }
 
