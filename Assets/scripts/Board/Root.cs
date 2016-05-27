@@ -78,13 +78,6 @@ namespace Board
         yield break;
       }
 
-      foreach(var t in active)
-      { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 255, 0, 255); }
-      yield return new WaitForSeconds(3);
-
-      foreach(var t in active)
-      { t.GetComponent<UnityEngine.UI.Image>().color = new Color(255, 255, 255, 0); }
-
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
         foreach(var rotation in GetComponent<Neighbour>().GetRotations())
