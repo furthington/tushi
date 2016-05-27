@@ -15,8 +15,10 @@ namespace Board
         var elements = line.Split(' ');
         foreach(var el in elements)
         { ret_line.Add(ParseInt(el)); }
+        Debug.Assert(ret_line.Count == 6, "Invalid neighbour data");
         ret.Add(ret_line);
       }
+      Debug.Assert(ret.Count >= 1, "Empty neighbour data");
       return ret;
     }
 

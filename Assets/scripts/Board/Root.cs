@@ -34,9 +34,12 @@ namespace Board
     public string neighbour_json; /* Assign in editor. */
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
+    private List<List<int?>> neighbours;
 
     private void Start()
     {
+      neighbours = NeighbourParser.Parse(neighbour_json);
+
       subscriptions.Add
       (Pool.Subscribe<RotateNeighbours>(_ => GetComponent<Neighbour>().Rotate()));
       subscriptions.Add /* TODO: Do this on piece placement. */
