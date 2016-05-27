@@ -83,7 +83,7 @@ namespace Board
       yield return new WaitForSeconds(3);
 
       foreach(var t in active)
-      { t.GetComponent<UnityEngine.UI.Image>().color = new Color(0, 0, 0, 0); }
+      { t.GetComponent<UnityEngine.UI.Image>().color = new Color(255, 255, 255, 0); }
 
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
