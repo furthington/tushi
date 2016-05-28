@@ -34,6 +34,7 @@ namespace Board
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
     private List<List<List<int?>>> neighbour_rotations;
+    private const int threshold = 40; /* TODO: Configure */
 
     private void Start()
     {
@@ -76,7 +77,7 @@ namespace Board
         Pool.Dispatch(new EndGame.CheckFailed());
         yield break;
       }
-      else if(active.Count > 30) /* TODO: Calculate */
+      else if(active.Count > threshold)
       {
         Logger.Log("Active count greater than threshold");
         Pool.Dispatch(new EndGame.CheckPassed());
