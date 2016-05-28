@@ -11,7 +11,7 @@ namespace Profile
 
     public TaskTimer(string name)
     {
-#if ENABLE_LOG
+#if ENABLE_TIMER
       this.name = name;
       watch = new Stopwatch();
       watch.Start();
@@ -20,7 +20,7 @@ namespace Profile
 
     public TaskTimer()
     {
-#if ENABLE_LOG
+#if ENABLE_TIMER
       var trace = new StackTrace();
       name = trace.GetFrame(1).GetMethod().Name;
       watch = new Stopwatch();
@@ -30,7 +30,7 @@ namespace Profile
 
     public void Dispose()
     {
-#if ENABLE_LOG
+#if ENABLE_TIMER
       watch.Stop();
       Logger.Log
       ("TaskTimer (" + name + "): " + watch.ElapsedMilliseconds + "ms");
