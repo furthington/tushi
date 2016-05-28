@@ -36,7 +36,7 @@ namespace Board
     private List<List<List<int?>>> neighbour_rotations;
     private const int threshold = 40; /* TODO: Configure */
 
-    private void Start()
+    private void Awake()
     {
       neighbour_rotations = NeighbourParser.GetRotations(neighbour_json);
 
