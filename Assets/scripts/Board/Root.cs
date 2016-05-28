@@ -34,13 +34,16 @@ namespace Board
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
     private List<List<List<int?>>> neighbour_rotations;
+    private const int threshold = 40; /* TODO: Configure */
 
-    private void Start()
+    /* This is awake so that new pieces added to the tray
+       can participate in endgame checks. */
+    private void Awake()
     {
       neighbour_rotations = NeighbourParser.GetRotations(neighbour_json);
 
-      subscriptions.Add /* TODO: Do this on piece placement. */
-      (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
+      subscriptions.Add
+      (Pool.Subscribe<PiecePlaced>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
     }
@@ -71,12 +74,14 @@ namespace Board
       if(active.Count == 0)
       {
         Logger.Log("Board is full...?");
-        yield break; /* TODO: Notif? */
+        Pool.Dispatch(new EndGame.CheckFailed());
+        yield break;
       }
-      else if(active.Count > 30) /* TODO: Calculate */
+      else if(active.Count > threshold)
       {
         Logger.Log("Active count greater than threshold");
-        yield break; /* TODO: Notif? */
+        Pool.Dispatch(new EndGame.CheckPassed());
+        yield break;
       }
 
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
@@ -85,17 +90,19 @@ namespace Board
         {
           foreach(var act in active)
           {
-            /* TODO: Coroutine. */
+            /* TODO: Coroutine? */
             var valid = Walk(rotation, 0, act);
             if(valid)
             {
               Logger.Log("Found valid position for piece");
-              yield break; /* TODO: Notif? */
+              Pool.Dispatch(new EndGame.CheckPassed());
+              yield break;
             }
           }
         }
       }
-      Logger.Log("No piece found"); /* TODO: Notif? */
+      Logger.Log("No piece found");
+      Pool.Dispatch(new EndGame.CheckFailed());
     }
 
     private void StoreActiveTile(ActiveTileReply r)
