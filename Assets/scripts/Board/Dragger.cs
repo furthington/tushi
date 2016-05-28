@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
@@ -8,11 +9,22 @@ namespace Board
   public class Dragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
   {
     private GameObject currently_dragged;
-    private List<Block> blocks = new List<Block>();
     private GameObject canvas;
+    private List<Block> blocks = new List<Block>();
+    private List<Image> guides = new List<Image>();
+    private List<Image> hide = new List<Image>();
 
     private void Awake()
-    { canvas = GameObject.FindGameObjectWithTag("main_canvas"); }
+    {
+      canvas = GameObject.FindGameObjectWithTag("main_canvas");
+      foreach (Transform child in transform)
+      {
+        if (child.gameObject.tag == "guide")
+        { guides.Add(child.GetComponent<Image>()); }
+        else if (child.gameObject.tag == "hide")
+        { hide.Add(child.GetComponent<Image>()); }
+      }
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -28,7 +40,10 @@ namespace Board
       /* To raycast to the tiles under it */
       currently_dragged.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
-      GetComponent<CanvasGroup>().alpha = 0.0f;
+      foreach (Image img in hide)
+      { img.enabled = false; }
+      foreach (Image img in guides)
+      { img.enabled = true; }
 
       Notification.Pool.Dispatch(new GlowStart());
     }
@@ -66,6 +81,11 @@ namespace Board
     {
       Notification.Pool.Dispatch(new GlowStop());
 
+      foreach (Image img in hide)
+      { img.enabled = true; }
+      foreach (Image img in guides)
+      { img.enabled = false; }
+
       int valid = 0;
       foreach (Block b in blocks)
       {
@@ -92,10 +112,6 @@ namespace Board
 
         Notification.Pool.Dispatch(new AddNewPiece());
         Destroy(gameObject);
-      }
-      else
-      {
-        GetComponent<CanvasGroup>().alpha = 1.0f;
       }
 
       Destroy(currently_dragged);
