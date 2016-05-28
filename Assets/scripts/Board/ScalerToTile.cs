@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace Board
 {
-  public class Scaler : MonoBehaviour
+  public class ScalerToTile : MonoBehaviour
   {
     private void Start()
     {
@@ -14,7 +14,7 @@ namespace Board
       float scale_amount = tile_rect.sizeDelta.x / GetComponent<RectTransform>().sizeDelta.x;
       //Debug.Log("scale amount " + scale_amount);
       Vector3 scale = transform.parent.localScale;
-      scale *= scale_amount;
+      scale.x = scale.y = scale_amount;
       transform.parent.localScale = scale;
 
       /* Only scale once! Prevents clones from scaling again and again */

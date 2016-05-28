@@ -20,6 +20,7 @@ namespace Board
       currently_dragged.transform.SetParent(canvas.transform);
       currently_dragged.transform.position = eventData.position;
       currently_dragged.GetComponentsInChildren<Block>(blocks);
+      currently_dragged.GetComponentInChildren<ScalerToTile>(true).gameObject.SetActive(true);
 
       /* Have to manually set size probably because HorizontalLayoutGroup is messing with it? */
       currently_dragged.GetComponent<RectTransform>().sizeDelta = GetComponent<RectTransform>().sizeDelta;
