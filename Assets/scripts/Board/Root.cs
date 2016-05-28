@@ -36,6 +36,8 @@ namespace Board
     private List<List<List<int?>>> neighbour_rotations;
     private const int threshold = 40; /* TODO: Configure */
 
+    /* This is awake so that new pieces added to the tray
+       can participate in endgame checks. */
     private void Awake()
     {
       neighbour_rotations = NeighbourParser.GetRotations(neighbour_json);
