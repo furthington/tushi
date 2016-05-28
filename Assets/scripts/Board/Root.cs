@@ -71,12 +71,14 @@ namespace Board
       if(active.Count == 0)
       {
         Logger.Log("Board is full...?");
-        yield break; /* TODO: Notif? */
+        Pool.Dispatch(new EndGame.CheckFailed());
+        yield break;
       }
       else if(active.Count > 30) /* TODO: Calculate */
       {
         Logger.Log("Active count greater than threshold");
-        yield break; /* TODO: Notif? */
+        Pool.Dispatch(new EndGame.CheckPassed());
+        yield break;
       }
 
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
@@ -85,17 +87,19 @@ namespace Board
         {
           foreach(var act in active)
           {
-            /* TODO: Coroutine. */
+            /* TODO: Coroutine? */
             var valid = Walk(rotation, 0, act);
             if(valid)
             {
               Logger.Log("Found valid position for piece");
-              yield break; /* TODO: Notif? */
+              Pool.Dispatch(new EndGame.CheckPassed());
+              yield break;
             }
           }
         }
       }
-      Logger.Log("No piece found"); /* TODO: Notif? */
+      Logger.Log("No piece found");
+      Pool.Dispatch(new EndGame.CheckFailed());
     }
 
     private void StoreActiveTile(ActiveTileReply r)
