@@ -39,7 +39,9 @@ namespace Board
     {
       neighbour_rotations = NeighbourParser.GetRotations(neighbour_json);
 
-      subscriptions.Add /* TODO: Do this on piece placement. */
+      subscriptions.Add
+      (Pool.Subscribe<PiecePlaced>(_ => FindPlacement()));
+      subscriptions.Add /* TODO: Remove this. */
       (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));

@@ -4,6 +4,9 @@ using UnityEngine.EventSystems;
 
 namespace Board
 {
+  public class PiecePlaced
+  { }
+
   [RequireComponent (typeof(CanvasGroup))]
   public class Dragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
   {
@@ -78,6 +81,7 @@ namespace Board
       if(valid == blocks.Count)
       {
         /* Placed pieces do not rotate anymore. */
+        /* TODO: Destroy component? */
         currently_dragged.GetComponentInChildren<Root>().ClearSubscriptions();
 
         foreach(Block b in blocks)
@@ -91,6 +95,8 @@ namespace Board
         }
 
         Notification.Pool.Dispatch(new AddNewPiece());
+        Notification.Pool.Dispatch(new PiecePlaced());
+        Notification.Pool.Dispatch(new Save.SaveGame());
         Destroy(gameObject);
       }
       else

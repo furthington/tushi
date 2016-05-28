@@ -3,8 +3,6 @@ using Notification;
 
 namespace EndGame
 {
-  public class StartCheck
-  { }
   public class CheckFailed
   { }
   public class CheckPassed
@@ -18,7 +16,8 @@ namespace EndGame
 
     private void Start()
     {
-      subscriptions.Add(Pool.Subscribe<StartCheck>(_ => OnStartCheck()));
+      /* TODO: Use a coroutine for this whole thing. */
+      subscriptions.Add(Pool.Subscribe<Board.PiecePlaced>(_ => OnStartCheck()));
       subscriptions.Add(Pool.Subscribe<CheckFailed>(_ => OnCheckFailed()));
       subscriptions.Add(Pool.Subscribe<CheckPassed>(_ => OnCheckPassed()));
     }
