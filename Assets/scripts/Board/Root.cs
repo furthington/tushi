@@ -44,8 +44,6 @@ namespace Board
 
       subscriptions.Add
       (Pool.Subscribe<PiecePlaced>(_ => FindPlacement()));
-      subscriptions.Add /* TODO: Remove this. */
-      (Pool.Subscribe<RotateNeighbours>(_ => FindPlacement()));
       subscriptions.Add
       (Pool.Subscribe<ActiveTileReply>(StoreActiveTile));
     }
