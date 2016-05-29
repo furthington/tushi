@@ -10,8 +10,8 @@ public sealed class Logger
   { Debug.Log(message); }
 
   [System.Diagnostics.Conditional(Symbol)]
-  public static void Log(object message, Object context)
-  { Debug.Log(message, context); }
+  public static void Log(string message, params object[] args)
+  { Debug.LogFormat(message, args); }
 
   [System.Diagnostics.Conditional(Symbol)]
   public static void LogFormat(string message, params object[] args)
