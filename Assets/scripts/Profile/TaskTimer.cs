@@ -6,35 +6,40 @@ namespace Profile
 {
   public class TaskTimer : IDisposable
   {
-    private string name = "generic";
+    private const string Symbol = "ENABLE_TIMER";
+    private string name;
     private Stopwatch watch;
 
     public TaskTimer(string name)
-    {
-#if ENABLE_TIMER
-      this.name = name;
-      watch = new Stopwatch();
-      watch.Start();
-#endif
-    }
+    { Start(name); }
 
     public TaskTimer()
-    {
-#if ENABLE_TIMER
-      var trace = new StackTrace();
-      name = trace.GetFrame(1).GetMethod().Name;
-      watch = new Stopwatch();
-      watch.Start();
-#endif
-    }
+    { Start(); }
 
     public void Dispose()
+    { Stop(); }
+
+    [System.Diagnostics.Conditional(Symbol)]
+    private void Start()
     {
-#if ENABLE_TIMER
+      var trace = new StackTrace();
+      Start(trace.GetFrame(1).GetMethod().Name);
+    }
+
+    [System.Diagnostics.Conditional(Symbol)]
+    private void Start(string n)
+    {
+      name = n;
+      watch = new Stopwatch();
+      watch.Start();
+    }
+
+    [System.Diagnostics.Conditional(Symbol)]
+    private void Stop()
+    {
       watch.Stop();
       Logger.Log
       ("TaskTimer (" + name + "): " + watch.ElapsedMilliseconds + "ms");
-#endif
     }
   }
 }
