@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using Notification;
 
 namespace Board
@@ -86,8 +86,11 @@ namespace Board
 
       using(var timer = new Profile.TaskTimer("Neighbour walk"))
       {
+        int rotation_index = 0;
         foreach(var rotation in neighbour_rotations)
         {
+          Logger.LogFormat("Trying rotation {0} for root {1}",
+                           rotation_index++, gameObject.name);
           foreach(var act in active)
           {
             /* TODO: Coroutine? */
