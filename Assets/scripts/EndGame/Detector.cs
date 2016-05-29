@@ -1,5 +1,6 @@
 using UnityEngine;
 using Notification;
+using System.Collections;
 
 namespace EndGame
 {
@@ -8,7 +9,13 @@ namespace EndGame
   public class CheckPassed
   { }
   public class GameLost
-  { }
+  {
+    public int Score
+    { get; set; }
+
+    public GameLost(int s)
+    { Score = s; }
+  }
 
   public class Detector : MonoBehaviour
   {
@@ -33,7 +40,7 @@ namespace EndGame
     private void OnCheckFailed()
     {
       if(--current == -total)
-      { Lost(); }
+      { StartCoroutine(Lost()); }
       Debug.Assert(current >= -total, "Too many check results");
     }
 
@@ -43,11 +50,18 @@ namespace EndGame
       Debug.Assert(current <= total, "Too many check results");
     }
 
-    private void Lost()
+    private IEnumerator Lost()
     {
       /* TODO: Show some UI. */
-      Logger.Log("Game lost!");
-      Pool.Dispatch(new GameLost());
+      var score = 0;
+      {
+        var sub = Pool.Subscribe<Board.ScoreReply>(r => score = r.Score);
+        Pool.Dispatch(new Board.ScoreQuery());
+        yield return Notification.Async.WaitForReplies<Board.ScoreQuery>();
+        Pool.Unsubscribe(sub);
+      }
+      Logger.Log("Game lost! Score: {0}", score);
+      Pool.Dispatch(new GameLost(score));
     }
   }
 }

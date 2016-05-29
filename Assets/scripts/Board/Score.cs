@@ -21,6 +21,13 @@ namespace Board
     public int Score
     { get; set; }
   }
+  public class ScoreQuery
+  { }
+  public class ScoreReply
+  {
+    public int Score
+    { get; set; }
+  }
 
   [RequireComponent(typeof(Text))]
   public class Score : MonoBehaviour
@@ -50,6 +57,7 @@ namespace Board
       );
       subscriptions.Add(Pool.Subscribe<LoadScore>(OnLoadScore));
       subscriptions.Add(Pool.Subscribe<SaveScore>(_ => OnSaveScore()));
+      subscriptions.Add(Pool.Subscribe<ScoreQuery>(_ => OnQuery()));
     }
 
     private void OnDisable()
@@ -67,6 +75,13 @@ namespace Board
     private void OnSaveScore()
     {
       var reply = new SaveScoreReply();
+      reply.Score = score;
+      Pool.Dispatch(reply);
+    }
+
+    private void OnQuery()
+    {
+      var reply = new ScoreReply();
       reply.Score = score;
       Pool.Dispatch(reply);
     }
