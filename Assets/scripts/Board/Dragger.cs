@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using Notification;
 
 namespace Board
 {
@@ -48,7 +50,7 @@ namespace Board
       foreach (Image img in guides)
       { img.enabled = true; }
 
-      Notification.Pool.Dispatch(new GlowStart());
+      Pool.Dispatch(new GlowStart());
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -82,7 +84,7 @@ namespace Board
 
     public void OnEndDrag(PointerEventData eventData)
     {
-      Notification.Pool.Dispatch(new GlowStop());
+      Pool.Dispatch(new GlowStop());
 
       foreach (Image img in hide)
       { img.enabled = true; }
@@ -114,13 +116,19 @@ namespace Board
           p.GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
 
-        Notification.Pool.Dispatch(new AddNewPiece());
-        Notification.Pool.Dispatch(new PiecePlaced());
-        Notification.Pool.Dispatch(new Save.SaveGame());
-        Destroy(gameObject);
+        StartCoroutine(AsyncDestroy());
       }
 
       Destroy(currently_dragged);
+    }
+
+    private IEnumerator AsyncDestroy()
+    {
+      Pool.Dispatch(new AddNewPiece());
+      Pool.Dispatch(new PiecePlaced());
+      Destroy(gameObject);
+      yield return Notification.Async.WaitForReplies<PiecePlaced>();
+      Pool.Dispatch(new Save.SaveGame());
     }
   }
 }
