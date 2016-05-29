@@ -9,6 +9,36 @@ namespace Board
 
   public class PieceTray : MonoBehaviour
   {
+    public class Save
+    { }
+    [System.Serializable]
+    public class SaveReply
+    {
+      public string[] Pieces
+      { get; set; }
+      public float[] Rotations
+      { get; set; }
+
+      public SaveReply(string[] p, float[] r)
+      {
+        Pieces = p;
+        Rotations = r;
+      }
+    }
+    public class Load
+    {
+      public string[] Pieces
+      { get; set; }
+      public float[] Rotations
+      { get; set; }
+
+      public Load(string[] p, float[] r)
+      {
+        Pieces = p;
+        Rotations = r;
+      }
+    }
+
     public List<GameObject> PrefabsLowProb;
     public List<GameObject> PrefabsHighProb;
 
