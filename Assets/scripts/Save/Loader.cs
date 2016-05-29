@@ -19,6 +19,7 @@ namespace Save
   public class Data
   {
     public SaveRowReply[] rows;
+    public int score;
     /* TODO: Save the current piece tray. */
     /* TODO: Save the current score. */
     /* TODO: Save the whole pieces. */
@@ -29,6 +30,7 @@ namespace Save
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<SaveRowReply> replies = new List<SaveRowReply>();
+    Data data_to_save = null;
 
     private void Start()
     {
@@ -38,6 +40,8 @@ namespace Save
       (Pool.Subscribe<SaveGame>(_ => Save()));
       subscriptions.Add
       (Pool.Subscribe<SaveRowReply>(OnSaveRow));
+      subscriptions.Add
+      (Pool.Subscribe<Board.SaveScoreReply>(OnSaveScore));
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new GameExists()); }
@@ -54,16 +58,23 @@ namespace Save
         using(var file = File.Open(Path(), FileMode.Open))
         { data = (Data)bf.Deserialize(file); }
 
+        var load_score = new Board.LoadScore();
+        load_score.Score = data.score;
+        Pool.Dispatch(load_score);
+
         foreach(var row in data.rows)
         { Pool.Dispatch(new LoadRow(row.Number, row.Tiles)); }
       }
     }
 
-    public void Save() // TODO private
+    private void Save()
     {
       /* Ask each row to respond. */
       replies.Clear();
+      data_to_save = new Data();
+      Pool.Dispatch(new Board.SaveScore());
       Pool.Dispatch(new SaveRow());
+      /* XXX: SaveRow should be the last notif sent here. */
     }
 
     private void OnSaveRow(SaveRowReply rrr)
@@ -83,6 +94,9 @@ namespace Save
       { Write(); }
     }
 
+    private void OnSaveScore(Board.SaveScoreReply reply)
+    { data_to_save.score = reply.Score; }
+
     private void Write()
     {
       var filled = replies.Count(x => x != null);
@@ -90,12 +104,11 @@ namespace Save
 
       using(var timer = new Profile.TaskTimer("Write save game"))
       {
-        var data = new Data();
-        data.rows = replies.ToArray();
+        data_to_save.rows = replies.ToArray();
 
         var bf = new BinaryFormatter();
         using(var file = File.Open(Path(), FileMode.OpenOrCreate))
-        { bf.Serialize(file, data); }
+        { bf.Serialize(file, data_to_save); }
       }
     }
 

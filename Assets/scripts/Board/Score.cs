@@ -9,6 +9,18 @@ namespace Board
     public int Score
     { get; set; }
   }
+  public class LoadScore
+  {
+    public int Score
+    { get; set; }
+  }
+  public class SaveScore
+  { }
+  public class SaveScoreReply
+  {
+    public int Score
+    { get; set; }
+  }
 
   [RequireComponent(typeof(Text))]
   public class Score : MonoBehaviour
@@ -20,7 +32,7 @@ namespace Board
     private void Awake()
     {
       text = GetComponent<Text>();
-      UpdateScore();
+      UpdateText();
     }
 
     private void Start()
@@ -32,16 +44,31 @@ namespace Board
           {
             /* TODO: Make score count up? */
             score += s.Score;
-            UpdateScore();
+            UpdateText();
           }
         )
       );
+      subscriptions.Add(Pool.Subscribe<LoadScore>(OnLoadScore));
+      subscriptions.Add(Pool.Subscribe<SaveScore>(_ => OnSaveScore()));
     }
 
     private void OnDisable()
     { subscriptions.Clear(); }
 
-    private void UpdateScore()
+    private void UpdateText()
     { text.text = score.ToString(); }
+
+    private void OnLoadScore(LoadScore ls)
+    {
+      score = ls.Score;
+      UpdateText();
+    }
+
+    private void OnSaveScore()
+    {
+      var reply = new SaveScoreReply();
+      reply.Score = score;
+      Pool.Dispatch(reply);
+    }
   }
 }
