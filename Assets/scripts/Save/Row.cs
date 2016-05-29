@@ -69,7 +69,7 @@ namespace Save
       (Pool.Subscribe<LoadRow>(Write));
     }
 
-    private void Read()
+    private void Read() // TODO: Rename
     {
       var states = new List<TileInfo>();
       for(var cur = GetComponent<Board.Tile>();
