@@ -18,7 +18,7 @@ namespace Save
   [Serializable]
   public class Data
   {
-    public ReadRowReply[] rows;
+    public SaveRowReply[] rows;
     /* TODO: Save the current piece tray. */
     /* TODO: Save the current score. */
     /* TODO: Save the whole pieces. */
@@ -28,7 +28,7 @@ namespace Save
   public class Loader : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
-    private List<ReadRowReply> replies = new List<ReadRowReply>();
+    private List<SaveRowReply> replies = new List<SaveRowReply>();
 
     private void Start()
     {
@@ -37,7 +37,7 @@ namespace Save
       subscriptions.Add
       (Pool.Subscribe<SaveGame>(_ => Save()));
       subscriptions.Add
-      (Pool.Subscribe<ReadRowReply>(SaveRow));
+      (Pool.Subscribe<SaveRowReply>(OnSaveRow));
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new GameExists()); }
@@ -55,7 +55,7 @@ namespace Save
         { data = (Data)bf.Deserialize(file); }
 
         foreach(var row in data.rows)
-        { Pool.Dispatch(new WriteRow(row.Number, row.Tiles)); }
+        { Pool.Dispatch(new LoadRow(row.Number, row.Tiles)); }
       }
     }
 
@@ -63,16 +63,16 @@ namespace Save
     {
       /* Ask each row to respond. */
       replies.Clear();
-      Pool.Dispatch(new ReadRow());
+      Pool.Dispatch(new SaveRow());
     }
 
-    private void SaveRow(ReadRowReply rrr)
+    private void OnSaveRow(SaveRowReply rrr)
     {
       if(rrr.Number >= replies.Count)
       {
         replies.AddRange
         (
-          Enumerable.Repeat<ReadRowReply>
+          Enumerable.Repeat<SaveRowReply>
           (null, (rrr.Number - replies.Count) + 1)
         );
       }

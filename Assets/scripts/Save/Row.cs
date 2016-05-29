@@ -24,30 +24,30 @@ namespace Save
     }
   }
 
-  public class ReadRow
+  public class SaveRow
   { }
   [Serializable]
-  public class ReadRowReply
+  public class SaveRowReply
   {
     public int Number
     { get; set; }
     public TileInfo[] Tiles
     { get; set; }
 
-    public ReadRowReply(int n, TileInfo[] t)
+    public SaveRowReply(int n, TileInfo[] t)
     {
       Number = n;
       Tiles = t;
     }
   }
-  public class WriteRow
+  public class LoadRow
   {
     public int Number
     { get; set; }
     public TileInfo[] Tiles
     { get; set; }
 
-    public WriteRow(int n, TileInfo[] t)
+    public LoadRow(int n, TileInfo[] t)
     {
       Number = n;
       Tiles = t;
@@ -64,9 +64,9 @@ namespace Save
     private void Start()
     {
       subscriptions.Add
-      (Pool.Subscribe<ReadRow>(_ => Read()));
+      (Pool.Subscribe<SaveRow>(_ => Read()));
       subscriptions.Add
-      (Pool.Subscribe<WriteRow>(Write));
+      (Pool.Subscribe<LoadRow>(Write));
     }
 
     private void Read()
@@ -102,10 +102,10 @@ namespace Save
         else
         { states.Add(new TileInfo("", null, null)); }
       }
-      Pool.Dispatch(new ReadRowReply(number, states.ToArray()));
+      Pool.Dispatch(new SaveRowReply(number, states.ToArray()));
     }
 
-    private void Write(WriteRow wr)
+    private void Write(LoadRow wr)
     {
       if(wr.Number != number)
       { return; }
