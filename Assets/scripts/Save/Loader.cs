@@ -22,6 +22,7 @@ namespace Save
     /* TODO: Save the current piece tray. */
     /* TODO: Save the current score. */
     /* TODO: Save the whole pieces. */
+    /* TODO: Save the score. */
   }
 
   public class Loader : MonoBehaviour
