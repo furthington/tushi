@@ -7,6 +7,8 @@ namespace EndGame
   { }
   public class CheckPassed
   { }
+  public class GameLost
+  { }
 
   public class Detector : MonoBehaviour
   {
@@ -45,6 +47,7 @@ namespace EndGame
     {
       /* TODO: Show some UI. */
       Logger.Log("Game lost!");
+      Pool.Dispatch(new GameLost());
     }
   }
 }
