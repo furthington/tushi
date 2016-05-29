@@ -8,8 +8,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Save
 {
-  public class GameExists
-  { }
   public class LoadGame
   { }
   public class SaveGame
@@ -42,7 +40,7 @@ namespace Save
       (Pool.Subscribe<Board.SaveScoreReply>(OnSaveScore));
 
       if(File.Exists(Path()))
-      { Pool.Dispatch(new GameExists()); }
+      { Pool.Dispatch(new LoadGame()); }
     }
 
     private void Load()
