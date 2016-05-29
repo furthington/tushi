@@ -21,7 +21,6 @@ namespace Save
     public SaveRowReply[] rows;
     public int score;
     /* TODO: Save the current piece tray. */
-    /* TODO: Save the current score. */
     /* TODO: Save the whole pieces. */
   }
 
