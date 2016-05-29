@@ -81,7 +81,6 @@ namespace Board
       foreach (Transform child in transform)
       { child.Rotate(new Vector3(0, 0, -60)); }
       Notification.Pool.Dispatch(new RotateNeighbours());
-      //Notification.Pool.Dispatch(new PrintDebug());
     }
   }
 }
