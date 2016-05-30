@@ -18,6 +18,7 @@ namespace Save
   {
     public SaveRowReply[] rows;
     public int score;
+    public Board.PieceTray.SaveReply piece_tray;
     /* TODO: Save the current piece tray. */
     /* TODO: Save the whole pieces. */
   }
@@ -38,6 +39,8 @@ namespace Save
       (Pool.Subscribe<SaveRowReply>(OnSaveRow));
       subscriptions.Add
       (Pool.Subscribe<Board.SaveScoreReply>(OnSaveScore));
+      subscriptions.Add
+      (Pool.Subscribe<Board.PieceTray.SaveReply>(OnSavePieceTray));
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new LoadGame()); }
@@ -58,6 +61,15 @@ namespace Save
         load_score.Score = data.score;
         Pool.Dispatch(load_score);
 
+        Pool.Dispatch
+        (
+          new Board.PieceTray.Load
+          (
+            data.piece_tray.Names,
+            data.piece_tray.Rotations
+          )
+        );
+
         foreach(var row in data.rows)
         { Pool.Dispatch(new LoadRow(row.Number, row.Tiles)); }
       }
@@ -69,6 +81,7 @@ namespace Save
       replies.Clear();
       data_to_save = new Data();
       Pool.Dispatch(new Board.SaveScore());
+      Pool.Dispatch(new Board.PieceTray.Save());
       Pool.Dispatch(new SaveRow());
       /* XXX: SaveRow should be the last notif sent here. */
     }
@@ -92,6 +105,9 @@ namespace Save
 
     private void OnSaveScore(Board.SaveScoreReply reply)
     { data_to_save.score = reply.Score; }
+
+    private void OnSavePieceTray(Board.PieceTray.SaveReply reply)
+    { data_to_save.piece_tray = reply; }
 
     private void Write()
     {
