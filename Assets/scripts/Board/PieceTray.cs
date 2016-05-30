@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 using Notification;
@@ -14,27 +15,27 @@ namespace Board
     [System.Serializable]
     public class SaveReply
     {
-      public string[] Pieces
+      public string[] Names
       { get; set; }
       public float[] Rotations
       { get; set; }
 
-      public SaveReply(string[] p, float[] r)
+      public SaveReply(string[] n, float[] r)
       {
-        Pieces = p;
+        Names = n;
         Rotations = r;
       }
     }
     public class Load
     {
-      public string[] Pieces
+      public string[] Names
       { get; set; }
       public float[] Rotations
       { get; set; }
 
-      public Load(string[] p, float[] r)
+      public Load(string[] n, float[] r)
       {
-        Pieces = p;
+        Names = n;
         Rotations = r;
       }
     }
@@ -58,6 +59,8 @@ namespace Board
         Pool.Subscribe<AddNewPiece>
         (_ => AddPiece())
       );
+      subscriptions.Add(Pool.Subscribe<Save>(_ => OnSave()));
+      subscriptions.Add(Pool.Subscribe<Load>(OnLoad));
 
       /* Need to add pieces only after tiles are created,
        * since they are scaled based on the size of the tiles. */
@@ -91,13 +94,17 @@ namespace Board
       {
         /* Rice probability resets */
         rice_prob = rice_prob_min;
-        return (prob <= 0.1f) ? RandomFrom(PrefabsRiceLowProb) : RandomFrom(PrefabsRiceHighProb);
+        return (prob <= 0.1f)
+                 ? RandomFrom(PrefabsRiceLowProb)
+                 : RandomFrom(PrefabsRiceHighProb);
       }
       else
       {
         /* Rice probability goes up */
         rice_prob *= 1.5f;
-        return (prob <= 0.1f) ? RandomFrom(PrefabsLowProb) : RandomFrom(PrefabsHighProb);
+        return (prob <= 0.1f)
+                 ? RandomFrom(PrefabsLowProb)
+                 : RandomFrom(PrefabsHighProb);
       }
     }
 
@@ -108,7 +115,40 @@ namespace Board
     {
       foreach (Transform child in transform)
       { child.Rotate(new Vector3(0, 0, -60)); }
-      Notification.Pool.Dispatch(new RotateNeighbours());
+      Pool.Dispatch(new RotateNeighbours());
+    }
+
+    private void OnSave()
+    {
+      var names = new List<string>();
+      var rotations = new List<float>();
+      foreach (Transform child in transform)
+      {
+        names.Add(child.name);
+        rotations.Add(child.rotation.z);
+      }
+      Pool.Dispatch
+      (
+        new SaveReply
+        (
+          names.ToArray(),
+          rotations.ToArray()
+        )
+      );
+    }
+
+    private void OnLoad(Load l)
+    {
+      Debug.Assert(l.Names.Length == l.Rotations.Length,
+                   "Different amount of names and rotations");
+      for(int i = 0; i < l.Names.Length; ++i)
+      {
+        var prefab = Resources.Load("piece/" + l.Names[i]);
+        Debug.Assert(prefab != null, "Invalid prefab for name " + l.Names[i]);
+        var obj = Instantiate(prefab) as GameObject;
+        obj.transform.rotation = new Quaternion(0, 0, l.Rotations[i], 1);
+        obj.transform.SetParent(transform);
+      }
     }
   }
 }
