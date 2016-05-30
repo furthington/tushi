@@ -40,11 +40,14 @@ namespace Notification
 
     public static IEnumerator WaitForReplies<T>(Predicate<T> filter)
     {
+      //Logger.Log("Waiting for {0}", typeof(T).Name);
       yield return WaitFor<T>(filter);
 
+      //Logger.Log("Waiting for replies for {0}", typeof(T).Name);
       var id = Interlocked.Increment(ref counter);
       Pool.Dispatch(new RepliesComplete<T>(id));
       yield return WaitFor<RepliesComplete<T>>(n => n.ID == id);
+      //Logger.Log("Done waiting on {0}", typeof(T).Name);
     }
   }
 }
