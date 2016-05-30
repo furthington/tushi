@@ -49,13 +49,7 @@ namespace Board
     private void StopGlow()
     {
       StopAllCoroutines();
-      /* Hmmm glow fade doesn't feel snappy enough. */
-      //StartCoroutine(StopGlowAux());
-
-      /* This feels snappier, will do for now. */
-      Color clr = img.color;
-      clr.a = 0.0f;
-      img.color = clr;
+      StartCoroutine(StopGlowAux());
     }
 
     public void Glow()
@@ -84,7 +78,7 @@ namespace Board
       while (img.color.a > 0.0f)
       {
         Color clr = img.color;
-        clr.a = Mathf.Max(0.0f, clr.a - 0.1f);
+        clr.a = Mathf.Max(0.0f, clr.a - 0.015f);
         img.color = clr;
         yield return null;
       }
