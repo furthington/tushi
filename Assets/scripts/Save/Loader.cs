@@ -122,6 +122,7 @@ namespace Save
         using(var file = File.Open(Path(), FileMode.OpenOrCreate))
         { bf.Serialize(file, data_to_save); }
       }
+      Logger.Log("Game saved");
     }
 
     private string Path() /* TODO: encrypt */
