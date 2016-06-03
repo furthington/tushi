@@ -99,6 +99,8 @@ namespace Save
       }
       replies[rrr.Number] = rrr;
 
+      /* TODO: This will be true multiple times, since we don't know the
+         actual number of rows. We should just hard-code it. */
       var filled = replies.Count(x => x != null);
       if(filled == replies.Count)
       { Write(); }
