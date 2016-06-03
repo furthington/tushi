@@ -12,6 +12,8 @@ namespace Save
   { }
   public class SaveGame
   { }
+  public class NewGame
+  { }
 
   [Serializable]
   public class Data
@@ -44,6 +46,8 @@ namespace Save
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new LoadGame()); }
+      else
+      { Pool.Dispatch(new NewGame()); }
     }
 
     private void Load()

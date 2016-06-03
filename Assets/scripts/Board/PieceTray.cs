@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 using Notification;
+using Save;
 
 namespace Board
 {
@@ -61,15 +62,11 @@ namespace Board
       );
       subscriptions.Add(Pool.Subscribe<Save>(_ => OnSave()));
       subscriptions.Add(Pool.Subscribe<Load>(OnLoad));
-
-      /* Need to add pieces only after tiles are created,
-       * since they are scaled based on the size of the tiles. */
-      StartCoroutine(InitializePieces());
+      subscriptions.Add(Pool.Subscribe<NewGame>(_ => InitializePieces()));
     }
 
-    private IEnumerator InitializePieces()
+    private void InitializePieces()
     {
-      yield return new WaitForEndOfFrame();
       for (int i = 0; i < 3; ++i)
       { AddPiece(); }
     }
