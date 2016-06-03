@@ -27,11 +27,6 @@ namespace Board
       );
       transform.SetParent(canvas.transform);
       currently_over.Emplace(this);
-
-      /*TODO: remove when we no longer click tiles to do anything. */
-      CanvasGroup cg = gameObject.AddComponent<CanvasGroup>();
-      cg.blocksRaycasts = false;
-      cg.interactable = false;
     }
 
     public void InvalidatePosition()
