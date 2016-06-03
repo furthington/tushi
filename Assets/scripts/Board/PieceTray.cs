@@ -124,7 +124,7 @@ namespace Board
       var rotations = new List<float>();
       foreach (Transform child in transform)
       {
-        names.Add(child.name);
+        names.Add(child.name.Replace("(Clone)", ""));
         rotations.Add(child.rotation.z);
       }
       Pool.Dispatch
