@@ -41,8 +41,6 @@ namespace Notification
   {
     private readonly List<Action> unsubscribe = new List<Action>();
 
-    public void Add<T>(Subscription<T> sub)
-    { unsubscribe.Add(() => Pool.Unsubscribe(sub)); }
     public void Add<T>(Action<T> fn)
     {
       var sub = Pool.Subscribe<T>(fn);
