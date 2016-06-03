@@ -41,6 +41,7 @@ namespace Notification
   {
     private readonly List<Action> unsubscribe = new List<Action>();
 
+    /* TODO: Have an overload which does pool work itself. */
     public void Add<T>(Subscription<T> sub)
     { unsubscribe.Add(() => Pool.Unsubscribe(sub)); }
 
