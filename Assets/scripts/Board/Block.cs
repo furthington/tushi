@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using Error;
 
 namespace Board
 {
@@ -20,7 +21,7 @@ namespace Board
 
     public void PlaceInTile()
     {
-      Debug.Assert
+      Assert.Invariant
       (
         currently_over != null,
         "Trying to place block in invalid tile!"

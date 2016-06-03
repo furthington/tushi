@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using Notification;
 using Save;
+using Error;
 
 namespace Board
 {
@@ -136,12 +137,13 @@ namespace Board
 
     private void OnLoad(Load l)
     {
-      Debug.Assert(l.Names.Length == l.Rotations.Length,
-                   "Different amount of names and rotations");
+      Assert.Invariant(l.Names.Length == l.Rotations.Length,
+                       "Different amount of names and rotations");
       for(int i = 0; i < l.Names.Length; ++i)
       {
         var prefab = Resources.Load("piece/" + l.Names[i]);
-        Debug.Assert(prefab != null, "Invalid prefab for name " + l.Names[i]);
+        Assert.Invariant(prefab != null,
+                         "Invalid prefab for name " + l.Names[i]);
         var obj = Instantiate(prefab) as GameObject;
         obj.transform.rotation = new Quaternion(0, 0, l.Rotations[i], 1);
         obj.transform.SetParent(transform);

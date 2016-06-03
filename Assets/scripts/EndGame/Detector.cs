@@ -1,6 +1,7 @@
 using UnityEngine;
 using Notification;
 using System.Collections;
+using Error;
 
 namespace EndGame
 {
@@ -54,7 +55,8 @@ namespace EndGame
 
     private void CheckValues()
     {
-      Debug.Assert(failed <= max && total <= max, "Too many check results");
+      Assert.Invariant(failed <= max && total <= max,
+                       "Too many check results");
       if(total == max)
       { Pool.Dispatch(new Save.SaveGame()); }
     }

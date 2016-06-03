@@ -5,6 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
+using Error;
 
 namespace Save
 {
@@ -52,7 +53,8 @@ namespace Save
 
     private void Load()
     {
-      Debug.Assert(File.Exists(Path()), "Trying to load non-existent save");
+      Assert.Invariant(File.Exists(Path()),
+                       "Trying to load non-existent save");
       using(var timer = new Profile.TaskTimer("Read saved game"))
       {
         Data data = null;
@@ -116,7 +118,8 @@ namespace Save
     private void Write()
     {
       var filled = replies.Count(x => x != null);
-      Debug.Assert(filled == replies.Count, "Cannot write incomplete data");
+      Assert.Invariant(filled == replies.Count,
+                       "Cannot write incomplete data");
 
       using(var timer = new Profile.TaskTimer("Write save game"))
       {

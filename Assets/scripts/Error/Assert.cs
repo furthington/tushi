@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// TODO: Update asserts
 namespace Error
 {
   public static class Assert
@@ -12,6 +11,12 @@ namespace Error
       { Debug.Break(); }
       else
       { Application.Quit(); }
+    }
+
+    public static void Invariant(bool test, string message)
+    {
+      if(!test)
+      { Fail(message); }
     }
   }
 }

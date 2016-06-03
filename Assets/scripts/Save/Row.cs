@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Notification;
 using System;
 using System.Collections.Generic;
+using Error;
 
 namespace Save
 {
@@ -118,7 +119,8 @@ namespace Save
           cur != null;
           cur = cur.right, ++i)
       {
-        Debug.Assert(i < wr.Tiles.Length, "Not enough tiles while loading");
+        Assert.Invariant(i < wr.Tiles.Length,
+                         "Not enough tiles while loading");
         if(wr.Tiles[i].Name == "")
         { continue; }
 
