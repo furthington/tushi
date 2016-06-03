@@ -71,7 +71,7 @@ namespace HighScore
           writer.WriteLine(whs.Score);
           writer.WriteLine(Math.Max(all_time ?? 0, whs.Score));
         }
-        Logger.LogFormat("wrote high scores to disk");
+        Logger.LogFormat("Wrote high scores to disk");
       }
     }
 

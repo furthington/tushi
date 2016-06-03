@@ -70,6 +70,7 @@ namespace EndGame
       }
       Logger.Log("Game lost! Score: {0}", score);
       Pool.Dispatch(new GameLost(score));
+      Pool.Dispatch(new Board.WriteScore());
     }
   }
 }

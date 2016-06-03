@@ -28,6 +28,8 @@ namespace Board
     public int Score
     { get; set; }
   }
+  public class WriteScore
+  { }
 
   [RequireComponent(typeof(Text))]
   public class Score : MonoBehaviour
@@ -58,6 +60,7 @@ namespace Board
       subscriptions.Add(Pool.Subscribe<LoadScore>(OnLoadScore));
       subscriptions.Add(Pool.Subscribe<SaveScore>(_ => OnSaveScore()));
       subscriptions.Add(Pool.Subscribe<ScoreQuery>(_ => OnQuery()));
+      subscriptions.Add(Pool.Subscribe<WriteScore>(_ => OnWrite()));
     }
 
     private void OnDisable()
@@ -85,5 +88,8 @@ namespace Board
       reply.Score = score;
       Pool.Dispatch(reply);
     }
+
+    private void OnWrite()
+    { Pool.Dispatch(new HighScore.Write(score)); }
   }
 }
