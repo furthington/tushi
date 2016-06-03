@@ -42,6 +42,7 @@ namespace Save
       (Pool.Subscribe<Board.SaveScoreReply>(OnSaveScore));
       subscriptions.Add
       (Pool.Subscribe<Board.PieceTray.SaveReply>(OnSavePieceTray));
+      subscriptions.Add(Pool.Subscribe<EndGame.GameLost>(_ => OnGameLost()));
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new LoadGame()); }
@@ -127,6 +128,9 @@ namespace Save
       }
       Logger.Log("Game saved");
     }
+
+    private void OnGameLost()
+    { File.Delete(Path()); }
 
     private string Path() /* TODO: encrypt */
     { return Application.persistentDataPath + "/current-game"; }
