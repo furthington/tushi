@@ -24,15 +24,18 @@ namespace UI
       Pool.Dispatch(new HighScore.Read());
     }
 
+    private void OnDisable()
+    { subscriptions.Clear(); }
+
     private void Read(HighScore.ReadReply rr)
     {
       switch(state)
       {
         case HighScoreState.Last:
-          GetComponent<Text>().text = "Last Score: " + rr.Last.ToString();
+          GetComponent<Text>().text = rr.Last.ToString();
           break;
         case HighScoreState.Best:
-          GetComponent<Text>().text = "Best Score: " + rr.Best.ToString();
+          GetComponent<Text>().text = rr.Best.ToString();
           break;
       }
     }
