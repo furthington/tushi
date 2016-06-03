@@ -21,7 +21,6 @@ namespace Save
     public SaveRowReply[] rows;
     public int score;
     public Board.PieceTray.SaveReply piece_tray;
-    /* TODO: Save the current piece tray. */
     /* TODO: Save the whole pieces. */
   }
 
