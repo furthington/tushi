@@ -82,16 +82,6 @@ namespace Board
       { tile.block.DeferredRemove(); }
     }
 
-    /* TODO: Remove for release. */
-    public void OnPointerClick(PointerEventData data)
-    {
-      if(block != null)
-      {
-        block.Remove();
-        block = null;
-      }
-    }
-
     private void ActiveReply(ActiveTileRequest r)
     {
       if(block == null)
