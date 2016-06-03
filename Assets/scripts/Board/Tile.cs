@@ -8,7 +8,7 @@ using Notification;
 
 namespace Board
 {
-  public class Tile : MonoBehaviour, IPointerClickHandler
+  public class Tile : MonoBehaviour
   {
     public Tile top_right;
     public Tile right;

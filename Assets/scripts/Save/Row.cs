@@ -64,12 +64,12 @@ namespace Save
     private void Start()
     {
       subscriptions.Add
-      (Pool.Subscribe<SaveRow>(_ => Read()));
+      (Pool.Subscribe<SaveRow>(_ => OnSave()));
       subscriptions.Add
-      (Pool.Subscribe<LoadRow>(Write));
+      (Pool.Subscribe<LoadRow>(OnLoad));
     }
 
-    private void Read() // TODO: Rename
+    private void OnSave()
     {
       var states = new List<TileInfo>();
       for(var cur = GetComponent<Board.Tile>();
@@ -105,7 +105,7 @@ namespace Save
       Pool.Dispatch(new SaveRowReply(number, states.ToArray()));
     }
 
-    private void Write(LoadRow wr)
+    private void OnLoad(LoadRow wr)
     {
       if(wr.Number != number)
       { return; }
