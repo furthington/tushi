@@ -20,12 +20,13 @@ namespace EndGame
   public class Detector : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
-    private const int total = 3;
-    private int current = 0;
+    private const int max = 3;
+    private int failed = 0;
+    private int total = 0;
 
     private void Start()
     {
-      /* TODO: Use a coroutine for this whole thing. */
+      /* TODO: Use a coroutine for this whole thing? */
       subscriptions.Add(Pool.Subscribe<Board.PiecePlaced>(_ => OnStartCheck()));
       subscriptions.Add(Pool.Subscribe<CheckFailed>(_ => OnCheckFailed()));
       subscriptions.Add(Pool.Subscribe<CheckPassed>(_ => OnCheckPassed()));
@@ -35,24 +36,31 @@ namespace EndGame
     { subscriptions.Clear(); }
 
     private void OnStartCheck()
-    { current = 0; }
+    { failed = total = 0; }
 
     private void OnCheckFailed()
     {
-      if(--current == -total)
+      ++total;
+      if(++failed == max)
       { StartCoroutine(Lost()); }
-      Debug.Assert(current >= -total, "Too many check results");
+      CheckValues();
     }
 
     private void OnCheckPassed()
     {
-      ++current;
-      Debug.Assert(current <= total, "Too many check results");
+      ++total;
+      CheckValues();
     }
 
+    private void CheckValues()
+    {
+      Debug.Assert(failed <= max && total <= max, "Too many check results");
+      if(total == max)
+      { Pool.Dispatch(new Save.SaveGame()); }
+    }
+    
     private IEnumerator Lost()
     {
-      /* TODO: Show some UI. */
       var score = 0;
       {
         var sub = Pool.Subscribe<Board.ScoreReply>(r => score = r.Score);

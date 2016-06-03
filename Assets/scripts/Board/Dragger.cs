@@ -116,19 +116,12 @@ namespace Board
           p.GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
 
-        StartCoroutine(AsyncDestroy());
+        Destroy(gameObject);
+        Pool.Dispatch(new AddNewPiece());
+        Pool.Dispatch(new PiecePlaced());
       }
 
       Destroy(currently_dragged);
-    }
-
-    private IEnumerator AsyncDestroy()
-    {
-      Pool.Dispatch(new AddNewPiece());
-      Pool.Dispatch(new PiecePlaced());
-      Destroy(gameObject);
-      yield return Notification.Async.WaitForReplies<PiecePlaced>();
-      Pool.Dispatch(new Save.SaveGame());
     }
   }
 }
