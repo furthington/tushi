@@ -26,8 +26,8 @@ namespace Board
       tile = GetComponent<Tile>();
       total_time = curve_short.keys[curve_short.length - 1].time;
 
-      subscriptions.Add(Pool.Subscribe<GlowStart>(_ => StartGlow()));
-      subscriptions.Add(Pool.Subscribe<GlowStop>(_ => StopGlow()));
+      subscriptions.Add<GlowStart>(_ => StartGlow());
+      subscriptions.Add<GlowStop>(_ => StopGlow());
     }
 
     private void StartGlow()

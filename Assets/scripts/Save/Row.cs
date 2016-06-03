@@ -64,10 +64,8 @@ namespace Save
 
     private void Start()
     {
-      subscriptions.Add
-      (Pool.Subscribe<SaveRow>(_ => OnSave()));
-      subscriptions.Add
-      (Pool.Subscribe<LoadRow>(OnLoad));
+      subscriptions.Add<SaveRow>(_ => OnSave());
+      subscriptions.Add<LoadRow>(OnLoad);
     }
 
     private void OnSave()

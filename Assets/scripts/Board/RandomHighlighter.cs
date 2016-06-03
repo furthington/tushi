@@ -15,8 +15,8 @@ namespace Board
       tiles = GameObject.FindObjectsOfType<Tile>();
       StartCoroutine(Glow());
 
-      subscriptions.Add(Pool.Subscribe<GlowStart>(_ => glowing = true));
-      subscriptions.Add(Pool.Subscribe<GlowStop>(_ => glowing = false));
+      subscriptions.Add<GlowStart>(_ => glowing = true);
+      subscriptions.Add<GlowStop>(_ => glowing = false);
     }
 
     private void OnDisable()

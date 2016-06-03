@@ -13,17 +13,14 @@ namespace EndGame
     public void Initialize(GameLost results)
     {
       score.text = results.Score.ToString();
-      subscriptions.Add
+      subscriptions.Add<HighScore.ReadReply>
       (
-        Pool.Subscribe<HighScore.ReadReply>
-        (
-          rr =>
-          {
-            if (results.Score > rr.Best)
-            { new_high_score.gameObject.SetActive(true); }
-            subscriptions.Clear();
-          }
-        )
+        rr =>
+        {
+          if (results.Score > rr.Best)
+          { new_high_score.gameObject.SetActive(true); }
+          subscriptions.Clear();
+        }
       );
       Pool.Dispatch(new HighScore.Read());
     }

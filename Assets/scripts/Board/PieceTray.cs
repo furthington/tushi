@@ -56,14 +56,10 @@ namespace Board
     {
       rice_prob = rice_prob_min;
 
-      subscriptions.Add
-      (
-        Pool.Subscribe<AddNewPiece>
-        (_ => AddPiece())
-      );
-      subscriptions.Add(Pool.Subscribe<Save>(_ => OnSave()));
-      subscriptions.Add(Pool.Subscribe<Load>(OnLoad));
-      subscriptions.Add(Pool.Subscribe<NewGame>(_ => InitializePieces()));
+      subscriptions.Add<AddNewPiece>(_ => AddPiece());
+      subscriptions.Add<Save>(_ => OnSave());
+      subscriptions.Add<Load>(OnLoad);
+      subscriptions.Add<NewGame>(_ => InitializePieces());
     }
 
     private void InitializePieces()

@@ -28,9 +28,9 @@ namespace EndGame
     private void Start()
     {
       /* TODO: Use a coroutine for this whole thing? */
-      subscriptions.Add(Pool.Subscribe<Board.PiecePlaced>(_ => OnStartCheck()));
-      subscriptions.Add(Pool.Subscribe<CheckFailed>(_ => OnCheckFailed()));
-      subscriptions.Add(Pool.Subscribe<CheckPassed>(_ => OnCheckPassed()));
+      subscriptions.Add<Board.PiecePlaced>(_ => OnStartCheck());
+      subscriptions.Add<CheckFailed>(_ => OnCheckFailed());
+      subscriptions.Add<CheckPassed>(_ => OnCheckPassed());
     }
 
     private void OnDisable()

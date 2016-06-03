@@ -10,15 +10,12 @@ namespace EndGame
 
     private void Start()
     {
-      subscriptions.Add
+      subscriptions.Add<GameLost>
       (
-        Pool.Subscribe<GameLost>
-        (
-          rr =>
-          Instantiate(game_over_prefab)
-            .GetComponentInChildren<Populator>()
-            .Initialize(rr)
-        )
+        rr =>
+        Instantiate(game_over_prefab)
+          .GetComponentInChildren<Populator>()
+          .Initialize(rr)
       );
     }
 

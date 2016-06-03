@@ -33,17 +33,12 @@ namespace Save
 
     private void Start()
     {
-      subscriptions.Add
-      (Pool.Subscribe<LoadGame>(_ => Load()));
-      subscriptions.Add
-      (Pool.Subscribe<SaveGame>(_ => Save()));
-      subscriptions.Add
-      (Pool.Subscribe<SaveRowReply>(OnSaveRow));
-      subscriptions.Add
-      (Pool.Subscribe<Board.SaveScoreReply>(OnSaveScore));
-      subscriptions.Add
-      (Pool.Subscribe<Board.PieceTray.SaveReply>(OnSavePieceTray));
-      subscriptions.Add(Pool.Subscribe<EndGame.GameLost>(_ => OnGameLost()));
+      subscriptions.Add<LoadGame>(_ => Load());
+      subscriptions.Add<SaveGame>(_ => Save());
+      subscriptions.Add<SaveRowReply>(OnSaveRow);
+      subscriptions.Add<Board.SaveScoreReply>(OnSaveScore);
+      subscriptions.Add<Board.PieceTray.SaveReply>(OnSavePieceTray);
+      subscriptions.Add<EndGame.GameLost>(_ => OnGameLost());
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new LoadGame()); }

@@ -46,21 +46,19 @@ namespace Board
 
     private void Start()
     {
-      subscriptions.Add
+      subscriptions.Add<AddScore>
       (
-        Pool.Subscribe<AddScore>
-        ( s =>
-          {
-            /* TODO: Make score count up? */
-            score += s.Score;
-            UpdateText();
-          }
-        )
+       s =>
+       {
+         /* TODO: Make score count up? */
+         score += s.Score;
+         UpdateText();
+       }
       );
-      subscriptions.Add(Pool.Subscribe<LoadScore>(OnLoadScore));
-      subscriptions.Add(Pool.Subscribe<SaveScore>(_ => OnSaveScore()));
-      subscriptions.Add(Pool.Subscribe<ScoreQuery>(_ => OnQuery()));
-      subscriptions.Add(Pool.Subscribe<WriteScore>(_ => OnWrite()));
+      subscriptions.Add<LoadScore>(OnLoadScore);
+      subscriptions.Add<SaveScore>(_ => OnSaveScore());
+      subscriptions.Add<ScoreQuery>(_ => OnQuery());
+      subscriptions.Add<WriteScore>(_ => OnWrite());
     }
 
     private void OnDisable()

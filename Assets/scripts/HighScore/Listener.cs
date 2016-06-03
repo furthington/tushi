@@ -31,10 +31,8 @@ namespace HighScore
 
     private void Start()
     {
-      subscriptions.Add
-      (Pool.Subscribe<Read>(_ => DoRead()));
-      subscriptions.Add
-      (Pool.Subscribe<Write>(DoWrite));
+      subscriptions.Add<Read>(_ => DoRead());
+      subscriptions.Add<Write>(DoWrite);
       Logger.LogFormat("High score path: {0}", Path());
     }
 

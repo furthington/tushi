@@ -19,8 +19,7 @@ namespace UI
 
     private void Start()
     {
-      subscriptions.Add
-      (Pool.Subscribe<HighScore.ReadReply>(Read));
+      subscriptions.Add<HighScore.ReadReply>(Read);
       Pool.Dispatch(new HighScore.Read());
     }
 

@@ -28,7 +28,7 @@ namespace Board
     private void Start()
     {
       lines = new List<Tile>[]{ line0, line1, line2 };
-      subscriptions.Add(Pool.Subscribe<ActiveTileRequest>(ActiveReply));
+      subscriptions.Add<ActiveTileRequest>(ActiveReply);
     }
 
     private void OnDisable()
