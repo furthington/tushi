@@ -68,6 +68,9 @@ namespace Save
       subscriptions.Add<LoadRow>(OnLoad);
     }
 
+    private void OnDisable()
+    { subscriptions.Clear(); }
+
     private void OnSave()
     {
       var states = new List<TileInfo>();
