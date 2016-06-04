@@ -19,10 +19,10 @@ namespace Board
     {
       public string[] Names
       { get; set; }
-      public float[] Rotations
+      public float[][] Rotations
       { get; set; }
 
-      public SaveReply(string[] n, float[] r)
+      public SaveReply(string[] n, float[][] r)
       {
         Names = n;
         Rotations = r;
@@ -32,10 +32,10 @@ namespace Board
     {
       public string[] Names
       { get; set; }
-      public float[] Rotations
+      public float[][] Rotations
       { get; set; }
 
-      public Load(string[] n, float[] r)
+      public Load(string[] n, float[][] r)
       {
         Names = n;
         Rotations = r;
@@ -115,11 +115,20 @@ namespace Board
     private void OnSave()
     {
       var names = new List<string>();
-      var rotations = new List<float>();
+      var rotations = new List<float[]>();
       foreach (Transform child in transform)
       {
         names.Add(child.name.Replace("(Clone)", ""));
-        rotations.Add(child.rotation.z);
+        rotations.Add
+        (
+          new float[]
+          {
+            child.rotation.x,
+            child.rotation.y,
+            child.rotation.z,
+            child.rotation.w
+          }
+        );
       }
       Pool.Dispatch
       (
@@ -141,7 +150,13 @@ namespace Board
         Assert.Invariant(prefab != null,
                          "Invalid prefab for name " + l.Names[i]);
         var obj = Instantiate(prefab) as GameObject;
-        obj.transform.rotation = new Quaternion(0, 0, l.Rotations[i], 1);
+        obj.transform.rotation = new Quaternion
+        (
+          l.Rotations[i][0],
+          l.Rotations[i][1],
+          l.Rotations[i][2],
+          l.Rotations[i][3]
+        );
         obj.transform.SetParent(transform);
       }
     }
