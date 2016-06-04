@@ -66,7 +66,8 @@ namespace UI.Mode
     {
       using(var writer = new StreamWriter(Path()))
       { writer.WriteLine(is_right); }
-      Logger.LogFormat("Wrote UI mode to disk");
+      Logger.Log
+      ("Wrote UI mode to disk: {0}", is_right ? "right" : "left");
     }
 
     private void DoRead()
@@ -76,7 +77,8 @@ namespace UI.Mode
         using(var reader = new StreamReader(Path()))
         { is_right = Boolean.Parse(reader.ReadLine()); }
         SetMode(is_right);
-        Logger.Log("Read UI mode: ", is_right);
+        Logger.Log
+        ("Read UI mode: {0}", is_right ? "right" : "left");
       }
     }
 
