@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+using System.IO;
 using System.Collections.Generic;
 using Notification;
 
@@ -35,8 +37,7 @@ namespace UI.Mode
 
     private void Start()
     {
-      /* TODO: read saved mode. */
-      SetMode(true);
+      DoRead();
 
       subscriptions.Add<Read>(_ => Pool.Dispatch(new ReadReply(is_right)));
       subscriptions.Add<Write>
@@ -44,7 +45,7 @@ namespace UI.Mode
         mode =>
         {
           SetMode(mode.Right);
-          SaveMode();
+          Save();
         }
       );
     }
@@ -61,9 +62,25 @@ namespace UI.Mode
       { obj.SetActive(!right); }
     }
 
-    private void SaveMode()
+    private void Save()
     {
-      /* TODO: save current mode. */
+      using(var writer = new StreamWriter(Path()))
+      { writer.WriteLine(is_right); }
+      Logger.LogFormat("Wrote UI mode to disk");
     }
+
+    private void DoRead()
+    {
+      if(File.Exists(Path()))
+      {
+        using(var reader = new StreamReader(Path()))
+        { is_right = Boolean.Parse(reader.ReadLine()); }
+        SetMode(is_right);
+        Logger.Log("Read UI mode: ", is_right);
+      }
+    }
+
+    private string Path() /* TODO: encrypt */
+    { return Application.persistentDataPath + "/ui-mode"; }
   }
 }
