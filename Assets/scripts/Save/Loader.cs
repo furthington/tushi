@@ -20,6 +20,7 @@ namespace Save
   public class Data
   {
     public SaveRowReply[] rows;
+    public Board.PieceIdentifier.SaveReply[] pieces;
     public int score;
     public Board.PieceTray.SaveReply piece_tray;
     /* TODO: Save the whole pieces. */
@@ -28,7 +29,8 @@ namespace Save
   public class Loader : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
-    private List<SaveRowReply> replies = new List<SaveRowReply>();
+    private List<SaveRowReply> row_replies = new List<SaveRowReply>();
+    private List<Board.PieceIdentifier.SaveReply> piece_replies = new List<Board.PieceIdentifier.SaveReply>();
     Data data_to_save = null;
 
     private void Start()
@@ -38,6 +40,7 @@ namespace Save
       subscriptions.Add<SaveRowReply>(OnSaveRow);
       subscriptions.Add<Board.SaveScoreReply>(OnSaveScore);
       subscriptions.Add<Board.PieceTray.SaveReply>(OnSavePieceTray);
+      subscriptions.Add<Board.PieceIdentifier.SaveReply>(OnSavePieceIdentifier);
       subscriptions.Add<EndGame.GameLost>(_ => OnGameLost());
 
       if(File.Exists(Path()))
@@ -73,36 +76,41 @@ namespace Save
 
         foreach(var row in data.rows)
         { Pool.Dispatch(new LoadRow(row.Number, row.Tiles)); }
+
+        foreach(var piece in data.pieces)
+        { Pool.Dispatch(new Board.PieceLoader.Load(piece)); }
       }
     }
 
     private void Save()
     {
       /* Ask each row to respond. */
-      replies.Clear();
+      row_replies.Clear();
+      piece_replies.Clear();
       data_to_save = new Data();
       Pool.Dispatch(new Board.SaveScore());
       Pool.Dispatch(new Board.PieceTray.Save());
+      Pool.Dispatch(new Board.PieceIdentifier.Save());
       Pool.Dispatch(new SaveRow());
       /* XXX: SaveRow should be the last notif sent here. */
     }
 
     private void OnSaveRow(SaveRowReply rrr)
     {
-      if(rrr.Number >= replies.Count)
+      if(rrr.Number >= row_replies.Count)
       {
-        replies.AddRange
+        row_replies.AddRange
         (
           Enumerable.Repeat<SaveRowReply>
-          (null, (rrr.Number - replies.Count) + 1)
+          (null, (rrr.Number - row_replies.Count) + 1)
         );
       }
-      replies[rrr.Number] = rrr;
+      row_replies[rrr.Number] = rrr;
 
       /* TODO: This will be true multiple times, since we don't know the
          actual number of rows. We should just hard-code it. */
-      var filled = replies.Count(x => x != null);
-      if(filled == replies.Count)
+      var filled = row_replies.Count(x => x != null);
+      if(filled == row_replies.Count)
       { Write(); }
     }
 
@@ -112,15 +120,19 @@ namespace Save
     private void OnSavePieceTray(Board.PieceTray.SaveReply reply)
     { data_to_save.piece_tray = reply; }
 
+    private void OnSavePieceIdentifier(Board.PieceIdentifier.SaveReply reply)
+    { piece_replies.Add(reply); }
+
     private void Write()
     {
-      var filled = replies.Count(x => x != null);
-      Assert.Invariant(filled == replies.Count,
+      var filled = row_replies.Count(x => x != null);
+      Assert.Invariant(filled == row_replies.Count,
                        "Cannot write incomplete data");
 
       using(var timer = new Profile.TaskTimer("Write save game"))
       {
-        data_to_save.rows = replies.ToArray();
+        data_to_save.rows = row_replies.ToArray();
+        data_to_save.pieces = piece_replies.ToArray();
 
         var bf = new BinaryFormatter();
         using(var file = File.Open(Path(), FileMode.OpenOrCreate))

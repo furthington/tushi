@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using Notification;
 using Error;
 
 namespace Board
@@ -10,11 +11,19 @@ namespace Board
   public class Block : MonoBehaviour
   {
     public Piece piece; /* Assign in editor */
+    public string piece_id; /* Loaded from saved game */
     private Tile currently_over = null;
     private GameObject canvas;
+    private SubscriptionStack subscriptions = new SubscriptionStack();
 
     private void Awake()
-    { canvas = GameObject.FindGameObjectWithTag("main_canvas"); }
+    {
+      canvas = GameObject.FindGameObjectWithTag("main_canvas");
+      subscriptions.Add<PieceLoader.Loaded>(OnPieceLoaded);
+    }
+
+    private void OnDisable()
+    { subscriptions.Clear(); }
 
     public bool IsInValidPosition()
     { return (currently_over != null && currently_over.block == null) ; }
@@ -71,6 +80,16 @@ namespace Board
       /* Wait for this frame to finish. */
       yield return new WaitForEndOfFrame();
       Remove();
+    }
+
+    private void OnPieceLoaded(PieceLoader.Loaded l)
+    {
+      if(l.ID != piece_id)
+      { return; }
+      piece = l.Item;
+      var img = GetComponent<Image>();
+      img.enabled = false;
+      piece.block_images.Add(img);
     }
   }
 }

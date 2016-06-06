@@ -12,16 +12,22 @@ namespace Save
   {
     public string Name
     { get; set; }
+    public string SpriteName
+    { get; set; }
     public float[] Scale
     { get; set; }
     public float[] Rotation
     { get; set; }
+    public string PieceIdentifier
+    { get; set; }
 
-    public TileInfo(string n, float[] s, float[] r)
+    public TileInfo(string n, string sn, float[] s, float[] r, string p)
     {
       Name = n;
+      SpriteName = sn;
       Scale = s;
       Rotation = r;
+      PieceIdentifier = p;
     }
   }
 
@@ -84,6 +90,7 @@ namespace Save
           (
             new TileInfo
             (
+              cur.block.name,
               cur.block.GetComponent<Image>().sprite.name,
               new float[]
               {
@@ -97,12 +104,15 @@ namespace Save
                 cur.block.transform.rotation.y,
                 cur.block.transform.rotation.z,
                 cur.block.transform.rotation.w
-              }
+              },
+              (cur.block.piece != null)
+                ? cur.block.piece.GetComponent<Board.PieceIdentifier>().ID
+                : ""
             )
           );
         }
         else
-        { states.Add(new TileInfo("", null, null)); }
+        { states.Add(new TileInfo("", "", null, null, "")); }
       }
       Pool.Dispatch(new SaveRowReply(number, states.ToArray()));
     }
@@ -126,6 +136,7 @@ namespace Save
         { continue; }
 
         cur.block = new GameObject().AddComponent<Board.Block>();
+        cur.block.piece_id = wr.Tiles[i].PieceIdentifier;
         cur.block.transform.position = cur.transform.position;
         cur.block.transform.localScale = new Vector3
         (
@@ -144,8 +155,9 @@ namespace Save
         cur.block.gameObject.AddComponent<Image>();
         cur.block.transform.SetParent(canvas.transform);
         cur.block.GetComponent<Image>()
-           .sprite = Resources.Load<Sprite>(wr.Tiles[i].Name);
+           .sprite = Resources.Load<Sprite>(wr.Tiles[i].SpriteName);
         cur.block.GetComponent<Image>().SetNativeSize();
+        cur.block.name = wr.Tiles[i].Name;
       }
     }
   }

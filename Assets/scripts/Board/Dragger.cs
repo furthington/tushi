@@ -114,6 +114,7 @@ namespace Board
         {
           p.transform.SetParent(canvas.transform);
           p.GetComponent<CanvasGroup>().blocksRaycasts = false;
+          p.OnPlacement();
         }
 
         Destroy(gameObject);
