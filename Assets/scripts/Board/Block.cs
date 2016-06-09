@@ -63,23 +63,38 @@ namespace Board
       currently_over = null;
     }
 
-    public void Remove()
-    { Destroy(gameObject); }
-
-    public void DeferredRemove()
+    public void DeferredRemove(int delay)
     {
       /* Destroy the big piece and show the little blocks. */
       if (!GetComponent<Image>().enabled)
       { piece.BreakDown(); }
 
-      StartCoroutine(DeferredRemoveImpl());
+      /* DeferredRemove could be called multiple times on one tile. */
+      StopAllCoroutines();
+
+      StartCoroutine(DeferredRemoveImpl(delay));
     }
 
-    private IEnumerator DeferredRemoveImpl()
+    private IEnumerator DeferredRemoveImpl(int delay)
     {
-      /* Wait for this frame to finish. */
-      yield return new WaitForEndOfFrame();
-      Remove();
+      if (delay > 0)
+      { yield return new WaitForSeconds(0.05f * delay); }
+
+      float scale = transform.localScale.x;
+      float delta = scale * 0.15f;
+      Vector3 new_scale = transform.localScale;
+
+      while (scale > 0.0f)
+      {
+        scale -= delta;
+        if (scale < 0.0f)
+        { break; }
+        new_scale.x = new_scale.y = scale;
+        transform.localScale = new_scale;
+        yield return null;
+      }
+
+      Destroy(gameObject);
     }
 
     private void OnPieceLoaded(PieceLoader.Loaded l)

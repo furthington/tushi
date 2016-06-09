@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Profile;
@@ -42,7 +43,7 @@ namespace Board
         /* TODO: Implement combos. */
         if(IsComplete(line))
         {
-          Clear(line);
+          StartCoroutine(Clear(line));
           /* TODO: Improve score counting. */
           AddScore s = new AddScore();
           s.Score = line.Count * 6;
@@ -76,10 +77,15 @@ namespace Board
     private static bool IsRice(Tile t)
     { return t.block.name == "rice"; }
 
-    private static void Clear(List<Tile> line)
+    private static IEnumerator Clear(List<Tile> line)
     {
+      int i = 0;
       foreach(var tile in line)
-      { tile.block.DeferredRemove(); }
+      { tile.block.DeferredRemove(i++); }
+
+      yield return new WaitForEndOfFrame();
+      foreach (var tile in line)
+      { tile.block = null; }
     }
 
     private void ActiveReply(ActiveTileRequest r)
