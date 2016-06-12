@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 using Notification;
 
 namespace Board
@@ -36,13 +38,12 @@ namespace Board
   {
     private Text text;
     private int score = 0;
+    private int displayed_score = 0;
     private SubscriptionStack subscriptions = new SubscriptionStack();
+    private List<int> scores = new List<int>();
 
     private void Awake()
-    {
-      text = GetComponent<Text>();
-      UpdateText();
-    }
+    { text = GetComponent<Text>(); }
 
     private void Start()
     {
@@ -50,9 +51,10 @@ namespace Board
       (
        s =>
        {
-         /* TODO: Make score count up? */
          score += s.Score;
-         UpdateText();
+         if (scores.Count == 0)
+         { StartCoroutine(UpdateText(s.Score)); }
+         scores.Add(s.Score);
        }
       );
       subscriptions.Add<LoadScore>(OnLoadScore);
@@ -64,13 +66,24 @@ namespace Board
     private void OnDisable()
     { subscriptions.Clear(); }
 
-    private void UpdateText()
-    { text.text = score.ToString(); }
+    private IEnumerator UpdateText(int amt)
+    {
+      int final_score = displayed_score + amt;
+      while (displayed_score < final_score)
+      {
+        ++displayed_score;
+        text.text = displayed_score.ToString();
+        yield return new WaitForEndOfFrame();
+      }
+      scores.RemoveAt(0);
+      if (scores.Count > 0)
+      { StartCoroutine(UpdateText(scores[0])); }
+    }
 
     private void OnLoadScore(LoadScore ls)
     {
-      score = ls.Score;
-      UpdateText();
+      displayed_score = score = ls.Score;
+      text.text = score.ToString();
     }
 
     private void OnSaveScore()
