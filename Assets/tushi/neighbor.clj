@@ -132,6 +132,8 @@
   [rows element start-dir end-dir]
   (let [before (follow rows element start-dir)
         after (follow rows element end-dir)
+
+        ; One line may be longer, so just concat the rest at the end
         shortest (min (count before) (count after))
         before-trunc (drop shortest before)
         after-trunc (drop shortest after)]
