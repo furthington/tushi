@@ -31,7 +31,8 @@ namespace Save
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<SaveRowReply> row_replies = new List<SaveRowReply>();
     private List<Board.PieceIdentifier.SaveReply> piece_replies = new List<Board.PieceIdentifier.SaveReply>();
-    Data data_to_save = null;
+    private Data data_to_save = null;
+    private int total_rows = 9;
 
     private void Start()
     {
@@ -107,10 +108,8 @@ namespace Save
       }
       row_replies[rrr.Number] = rrr;
 
-      /* TODO: This will be true multiple times, since we don't know the
-         actual number of rows. We should just hard-code it. */
       var filled = row_replies.Count(x => x != null);
-      if(filled == row_replies.Count)
+      if(filled == total_rows)
       { Write(); }
     }
 
