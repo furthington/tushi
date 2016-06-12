@@ -82,7 +82,7 @@ namespace Save
       }
     }
 
-    private void Save()
+    public void Save()
     {
       /* Ask each row to respond. */
       row_replies.Clear();
