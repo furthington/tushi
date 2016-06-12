@@ -130,9 +130,15 @@
 
 (defn build-line
   [rows element start-dir end-dir]
-  (concat (follow rows element start-dir)
-          [element]
-          (follow rows element end-dir)))
+  (let [before (follow rows element start-dir)
+        after (follow rows element end-dir)
+        shortest (min (count before) (count after))
+        before-trunc (drop shortest before)
+        after-trunc (drop shortest after)]
+    (concat [element]
+            (interleave before after)
+            before-trunc
+            after-trunc)))
 
 (defn build-lines
   [rows]

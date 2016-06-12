@@ -77,14 +77,14 @@ namespace Board
 
     private IEnumerator DeferredRemoveImpl(int delay)
     {
-      if (delay > 0)
+      if(delay > 0)
       { yield return new WaitForSeconds(0.05f * delay); }
 
       float scale = transform.localScale.x;
       float delta = scale * 0.15f;
       Vector3 new_scale = transform.localScale;
 
-      while (scale > 0.0f)
+      while(scale > 0.0f)
       {
         scale -= delta;
         if (scale < 0.0f)
