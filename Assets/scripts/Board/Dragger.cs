@@ -15,6 +15,7 @@ namespace Board
   {
     private GameObject currently_dragged;
     private GameObject canvas;
+    private float drag_offset;
     private List<Block> blocks = new List<Block>();
     private List<Image> guides = new List<Image>();
     private List<Image> hide = new List<Image>();
@@ -22,6 +23,7 @@ namespace Board
     private void Awake()
     {
       canvas = GameObject.FindGameObjectWithTag("main_canvas");
+      drag_offset = Screen.height * 0.1f;
       foreach (Transform child in transform)
       {
         if (child.gameObject.tag == "guide")
@@ -55,12 +57,28 @@ namespace Board
 
     public void OnDrag(PointerEventData eventData)
     {
-      currently_dragged.transform.position = eventData.position;
-      RaycastResult r = eventData.pointerCurrentRaycast;
-      Vector3 snap_correction = new Vector3();
+      Vector3 new_pos = eventData.position;
+      new_pos.y += drag_offset;
+      currently_dragged.transform.position = new_pos;
+
+      /* Manual raycast since piece is no longer dragging under cursor. */
+      PointerEventData p = new PointerEventData(EventSystem.current);
+      p.position = canvas.transform.worldToLocalMatrix * new_pos;
+      List<RaycastResult> results = new List<RaycastResult>();
+      EventSystem.current.RaycastAll(p, results);
+
+      if (results.Count == 0)
+      {
+        foreach (Block b in blocks)
+        { b.InvalidatePosition(); }
+        return;
+      }
+
+      RaycastResult r = results[0];
       if (r.gameObject != null && r.gameObject.GetComponent<Tile>() != null)
       {
-        snap_correction = (canvas.transform.worldToLocalMatrix * r.gameObject.transform.position) - new Vector4(eventData.position.x, eventData.position.y);
+        Vector3 snap_correction = (canvas.transform.worldToLocalMatrix * r.gameObject.transform.position)
+                                    - new Vector4(new_pos.x, new_pos.y);
 
         int valid = 0;
         foreach (Block b in blocks)
@@ -73,7 +91,7 @@ namespace Board
         /* If they are all valid, snap to position.
          * This snapping assumes that you are dragging a block right under the cursor. */
         if (valid == blocks.Count)
-        { currently_dragged.GetComponent<RectTransform>().position = r.gameObject.GetComponent<RectTransform>().position; }
+        { currently_dragged.transform.position = r.gameObject.GetComponent<RectTransform>().position; }
       }
       else
       {
