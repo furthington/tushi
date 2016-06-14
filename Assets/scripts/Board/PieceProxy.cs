@@ -4,7 +4,8 @@ using Error;
 
 namespace Board
 {
-  public class PieceProxy : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+  public class PieceProxy : MonoBehaviour,
+  IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
   {
     private int index;
     private GameObject tray;
@@ -35,6 +36,15 @@ namespace Board
     {
       if (dragger != null)
       { dragger.OnEndDrag(eventData); }
+    }
+
+    public void OnPointerClick(PointerEventData data)
+    {
+      Transform child = tray.transform.GetChild(index);
+      Assert.Invariant(child != null, "Piece tray has no child of index " + index);
+      Rotater r = child.GetComponent<Rotater>();
+      Assert.Invariant(r != null, "Piece tray's child " + index + " has no rotater!");
+      r.OnPointerClick(data);
     }
   }
 }
