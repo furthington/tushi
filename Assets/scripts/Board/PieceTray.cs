@@ -106,10 +106,7 @@ namespace Board
     { return Instantiate(prefabs[Random.Range(0, prefabs.Count)]); }
 
     public void Rotate()
-    {
-      foreach (Transform child in transform)
-      { child.Rotate(new Vector3(0, 0, -60)); }
-    }
+    { Pool.Dispatch(new RotatePieces()); }
 
     private void OnSave()
     {
