@@ -85,6 +85,10 @@ namespace Save
 
     public void Save()
     {
+      /* Multiple requests to save shouldn't do anything. */
+      if(data_to_save != null)
+      { return; }
+
       /* Ask each row to respond. */
       row_replies.Clear();
       piece_replies.Clear();
@@ -138,6 +142,7 @@ namespace Save
         { bf.Serialize(file, data_to_save); }
       }
       Logger.Log("Game saved");
+      data_to_save = null;
     }
 
     private void OnGameLost()
