@@ -5,7 +5,6 @@ using Notification;
 
 namespace Board
 {
-  public class RotateNeighbours { }
   public class ActiveTileRequest
   {
     public GameObject Requestor
