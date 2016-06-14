@@ -15,9 +15,12 @@ namespace Menu
     {
       score.text = GameObject.FindGameObjectWithTag("score")
                      .GetComponent<Text>().text;
+      Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Close));
     }
+
     public void Close()
     {
+      Pool.Dispatch(new UI.RemoveBackButtonHandler(gameObject));
       foreach (Animator a in animators)
       { a.SetTrigger("exit"); }
       StartCoroutine(DelayDestroy());
