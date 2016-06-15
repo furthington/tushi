@@ -110,30 +110,33 @@ namespace Board
 
     private void OnSave()
     {
-      var names = new List<string>();
-      var rotations = new List<float[]>();
-      foreach (Transform child in transform)
+      using(var timer = new Profile.TaskTimer("Save piece tray"))
       {
-        names.Add(child.name.Replace("(Clone)", ""));
-        rotations.Add
+        var names = new List<string>();
+        var rotations = new List<float[]>();
+        foreach (Transform child in transform)
+        {
+          names.Add(child.name.Replace("(Clone)", ""));
+          rotations.Add
+          (
+            new float[]
+            {
+              child.rotation.x,
+              child.rotation.y,
+              child.rotation.z,
+              child.rotation.w
+            }
+          );
+        }
+        Pool.Dispatch
         (
-          new float[]
-          {
-            child.rotation.x,
-            child.rotation.y,
-            child.rotation.z,
-            child.rotation.w
-          }
+          new SaveReply
+          (
+            names.ToArray(),
+            rotations.ToArray()
+          )
         );
       }
-      Pool.Dispatch
-      (
-        new SaveReply
-        (
-          names.ToArray(),
-          rotations.ToArray()
-        )
-      );
     }
 
     private void OnLoad(Load l)
