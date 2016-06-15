@@ -79,42 +79,45 @@ namespace Save
 
     private void OnSave()
     {
-      var states = new List<TileInfo>();
-      for(var cur = GetComponent<Board.Tile>();
-          cur != null;
-          cur = cur.right)
+      using(var timer = new Profile.TaskTimer("Save row"))
       {
-        if(cur.block != null)
+        var states = new List<TileInfo>();
+        for(var cur = GetComponent<Board.Tile>();
+            cur != null;
+            cur = cur.right)
         {
-          states.Add
-          (
-            new TileInfo
+          if(cur.block != null)
+          {
+            states.Add
             (
-              cur.block.name,
-              cur.block.GetComponent<Image>().sprite.name,
-              new float[]
-              {
-                cur.block.transform.localScale.x,
-                cur.block.transform.localScale.y,
-                cur.block.transform.localScale.z
-              },
-              new float[]
-              {
-                cur.block.transform.rotation.x,
-                cur.block.transform.rotation.y,
-                cur.block.transform.rotation.z,
-                cur.block.transform.rotation.w
-              },
-              (cur.block.piece != null)
-                ? cur.block.piece.GetComponent<Board.PieceIdentifier>().ID
-                : ""
-            )
-          );
+              new TileInfo
+              (
+                cur.block.name,
+                cur.block.GetComponent<Image>().sprite.name,
+                new float[]
+                {
+                  cur.block.transform.localScale.x,
+                  cur.block.transform.localScale.y,
+                  cur.block.transform.localScale.z
+                },
+                new float[]
+                {
+                  cur.block.transform.rotation.x,
+                  cur.block.transform.rotation.y,
+                  cur.block.transform.rotation.z,
+                  cur.block.transform.rotation.w
+                },
+                (cur.block.piece != null)
+                  ? cur.block.piece.GetComponent<Board.PieceIdentifier>().ID
+                  : ""
+              )
+            );
+          }
+          else
+          { states.Add(new TileInfo("", "", null, null, "")); }
         }
-        else
-        { states.Add(new TileInfo("", "", null, null, "")); }
+        Pool.Dispatch(new SaveRowReply(number, states.ToArray()));
       }
-      Pool.Dispatch(new SaveRowReply(number, states.ToArray()));
     }
 
     private void OnLoad(LoadRow wr)
