@@ -64,21 +64,27 @@ namespace UI.Mode
 
     private void Save()
     {
-      using(var writer = new StreamWriter(Path()))
-      { writer.WriteLine(is_right); }
-      Logger.Log
-      ("Wrote UI mode to disk: {0}", is_right ? "right" : "left");
+      using(var timer = new Profile.TaskTimer("Save UI mode"))
+      {
+        using(var writer = new StreamWriter(Path()))
+        { writer.WriteLine(is_right); }
+        Logger.Log
+        ("Wrote UI mode to disk: {0}", is_right ? "right" : "left");
+      }
     }
 
     private void DoRead()
     {
-      if(File.Exists(Path()))
+      using(var timer = new Profile.TaskTimer("Load UI mode"))
       {
-        using(var reader = new StreamReader(Path()))
-        { is_right = Boolean.Parse(reader.ReadLine()); }
-        SetMode(is_right);
-        Logger.Log
-        ("Read UI mode: {0}", is_right ? "right" : "left");
+        if(File.Exists(Path()))
+        {
+          using(var reader = new StreamReader(Path()))
+          { is_right = Boolean.Parse(reader.ReadLine()); }
+          SetMode(is_right);
+          Logger.Log
+          ("Read UI mode: {0}", is_right ? "right" : "left");
+        }
       }
     }
 
