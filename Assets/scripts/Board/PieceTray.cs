@@ -105,7 +105,7 @@ namespace Board
     private GameObject RandomFrom(List<GameObject> prefabs)
     { return Instantiate(prefabs[Random.Range(0, prefabs.Count)]); }
 
-    public void Rotate()
+    public static void Rotate()
     { Pool.Dispatch(new RotatePieces()); }
 
     private void OnSave()
@@ -140,20 +140,24 @@ namespace Board
     {
       Assert.Invariant(l.Names.Length == l.Rotations.Length,
                        "Different amount of names and rotations");
-      for(int i = 0; i < l.Names.Length; ++i)
+
+      using(var timer = new Profile.TaskTimer("Load piece tray"))
       {
-        var prefab = Resources.Load("piece/" + l.Names[i]);
-        Assert.Invariant(prefab != null,
-                         "Invalid prefab for name " + l.Names[i]);
-        var obj = Instantiate(prefab) as GameObject;
-        obj.transform.rotation = new Quaternion
-        (
-          l.Rotations[i][0],
-          l.Rotations[i][1],
-          l.Rotations[i][2],
-          l.Rotations[i][3]
-        );
-        obj.transform.SetParent(transform);
+        for(int i = 0; i < l.Names.Length; ++i)
+        {
+          var prefab = Resources.Load("piece/" + l.Names[i]);
+          Assert.Invariant(prefab != null,
+                           "Invalid prefab for name " + l.Names[i]);
+          var obj = Instantiate(prefab) as GameObject;
+          obj.transform.rotation = new Quaternion
+          (
+            l.Rotations[i][0],
+            l.Rotations[i][1],
+            l.Rotations[i][2],
+            l.Rotations[i][3]
+          );
+          obj.transform.SetParent(transform);
+        }
       }
     }
   }
