@@ -122,42 +122,45 @@ namespace Save
       if(wr.Number != number)
       { return; }
 
-      /* TODO: Cache this? */
-      var canvas = GameObject.FindGameObjectWithTag("main_canvas");
-
-      var i = 0;
-      for(var cur = GetComponent<Board.Tile>();
-          cur != null;
-          cur = cur.right, ++i)
+      using(var timer = new Profile.TaskTimer("Load row"))
       {
-        Assert.Invariant(i < wr.Tiles.Length,
-                         "Not enough tiles while loading");
-        if(wr.Tiles[i].Name == "")
-        { continue; }
+        /* TODO: Cache this? */
+        var canvas = GameObject.FindGameObjectWithTag("main_canvas");
 
-        cur.block = new GameObject().AddComponent<Board.Block>();
-        cur.block.piece_id = wr.Tiles[i].PieceIdentifier;
-        cur.block.transform.position = cur.transform.position;
-        cur.block.transform.localScale = new Vector3
-        (
-          wr.Tiles[i].Scale[0],
-          wr.Tiles[i].Scale[1],
-          wr.Tiles[i].Scale[2]
-        );
-        cur.block.transform.rotation = new Quaternion
-        (
-          wr.Tiles[i].Rotation[0],
-          wr.Tiles[i].Rotation[1],
-          wr.Tiles[i].Rotation[2],
-          wr.Tiles[i].Rotation[3]
-        );
+        var i = 0;
+        for(var cur = GetComponent<Board.Tile>();
+            cur != null;
+            cur = cur.right, ++i)
+        {
+          Assert.Invariant(i < wr.Tiles.Length,
+                           "Not enough tiles while loading");
+          if(wr.Tiles[i].Name == "")
+          { continue; }
 
-        cur.block.gameObject.AddComponent<Image>();
-        cur.block.transform.SetParent(canvas.transform);
-        cur.block.GetComponent<Image>()
-           .sprite = Resources.Load<Sprite>(wr.Tiles[i].SpriteName);
-        cur.block.GetComponent<Image>().SetNativeSize();
-        cur.block.name = wr.Tiles[i].Name;
+          cur.block = new GameObject().AddComponent<Board.Block>();
+          cur.block.piece_id = wr.Tiles[i].PieceIdentifier;
+          cur.block.transform.position = cur.transform.position;
+          cur.block.transform.localScale = new Vector3
+          (
+            wr.Tiles[i].Scale[0],
+            wr.Tiles[i].Scale[1],
+            wr.Tiles[i].Scale[2]
+          );
+          cur.block.transform.rotation = new Quaternion
+          (
+            wr.Tiles[i].Rotation[0],
+            wr.Tiles[i].Rotation[1],
+            wr.Tiles[i].Rotation[2],
+            wr.Tiles[i].Rotation[3]
+          );
+
+          cur.block.gameObject.AddComponent<Image>();
+          cur.block.transform.SetParent(canvas.transform);
+          cur.block.GetComponent<Image>()
+             .sprite = Resources.Load<Sprite>(wr.Tiles[i].SpriteName);
+          cur.block.GetComponent<Image>().SetNativeSize();
+          cur.block.name = wr.Tiles[i].Name;
+        }
       }
     }
   }
