@@ -105,7 +105,8 @@ namespace Board
     private GameObject RandomFrom(List<GameObject> prefabs)
     { return Instantiate(prefabs[Random.Range(0, prefabs.Count)]); }
 
-    public static void Rotate()
+    /* Editor needs this to be non-static. */
+    public void Rotate()
     { Pool.Dispatch(new RotatePieces()); }
 
     private void OnSave()
