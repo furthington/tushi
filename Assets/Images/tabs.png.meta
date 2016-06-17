@@ -1,0 +1,224 @@
+fileFormatVersion: 2
+guid: 99302cb3cf670334c87d7a90d9fe4f05
+timeCreated: 1466198709
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: tabs_0
+    21300002: tabs_1
+    21300004: tabs_2
+    21300006: tabs_3
+    21300008: tabs_4
+    21300010: tabs_5
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: tabs_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 200
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 20, y: -44}
+        - {x: 22, y: -48}
+        - {x: 30, y: -45}
+        - {x: 29, y: -34}
+        - {x: 42, y: -4}
+        - {x: 41, y: 1}
+        - {x: 36, y: 3}
+        - {x: 32, y: 3}
+        - {x: 43, y: 3}
+        - {x: 77, y: -37}
+        - {x: 85, y: -43}
+        - {x: 100, y: -24}
+        - {x: 100, y: 27}
+        - {x: 78, y: 50}
+        - {x: 62, y: 55}
+        - {x: -84, y: 55}
+        - {x: -100, y: 44}
+        - {x: -100, y: -36}
+        - {x: -90, y: -55}
+        - {x: 24, y: -55}
+        - {x: 26, y: -51}
+        - {x: 19, y: -47}
+        - {x: 20, y: -45}
+    - name: tabs_1
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 0
+        width: 200
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 20, y: -44}
+        - {x: 22, y: -48}
+        - {x: 30, y: -45}
+        - {x: 29, y: -34}
+        - {x: 42, y: -4}
+        - {x: 41, y: 1}
+        - {x: 36, y: 3}
+        - {x: 32, y: 3}
+        - {x: 43, y: 3}
+        - {x: 77, y: -37}
+        - {x: 85, y: -43}
+        - {x: 100, y: -24}
+        - {x: 100, y: 27}
+        - {x: 78, y: 50}
+        - {x: 62, y: 55}
+        - {x: -84, y: 55}
+        - {x: -100, y: 44}
+        - {x: -100, y: -36}
+        - {x: -90, y: -55}
+        - {x: 24, y: -55}
+        - {x: 26, y: -51}
+        - {x: 19, y: -47}
+        - {x: 20, y: -45}
+    - name: tabs_2
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 0
+        width: 200
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -88, y: 55}
+        - {x: -100, y: 40}
+        - {x: -100, y: -28}
+        - {x: -94, y: -53}
+        - {x: -86, y: -55}
+        - {x: 94, y: -55}
+        - {x: 100, y: -30}
+        - {x: 100, y: 36}
+        - {x: 74, y: 55}
+    - name: tabs_3
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 0
+        width: 200
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 77, y: 55}
+        - {x: -73, y: 55}
+        - {x: -100, y: 32}
+        - {x: -100, y: -20}
+        - {x: -96, y: -28}
+        - {x: -84, y: -21}
+        - {x: -61, y: 3}
+        - {x: -57, y: 3}
+        - {x: -61, y: 3}
+        - {x: -63, y: 1}
+        - {x: -63, y: -8}
+        - {x: -61, y: -10}
+        - {x: -68, y: -39}
+        - {x: -61, y: -54}
+        - {x: -59, y: -55}
+        - {x: 88, y: -55}
+        - {x: 94, y: -53}
+        - {x: 100, y: -30}
+        - {x: 100, y: 37}
+    - name: tabs_4
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 0
+        width: 200
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -77, y: 55}
+        - {x: -100, y: 31}
+        - {x: -100, y: -20}
+        - {x: -96, y: -28}
+        - {x: -84, y: -21}
+        - {x: -47, y: -55}
+        - {x: 91, y: -55}
+        - {x: 100, y: -54}
+        - {x: 100, y: 36}
+        - {x: 82, y: 55}
+    - name: tabs_5
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 0
+        width: 200
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -92, y: 55}
+        - {x: -100, y: 40}
+        - {x: -100, y: -28}
+        - {x: -96, y: -28}
+        - {x: -84, y: -21}
+        - {x: -75, y: -6}
+        - {x: -25, y: -55}
+        - {x: 78, y: -55}
+        - {x: 100, y: -35}
+        - {x: 100, y: 27}
+        - {x: 90, y: 55}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
