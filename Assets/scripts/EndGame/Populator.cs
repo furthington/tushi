@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Notification;
+using System.Collections;
 
 namespace EndGame
 {
@@ -8,11 +9,15 @@ namespace EndGame
   {
     public Text score; /* Assign in editor. */
     public Text new_high_score; /* Assign in editor. */
+    private int current_score = 0;
+    private int final_score = 0;
     private SubscriptionStack subscriptions = new SubscriptionStack();
 
     public void Initialize(GameLost results)
     {
-      score.text = results.Score.ToString();
+      final_score = results.Score;
+      score.text = "0";
+      StartCoroutine(CountScore());
       subscriptions.Add<HighScore.ReadReply>
       (
         rr =>
@@ -23,6 +28,18 @@ namespace EndGame
         }
       );
       Pool.Dispatch(new HighScore.Read());
+    }
+
+    private IEnumerator CountScore()
+    {
+      float start_time = Time.time;
+      while (current_score < final_score)
+      {
+        float elapsed = Time.time - start_time;
+        current_score = Mathf.Min((int)(elapsed / 3.0f * final_score), final_score);
+        score.text = current_score.ToString();
+        yield return new WaitForEndOfFrame();
+      }
     }
   }
 }
