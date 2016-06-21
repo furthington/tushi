@@ -50,6 +50,9 @@ namespace Save
       { Pool.Dispatch(new NewGame()); }
     }
 
+    private void OnDisable()
+    { subscriptions.Clear(); }
+
     private void Load()
     {
       Assert.Invariant(File.Exists(Path()),
