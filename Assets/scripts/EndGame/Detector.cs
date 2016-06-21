@@ -9,6 +9,8 @@ namespace EndGame
   { }
   public class CheckPassed
   { }
+  public class GameRestart
+  { }
   public class GameLost
   {
     public int Score

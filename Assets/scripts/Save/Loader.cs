@@ -42,7 +42,8 @@ namespace Save
       subscriptions.Add<Board.SaveScoreReply>(OnSaveScore);
       subscriptions.Add<Board.PieceTray.SaveReply>(OnSavePieceTray);
       subscriptions.Add<Board.PieceIdentifier.SaveReply>(OnSavePieceIdentifier);
-      subscriptions.Add<EndGame.GameLost>(_ => OnGameLost());
+      subscriptions.Add<EndGame.GameLost>(_ => EraseGame());
+      subscriptions.Add<EndGame.GameRestart>(_ => EraseGame());
 
       if(File.Exists(Path()))
       { Pool.Dispatch(new LoadGame()); }
@@ -148,7 +149,7 @@ namespace Save
       data_to_save = null;
     }
 
-    private void OnGameLost()
+    private void EraseGame()
     { File.Delete(Path()); }
 
     private string Path() /* TODO: encrypt */

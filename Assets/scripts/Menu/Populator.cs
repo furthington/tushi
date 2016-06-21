@@ -18,6 +18,15 @@ namespace Menu
       Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Close));
     }
 
+    public void OnRestart()
+    {
+      Pool.Dispatch(new EndGame.GameRestart());
+      Pool.Dispatch(new Board.WriteScore());
+      /*All notifications above will be pumped. */
+      Scene.LoadLevelProxy ll = gameObject.AddComponent<Scene.LoadLevelProxy>();
+      ll.LoadLevel(0);
+    }
+
     public void Close()
     {
       Pool.Dispatch(new UI.RemoveBackButtonHandler(gameObject));
