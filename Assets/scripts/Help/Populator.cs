@@ -14,7 +14,10 @@ namespace Help
     public AnimationCurve curve;
     public List<Sprite> sprites;
     public float transit_time;
+    public float wait_time;
+    public List<Animator> animators;
 
+    /* TODO: Start, Close, and DelayDestroy are basically the same thing from Menu.Populator. Refactor? */
     private void Start()
     {
       Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Close));
@@ -38,7 +41,7 @@ namespace Help
         pos.y += height;
         next.rectTransform.anchoredPosition = pos;
         current.rectTransform.anchoredPosition = origin;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(wait_time);
 
         /* Play transition. */
         float start_time = Time.time;
@@ -63,6 +66,14 @@ namespace Help
     public void Close()
     {
       Pool.Dispatch(new UI.RemoveBackButtonHandler(gameObject));
+      foreach (Animator a in animators)
+      { a.SetTrigger("exit"); }
+      StartCoroutine(DelayDestroy());
+    }
+
+    private IEnumerator DelayDestroy()
+    {
+      yield return new WaitForSeconds(0.5f);
       Destroy(gameObject);
     }
   }
