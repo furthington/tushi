@@ -18,6 +18,9 @@ namespace Menu
       Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Close));
     }
 
+    private void OnDisable() /* In case we don't close, but restart. */
+    { Pool.Dispatch(new UI.RemoveBackButtonHandler(gameObject)); }
+
     public void OnRestart()
     {
       Pool.Dispatch(new EndGame.GameRestart());
