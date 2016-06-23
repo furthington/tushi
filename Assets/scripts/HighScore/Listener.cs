@@ -78,7 +78,7 @@ namespace HighScore
       }
     }
 
-    private string Path() /* TODO: encrypt */
+    private string Path()
     { return Application.persistentDataPath + "/high-scores"; }
   }
 }

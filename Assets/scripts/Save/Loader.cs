@@ -152,7 +152,7 @@ namespace Save
     private void EraseGame()
     { File.Delete(Path()); }
 
-    private string Path() /* TODO: encrypt */
+    private string Path()
     { return Application.persistentDataPath + "/current-game"; }
   }
 }

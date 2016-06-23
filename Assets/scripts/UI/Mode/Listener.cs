@@ -88,7 +88,7 @@ namespace UI.Mode
       }
     }
 
-    private string Path() /* TODO: encrypt */
+    private string Path()
     { return Application.persistentDataPath + "/ui-mode"; }
   }
 }
