@@ -23,7 +23,6 @@ namespace Save
     public Board.PieceIdentifier.SaveReply[] pieces;
     public int score;
     public Board.PieceTray.SaveReply piece_tray;
-    /* TODO: Save the whole pieces. */
   }
 
   public class Loader : MonoBehaviour
