@@ -67,9 +67,12 @@ namespace Save
     public int number;
 
     private SubscriptionStack subscriptions = new SubscriptionStack();
+    private GameObject canvas;
 
     private void Start()
     {
+      canvas = GameObject.FindGameObjectWithTag("main_canvas");
+
       subscriptions.Add<SaveRow>(_ => OnSave());
       subscriptions.Add<LoadRow>(OnLoad);
     }
@@ -127,9 +130,6 @@ namespace Save
 
       using(var timer = new Profile.TaskTimer("Load row"))
       {
-        /* TODO: Cache this? */
-        var canvas = GameObject.FindGameObjectWithTag("main_canvas");
-
         var i = 0;
         for(var cur = GetComponent<Board.Tile>();
             cur != null;

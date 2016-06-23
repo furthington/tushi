@@ -7,6 +7,7 @@ namespace Board
   public class PieceLoader : MonoBehaviour
   {
     private SubscriptionStack subscriptions = new SubscriptionStack();
+    private GameObject canvas;
 
     public class Load
     {
@@ -32,7 +33,11 @@ namespace Board
     }
 
     private void Start()
-    { subscriptions.Add<Load>(OnLoadPiece); }
+    {
+      canvas = GameObject.FindGameObjectWithTag("main_canvas");
+
+      subscriptions.Add<Load>(OnLoadPiece);
+    }
 
     private void OnDisable()
     { subscriptions.Clear(); }
@@ -41,9 +46,6 @@ namespace Board
     {
       using(var timer = new Profile.TaskTimer("Load piece"))
       {
-        /* TODO: Cache this? */
-        var canvas = GameObject.FindGameObjectWithTag("main_canvas");
-
         /* TODO: Copied from Row loading */
         var obj = new GameObject().AddComponent<Piece>();
         obj.gameObject.AddComponent<CanvasGroup>().blocksRaycasts = false;
