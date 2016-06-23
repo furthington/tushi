@@ -34,6 +34,7 @@ namespace HighScore
       subscriptions.Add<Read>(_ => DoRead());
       subscriptions.Add<Write>(DoWrite);
       Logger.LogFormat("High score path: {0}", Path());
+      DoRead();
     }
 
     private void OnDisable()
@@ -67,7 +68,11 @@ namespace HighScore
         using(var writer = new StreamWriter(Path()))
         {
           writer.WriteLine(whs.Score);
-          writer.WriteLine(Math.Max(all_time ?? 0, whs.Score));
+          var old_max = all_time ?? 0;
+          var max = Math.Max(old_max, whs.Score);
+          if(max > old_max)
+          { Logger.Log("New high score ({0} > {1})", max, old_max); }
+          writer.WriteLine(max);
         }
         Logger.LogFormat("Wrote high scores to disk");
       }
