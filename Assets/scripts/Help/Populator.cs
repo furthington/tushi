@@ -21,6 +21,7 @@ namespace Help
     private void Start()
     {
       Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Close));
+      StopAllCoroutines();
       StartCoroutine(Scroll());
     }
 
