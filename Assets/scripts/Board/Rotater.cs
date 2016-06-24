@@ -8,12 +8,13 @@ namespace Board
   { }
 
   [RequireComponent (typeof(Animator))]
-  public class Rotater : MonoBehaviour, IPointerClickHandler
+  public class Rotater : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler
   {
     SubscriptionStack subscriptions = new SubscriptionStack();
     Animator animator;
     bool animating = false;
     float target_rotation;
+    bool dragging = false;
 
     private void Start()
     {
@@ -24,8 +25,17 @@ namespace Board
     private void OnDisable()
     { subscriptions.Clear(); }
 
+    public void OnBeginDrag(PointerEventData eventData)
+    { dragging = true;  }
+
+    public void OnEndDrag(PointerEventData eventData)
+    { dragging = false; }
+
     public void OnPointerClick(PointerEventData data)
-    { Rotate(); }
+    {
+      if (!dragging)
+      { Rotate(); }
+    }
 
     public void Rotate()
     {
