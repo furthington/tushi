@@ -111,6 +111,18 @@ namespace Board
       active.Add(r.Active);
     }
 
+    private class WalkInfo
+    {
+      public NeighbourRelationship rel;
+      public Tile tile;
+
+      public WalkInfo(NeighbourRelationship r, Tile t)
+      {
+        rel = r;
+        tile = t;
+      }
+    }
+
     private bool WalkImpl(List<List<int?>> rotation,
                           int? next, Tile tile)
     {
@@ -129,30 +141,21 @@ namespace Board
       if(tile == null)
       { return true; }
 
-      if(!WalkImpl(rotation,
-                   rotation[line][(int)NeighbourRelationship.Right],
-                   tile.right))
-      { return false; }
-      if(!WalkImpl(rotation,
-                   rotation[line][(int)NeighbourRelationship.TopRight],
-                   tile.top_right))
-      { return false; }
-      if(!WalkImpl(rotation,
-                   rotation[line][(int)NeighbourRelationship.TopLeft],
-                   tile.top_left))
-      { return false; }
-      if(!WalkImpl(rotation,
-                   rotation[line][(int)NeighbourRelationship.Left],
-                   tile.left))
-      { return false; }
-      if(!WalkImpl(rotation,
-                   rotation[line][(int)NeighbourRelationship.BottomLeft],
-                   tile.bottom_left))
-      { return false; }
-      if(!WalkImpl(rotation,
-                   rotation[line][(int)NeighbourRelationship.BottomRight],
-                   tile.bottom_right))
-      { return false; }
+      WalkInfo[] directions =
+      {
+        new WalkInfo(NeighbourRelationship.Right, tile.right),
+        new WalkInfo(NeighbourRelationship.TopRight, tile.top_right),
+        new WalkInfo(NeighbourRelationship.TopLeft, tile.top_left),
+        new WalkInfo(NeighbourRelationship.Left, tile.left),
+        new WalkInfo(NeighbourRelationship.BottomLeft, tile.bottom_left),
+        new WalkInfo(NeighbourRelationship.BottomRight, tile.bottom_right)
+      };
+
+      foreach(var dir in directions)
+      {
+        if(!WalkImpl(rotation, rotation[line][(int)dir.rel], dir.tile))
+        { return false; }
+      }
 
       return true;
     }
