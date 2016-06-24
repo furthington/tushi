@@ -121,7 +121,6 @@ namespace Board
       if(valid == blocks.Count)
       {
         /* Placed pieces do not rotate anymore. */
-        /* TODO: Destroy component? */
         currently_dragged.GetComponentInChildren<Root>().ClearSubscriptions();
 
         foreach(Block b in blocks)
