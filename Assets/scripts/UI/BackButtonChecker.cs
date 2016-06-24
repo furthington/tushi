@@ -5,7 +5,7 @@ using Notification;
 
 namespace UI
 {
-  public struct AddBackButtonHandler
+  public class AddBackButtonHandler
   {
     public GameObject Obj;
     public Action Handler;
@@ -16,7 +16,7 @@ namespace UI
       Handler = handler;
     }
   }
-  public struct RemoveBackButtonHandler
+  public class RemoveBackButtonHandler
   {
     public GameObject Obj;
 
@@ -24,7 +24,7 @@ namespace UI
     { Obj = obj; }
   }
 
-  public struct TaggedAction
+  public class TaggedAction
   {
     public GameObject Obj;
     public Action Handler;
