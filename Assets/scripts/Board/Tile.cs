@@ -40,14 +40,12 @@ namespace Board
       block = b;
       foreach(var line in lines)
       {
-        /* TODO: Implement combos. */
         if(IsComplete(line))
         {
           StartCoroutine(Clear(line));
-          /* TODO: Improve score counting. */
-          AddScore s = new AddScore();
+          var s = new AddScore();
           s.Score = line.Count * 6;
-          Notification.Pool.Dispatch(s);
+          Pool.Dispatch(s);
         }
       }
     }
