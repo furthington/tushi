@@ -90,7 +90,6 @@ namespace Board
                            rotation_index++, gameObject.name);
           foreach(var act in active)
           {
-            /* TODO: Coroutine? */
             var valid = Walk(rotation, 0, act);
             if(valid)
             {

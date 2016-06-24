@@ -29,7 +29,6 @@ namespace EndGame
 
     private void Start()
     {
-      /* TODO: Use a coroutine for this whole thing? */
       subscriptions.Add<Board.PiecePlaced>(_ => OnStartCheck());
       subscriptions.Add<CheckFailed>(_ => OnCheckFailed());
       subscriptions.Add<CheckPassed>(_ => OnCheckPassed());
