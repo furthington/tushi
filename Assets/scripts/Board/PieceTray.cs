@@ -149,7 +149,7 @@ namespace Board
       {
         for(int i = 0; i < l.Names.Length; ++i)
         {
-          var prefab = Resources.Load("piece/" + l.Names[i]);
+          var prefab = Resources.Load("piece_tray/" + l.Names[i]);
           Assert.Invariant(prefab != null,
                            "Invalid prefab for name " + l.Names[i]);
           var obj = Instantiate(prefab) as GameObject;

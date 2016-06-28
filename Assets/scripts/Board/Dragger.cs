@@ -13,6 +13,7 @@ namespace Board
   [RequireComponent (typeof(CanvasGroup))]
   public class Dragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
   {
+    public GameObject piece_prefab;
     private GameObject currently_dragged;
     private GameObject canvas;
     private float drag_offset;
@@ -35,9 +36,10 @@ namespace Board
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-      currently_dragged = Instantiate(gameObject);
+      currently_dragged = Instantiate(piece_prefab);
       currently_dragged.transform.SetParent(canvas.transform);
       currently_dragged.transform.position = eventData.position;
+      currently_dragged.transform.rotation = transform.rotation;
       currently_dragged.GetComponentsInChildren<Block>(blocks);
       currently_dragged.GetComponentInChildren<ScalerToTile>(true).gameObject.SetActive(true);
 
