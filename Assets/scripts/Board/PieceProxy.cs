@@ -10,6 +10,7 @@ namespace Board
     private int index;
     private GameObject tray;
     private Dragger dragger = null;
+    private Rotater rotater = null;
 
     private void Start()
     {
@@ -23,7 +24,10 @@ namespace Board
       Assert.Invariant(child != null, "Piece tray has no child of index " + index);
       dragger = child.GetComponent<Dragger>();
       Assert.Invariant(dragger != null, "Piece tray's child " + index + " has no dragger!");
+      rotater = child.GetComponent<Rotater>();
+      Assert.Invariant(rotater != null, "Piece tray's child " + index + " has no rotater!");
       dragger.OnBeginDrag(eventData);
+      rotater.OnBeginDrag(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -36,6 +40,8 @@ namespace Board
     {
       if (dragger != null)
       { dragger.OnEndDrag(eventData); }
+      if (rotater != null)
+      { rotater.OnEndDrag(eventData);}
     }
 
     public void OnPointerClick(PointerEventData data)
