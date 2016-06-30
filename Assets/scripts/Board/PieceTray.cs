@@ -48,7 +48,7 @@ namespace Board
     public List<GameObject> PrefabsRiceLowProb;
     public List<GameObject> PrefabsRiceHighProb;
 
-    private const float rice_prob_min = 0.1f;
+    private const float rice_prob_min = 0.143f;
     private float rice_prob = 0.0f;
     private SubscriptionStack subscriptions = new SubscriptionStack();
 
@@ -90,7 +90,7 @@ namespace Board
       {
         /* Rice probability resets */
         rice_prob = rice_prob_min;
-        return (prob <= 0.1f)
+        return (prob <= 0.2f)
                  ? RandomFrom(PrefabsRiceLowProb)
                  : RandomFrom(PrefabsRiceHighProb);
       }
@@ -98,7 +98,7 @@ namespace Board
       {
         /* Rice probability goes up */
         rice_prob *= 1.5f;
-        return (prob <= 0.1f)
+        return (prob <= 0.2f)
                  ? RandomFrom(PrefabsLowProb)
                  : RandomFrom(PrefabsHighProb);
       }
