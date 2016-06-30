@@ -76,6 +76,8 @@ namespace Board
       GameObject new_child = GeneratePiece();
       new_child.transform.SetParent(transform, false);
       new_child.transform.SetAsLastSibling();
+      /* Start it off screen to avoid flickering on screen before positioning kicks in. */
+      new_child.transform.position = new Vector3(-4000.0f, 0.0f);
     }
 
     private GameObject GeneratePiece()
