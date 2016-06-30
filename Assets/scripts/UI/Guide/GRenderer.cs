@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using Notification;
 using UnityEngine.UI;
 
@@ -16,32 +17,49 @@ namespace UI.Guide
     {
       img = GetComponent<Image>();
 
+      /* TODO: Optimize?
+        If guides are not showing, unsubscribe from PiecePlaced entirely? */
       subscriptions.Add<Board.PiecePlaced>
       (
         _ =>
         {
-          /* TODO: Optimize?
-            If guides are not showing, unsubscribe from PiecePlaced entirely? */
+          if (show)
+          {
+            StopAllCoroutines();
+            StartCoroutine(DelayedUpdate());
+          }
+        }
+      );
+      subscriptions.Add<Write>
+      (
+        w =>
+        {
+          show = w.Show;
           if (show)
           { UpdateGuide(); }
         }
       );
-      subscriptions.Add<Write>(w => show = w.Show);
 
-      /* TODO: Unsubscribe from ReadReply right after responding? */
-      subscriptions.Add<ReadReply>
-      (
-        rr =>
-        {
-          show = rr.Show;
-          UpdateGuide();
-        }
-      );
-      Pool.Dispatch(new Read());
+      StartCoroutine(Initialize());
     }
 
     private void OnDisable()
     { subscriptions.Clear(); }
+
+    private IEnumerator Initialize()
+    {
+      /* TODO: unsub may not be called if object is destroyed during yield. */
+      var sub = Pool.Subscribe<ReadReply>(_ => UpdateGuide());
+      Pool.Dispatch(new Read());
+      yield return Notification.Async.WaitForReplies<Read>();
+      Pool.Unsubscribe(sub);
+    }
+
+    private IEnumerator DelayedUpdate()
+    {
+      yield return Notification.Async.WaitForReplies<Board.PiecePlaced>();
+      UpdateGuide();
+    }
 
     private void UpdateGuide()
     {
