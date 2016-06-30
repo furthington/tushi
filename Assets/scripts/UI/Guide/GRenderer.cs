@@ -12,39 +12,55 @@ namespace UI.Guide
     public Board.Tile tile; /* Assign in editor. */
     private Image img;
     private SubscriptionStack subscriptions = new SubscriptionStack();
-    bool show = false;
+    private Subscription<Board.PiecePlaced> subscription = null;
+
     private void Start()
     {
       img = GetComponent<Image>();
-
-      /* TODO: Optimize?
-        If guides are not showing, unsubscribe from PiecePlaced entirely? */
-      subscriptions.Add<Board.PiecePlaced>
-      (
-        _ =>
-        {
-          if (show)
-          {
-            StopAllCoroutines();
-            StartCoroutine(DelayedUpdate());
-          }
-        }
-      );
       subscriptions.Add<Write>
       (
         w =>
         {
-          show = w.Show;
-          if (show)
-          { UpdateGuide(); }
+          if (w.Show)
+          {
+            Subscribe();
+            UpdateGuide();
+          }
+          else
+          { Unsubscribe(); }
         }
       );
-
       StartCoroutine(Initialize());
     }
 
+    private void Subscribe()
+    {
+      /* TODO: Fix subscription. */
+      if (subscription != null)
+      { return; }
+      subscription = Pool.Subscribe<Board.PiecePlaced>
+      (
+        _ =>
+        {
+          StopAllCoroutines();
+          StartCoroutine(DelayedUpdate());
+        }
+      );
+    }
+
+    private void Unsubscribe()
+    {
+      if (subscription == null)
+      { return; }
+      Pool.Unsubscribe(subscription);
+      subscription = null;
+    }
+
     private void OnDisable()
-    { subscriptions.Clear(); }
+    {
+      subscriptions.Clear();
+      Unsubscribe();
+    }
 
     private IEnumerator Initialize()
     {
