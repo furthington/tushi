@@ -3,6 +3,15 @@ using Notification;
 
 namespace Combo
 {
+  public class Triggered
+  {
+    public int Lines
+    { get; set; }
+
+    public Triggered(int l)
+    { Lines = l; }
+  }
+
   public class Detector : MonoBehaviour
   {
     SubscriptionStack subscriptions = new SubscriptionStack();
@@ -24,6 +33,7 @@ namespace Combo
         var s = new Board.AddScore();
         s.Score = lines_cleared * lines_cleared * 25;
         Pool.Dispatch(s);
+        Pool.Dispatch(new Triggered(lines_cleared));
       }
       lines_cleared = 0;
     }

@@ -17,10 +17,26 @@ namespace Board
 
       subscriptions.Add<GlowStart>(_ => glowing = true);
       subscriptions.Add<GlowStop>(_ => glowing = false);
+
+      subscriptions.Add<Combo.Triggered>
+      (
+        _ =>
+        {
+          StopAllCoroutines();
+          HighlightRandom();
+          StartCoroutine(Glow());
+        }
+      );
     }
 
     private void OnDisable()
     { subscriptions.Clear(); }
+
+    private void HighlightRandom()
+    {
+      tiles[Random.Range(0, tiles.Length)]
+      .gameObject.AddComponent<HighlightStarter>();
+    }
 
     private IEnumerator Glow()
     {
@@ -28,10 +44,7 @@ namespace Board
       {
         yield return new WaitForSeconds(Random.Range(5.0f, 10.0f));
         if (!glowing)
-        {
-          tiles[Random.Range(0, tiles.Length)]
-            .gameObject.AddComponent<HighlightStarter>();
-        }
+        { HighlightRandom(); }
       }
     }
   }
