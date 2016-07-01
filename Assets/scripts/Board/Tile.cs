@@ -9,6 +9,9 @@ using Notification;
 
 namespace Board
 {
+  public class LineCompleted
+  { }
+
   public class Tile : MonoBehaviour
   {
     public Tile top_right;
@@ -46,6 +49,7 @@ namespace Board
           var s = new AddScore();
           s.Score = line.Count * 6;
           Pool.Dispatch(s);
+          Pool.Dispatch(new LineCompleted());
         }
       }
     }
