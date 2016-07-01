@@ -49,7 +49,14 @@ namespace UI.Guide
     private IEnumerator Initialize()
     {
       /* TODO: unsub may not be called if object is destroyed during yield. */
-      var sub = Pool.Subscribe<ReadReply>(_ => UpdateGuide());
+      var sub = Pool.Subscribe<ReadReply>
+                (
+                  w =>
+                  {
+                    show = w.Show;
+                    UpdateGuide();
+                  }
+                );
       Pool.Dispatch(new Read());
       yield return Notification.Async.WaitForReplies<Read>();
       Pool.Unsubscribe(sub);
