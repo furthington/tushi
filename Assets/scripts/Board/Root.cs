@@ -33,7 +33,8 @@ namespace Board
     private SubscriptionStack subscriptions = new SubscriptionStack();
     private List<Tile> active = new List<Tile>();
     private List<List<List<int?>>> neighbour_rotations;
-    private const int threshold = 40; /* TODO: Configure */
+    private const int threshold = 15;
+    private const int max_tiles = 61;
 
     /* This is awake so that new pieces added to the tray
        can participate in endgame checks. */
@@ -74,9 +75,11 @@ namespace Board
         Pool.Dispatch(new EndGame.CheckFailed());
         yield break;
       }
-      else if(active.Count > threshold)
+
+      var filled = max_tiles - active.Count;
+      if(filled < threshold)
       {
-        Logger.Log("Active count greater than threshold");
+        Logger.Log("End game not possible yet");
         Pool.Dispatch(new EndGame.CheckPassed());
         yield break;
       }
