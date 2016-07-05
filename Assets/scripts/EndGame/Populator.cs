@@ -28,7 +28,14 @@ namespace EndGame
         }
       );
       Pool.Dispatch(new HighScore.Read());
+      Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Restart));
     }
+
+    public void Restart()
+    { gameObject.AddComponent<Scene.LoadLevelProxy>().LoadLevel(0); }
+
+    private void OnDisable()
+    { Pool.Dispatch(new UI.RemoveBackButtonHandler(gameObject)); }
 
     private IEnumerator CountScore()
     {
