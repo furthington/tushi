@@ -66,6 +66,9 @@ namespace Board
     private void OnDisable()
     { subscriptions.Clear(); }
 
+    public int GetRealScore()
+    { return score; }
+
     private IEnumerator UpdateText(int amt)
     {
       int final_score = displayed_score + amt;

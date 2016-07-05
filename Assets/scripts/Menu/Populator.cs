@@ -14,7 +14,7 @@ namespace Menu
     private void Start()
     {
       score.text = GameObject.FindGameObjectWithTag("score")
-                     .GetComponent<Text>().text;
+                     .GetComponent<Board.Score>().GetRealScore().ToString();
       Pool.Dispatch(new UI.AddBackButtonHandler(gameObject, Close));
     }
 
