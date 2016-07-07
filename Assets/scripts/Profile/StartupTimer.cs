@@ -10,6 +10,7 @@ namespace Profile
     private void Awake()
     { timer = new TaskTimer("Startup"); }
 
+    /* TODO: Check for timer define. */
     private void Update()
     {
       if(timer != null)
