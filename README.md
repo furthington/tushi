@@ -13,7 +13,8 @@ Tushi is simplicity. No bells or whistles, no competition or pressure. A relaxin
 - No demands of social media engagement here; only peace and quiet.
 
 ## Open source
-- Tushi's source code is freely available: https://github.com/furthington/tushi
+- Tushi is under a strict copyleft license; see the
+[LICENSE](https://github.com/furthington/tushi/blob/master/LICENSE) file.
 - Furthington Studios believes in sharing knowledge and joy.
 - Support us in any way you want: play the game; spread the word; send us a message; find us on Github.
 
