@@ -17,6 +17,3 @@ Tushi is simplicity. No bells or whistles, no competition or pressure. A relaxin
 [LICENSE](https://github.com/furthington/tushi/blob/master/LICENSE) file.
 - Furthington Studios believes in sharing knowledge and joy.
 - Support us in any way you want: play the game; spread the word; send us a message; find us on Github.
-
-## Contact
-- For bug reports and technical support, please contact us at support@furthington.com.
