@@ -1,5 +1,6 @@
 # Tushi
 
+|Screenshot 1        |Screenshot 2        |
 |:------------------:|:------------------:|
 | <img src="https://media.githubusercontent.com/media/furthington/tushi/master/img/tushi-1.png" width="100%"/> | <img src="https://media.githubusercontent.com/media/furthington/tushi/master/img/tushi-2.png" width="100%"/> |
 
