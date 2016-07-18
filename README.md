@@ -1,5 +1,8 @@
 # Tushi
 
+:------------------:|:------------------:
+<img src="https://raw.githubusercontent.com/furthington/tushi/master/img/tushi-1.png" width="100%"/> | <img src="https://raw.githubusercontent.com/furthington/tushi/master/img/tushi-2.png" width="100%"/>
+
 Tushi is simplicity. No bells or whistles, no competition or pressure. A relaxing little experience that's just the right amount of mental engagement.
 
 ## Beautiful artwork
